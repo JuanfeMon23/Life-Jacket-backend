@@ -13,10 +13,15 @@ export const getClients = async (req, res) => {
 };
 
 export const getClient = async (req,res) => {
-    const {idClient} = req.params;
     try {
-         await Client.findByPk(idClient);
-        res.json(Client)
+        const {idClient} = req.params;
+        
+        const client = await Client.findOne({
+            where: {
+                idClient
+            }
+        })
+        res.json(client)
     } catch (error) {
         return res.status(500).json({message : error.message});
 
