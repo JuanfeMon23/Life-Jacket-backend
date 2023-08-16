@@ -1,5 +1,6 @@
 import { DataTypes} from 'sequelize';
 import { sequelize } from '../database/database.js';
+import { Rol } from './Rol.model.js';
 
 export const User = sequelize.define('users', {
     idUser : {
@@ -49,4 +50,10 @@ export const User = sequelize.define('users', {
         type: DataTypes.BOOLEAN,
         defaultValue : true
     }
+})
+
+
+User.hasOne(Rol,{
+    foreignKey: 'idRol',
+    sourceKey : 'idRol',
 })
