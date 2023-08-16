@@ -1,9 +1,11 @@
 import {Router} from 'express';
-import {getClients, postClient, updateClient, statusClient, searchClient} from '../controllers/Clients.controller.js';
+import {getClients, getClient, postClient, updateClient, statusClient, searchClient} from '../controllers/Clients.controller.js';
 
 export const ClientRoutes = Router();
 
 ClientRoutes.get('/Clients', getClients);
+
+ClientRoutes.get('/Clients/:idClient', getClient);
 
 ClientRoutes.post('/Clients', postClient);
 

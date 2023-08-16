@@ -12,6 +12,17 @@ export const getClients = async (req, res) => {
     }
 };
 
+export const getClient = async (req,res) => {
+    const {idClient} = req.params;
+    try {
+         await Client.findByPk(idClient);
+        res.json(Client)
+    } catch (error) {
+        return res.status(500).json({message : error.message});
+
+    }
+};
+
 export const postClient = async (req, res) => {
     try {
         const {clientDocument, clientName, clientLastName, clientExpeditionPlace, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber, clientStatus} = req.body;
@@ -36,7 +47,7 @@ export const postClient = async (req, res) => {
 export const updateClient = async (req, res) => {
     const { idClient } = req.params;
     try {
-        const {clientDocument, clientName, clientLastName, clientExpeditionPlace, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber, clientStatus} = req.body;
+        const {clientDocument, clientName, clientLastName, clientExpeditionPlace, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber} = req.body;
 
         const client = await Client.findByPk(idClient)
 
@@ -48,7 +59,6 @@ export const updateClient = async (req, res) => {
         client.clientPhoneNumber = clientPhoneNumber
         client.clientOtherContact = clientOtherContact
         client.clientOtherPhoneNumber = clientOtherPhoneNumber
-        client.clientStatus = clientStatus
 
         await client.save()
         res.json(client);
