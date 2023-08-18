@@ -1,6 +1,7 @@
 import app from './app.js'
 import { sequelize } from './database/database.js';
 import './models/Users.model.js'
+import './models/Roles.model.js'
 
 
 const connection = async (req,res) => {

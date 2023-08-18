@@ -1,6 +1,6 @@
 import { DataTypes} from 'sequelize';
 import { sequelize } from '../database/database.js';
-import { Rol } from './Rol.model.js';
+import { Roles } from './Roles.model.js';
 
 export const User = sequelize.define('users', {
     idUser : {
@@ -53,7 +53,6 @@ export const User = sequelize.define('users', {
 })
 
 
-User.hasOne(Rol,{
-    foreignKey: 'idRol',
-    sourceKey : 'idRol',
-})
+User.hasOne(Roles);
+Roles.belongsTo(User);
+
