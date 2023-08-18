@@ -59,3 +59,16 @@ export const updateOther = async (req, res) => {
         return res.status(500).json({message : error.message})
     }
 };
+
+//GET ID
+export const getVehicleId = async (req, res) => {
+    try {
+        const {idOtherVehicleInformation} = req.params;
+        const other = await othervehicleinformation.findOne({
+            where : { idOtherVehicleInformation }
+        })
+        res.json(other);
+    } catch (error) {
+        return res.status(500).json({message : error.message})
+    }
+};
