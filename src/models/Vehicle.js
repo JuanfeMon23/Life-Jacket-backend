@@ -18,7 +18,11 @@ export const Vehicle = sequelize.define('vehicles', {
         type: DataTypes.STRING(7),
         unique: true,
         allowNull: false,
-        validate :{
+        validate : {
+            notNull : {
+                msg : 'Este campo es obligatorio'
+            },
+
             noSpecialCharacters (value) {
                 const specialCharacters = /[!@#$%^&*()_+\=\[\]{};':"\\|,.<>\/?]+/;
                 if (specialCharacters.test(value)) {
