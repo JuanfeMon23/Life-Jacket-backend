@@ -170,35 +170,12 @@ export const Client = sequelize.define('clients', {
     }
 }); 
 
-
-
-/* 
-//purchases
-
-Client.hasMany(Purchase, {
-    foreignKey : 'idClientPurchase',
-    sourceKey : 'idClient'
-})
-
-
-Purchase.belongsToMany(Client, {
-    through: purchasedetails,
-    foreignKey: 'idPurchase',
-    otherKey: 'idClient'
-})
-
-
-//sales
-
 Client.hasMany(Sale, {
-    foreignKey : 'idClientSale',
-    sourceKey : 'idClient'
+  foreignKey : 'idClientSale',
+  sourceKey : 'idClient'
 })
 
-
-Purchase.belongsToMany(Client, {
-    through: saledetails,
-    foreignKey: 'idSale',
-    otherKey: 'idClient'
+Sale.belongsTo(Client, {
+  foreignKey: 'idClientSale',
+  targetId: 'idClient'
 })
- */
