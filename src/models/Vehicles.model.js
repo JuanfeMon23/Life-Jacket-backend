@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
-import { othervehicleinformation } from "./othervehicleinformation.js";
-import { pictures } from "./pictures.js";
+import { othervehicleinformation } from "./Othervehicleinformations.model.js";
+import { pictures } from "./Pictures.model.js";
 
 
 export const Vehicle = sequelize.define('vehicles', {

@@ -1,4 +1,4 @@
-import { othervehicleinformation } from "../models/othervehicleinformation.js";
+import { othervehicleinformation } from "../models/Othervehicleinformations.model.js";
 import app from '../app.js'
 
 

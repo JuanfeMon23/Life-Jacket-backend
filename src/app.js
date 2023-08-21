@@ -1,6 +1,6 @@
 import express from 'express';
-import { VehiclesRoutes } from './routes/Vehicle.route.js';
-import { OtherRoutes } from './routes/othervehicleinformation.route.js';
+import { VehiclesRoutes } from './routes/Vehicles.routes.js';
+import { OtherRoutes } from './routes/Othervehicleinformations.routes.js';
 
 const app = express();
 

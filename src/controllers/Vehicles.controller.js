@@ -1,6 +1,6 @@
-import { Vehicle } from "../models/Vehicle.js";
+import { Vehicle } from "../models/Vehicles.model.js";
 import app from '../app.js'
-import { othervehicleinformation } from "../models/othervehicleinformation.js";
+import { othervehicleinformation } from "../models/Othervehicleinformations.model.js";
 
 
 // Get vehicles 

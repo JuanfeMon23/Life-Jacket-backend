@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getOthers, postOthers, updateOther, getVehicleId} from '../controllers/othervehicleinformation.controller.js'
+import { getOthers, postOthers, updateOther, getVehicleId} from '../controllers/Othervehicleinformations.controller.js'
 
 export const OtherRoutes = Router();
 

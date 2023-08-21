@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getVehicles, getVehicle, postVehicles, updateVehicle, statusVehicle, getSearchVehicle, getVehicleOther} from '../controllers/Vehicle.controller.js'
+import { getVehicles, getVehicle, postVehicles, updateVehicle, statusVehicle, getSearchVehicle, getVehicleOther} from '../controllers/Vehicles.controller.js'
 
 export const VehiclesRoutes = Router();
 
