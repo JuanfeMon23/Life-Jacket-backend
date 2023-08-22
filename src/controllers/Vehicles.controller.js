@@ -21,7 +21,14 @@ export const getVehicle = async (req, res) => {
         const vehicle = await Vehicle.findOne({
             where : { idVehicle }
         })
-        res.json(vehicle);
+        const otherInformation = await othervehicleinformation.findOne({
+            where: {idVehicleOtherVehicleInformation: vehicle.idVehicle}
+        })
+        const object = {
+            vehicle: vehicle,
+            otherInformation: otherInformation
+        }
+        res.json(object);
     } catch (error) {
         return res.status(500).json({message : error.message})
     }
@@ -115,20 +122,5 @@ export const getSearchVehicle = async (req, res) => {
         res.json(vehicles)
     } catch (error) {
         return res.status(500).json({message : error.message});
-    }
-};
-
-//OtherInformation
-export const getVehicleOther = async (req, res) => {
-    const {idVehicle} = req.params;
-    try{
-        const other = await othervehicleinformation.findAll({
-            where : {
-                idVehicleOtherVehicleInformation: idVehicle
-            }
-        })
-        res.json(other)
-    } catch (error) {
-        return res.status(500).json({message : error.message})
     }
 };
