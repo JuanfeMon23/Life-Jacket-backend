@@ -1,7 +1,7 @@
 import { User } from "../models/Users.model.js";
 import app from "../app.js";
 import bcrypts from 'bcryptjs';
-import { createAuthToken } from "../libs/jwt.js";
+import { Op } from "sequelize";
 
 export const getUsers = async  (req,res) => {
     try {
@@ -25,8 +25,6 @@ export const postUser = async  (req,res) => {
             userAddress,
             userPhoneNumber
         });
-        const token = await createAuthToken({id: newUser.id});
-        res.cookie("token", token);
         return res.status(200).json(newUser);
     } catch (error) {
         console.log(error)
@@ -66,12 +64,32 @@ export const deleteUser = async (req,res) => {
 };
 
 export const getUser = async (req,res) => {
-    const {idUser} = req.params;
     try {
-         await User.findByPk(idUser);
-        res.json(User)
+        const {idUser} = req.params;
+        const user = await User.findOne({
+            where :{idUser}
+        });
+         res.json(user);
     } catch (error) {
         return res.status(500).json({message : error.message});
 
+    }
+};
+
+export const userSearch = async (req,res) => {
+    const search = req.params;
+    try {
+        const user = await User.findAll({
+            where : {
+                [Op.Op] : [
+                    {idUser : { [Op.like] : `%${search}%`}},
+                    {userName : { [Op.like] : `%${search}%`}},
+                    {userEmail : { [Op.like] : `%${search}%`}},
+                ],
+            }
+        });
+        return res.json(user);
+    } catch (error) {
+        return res.status(500).json({message : error.message});
     }
 };
