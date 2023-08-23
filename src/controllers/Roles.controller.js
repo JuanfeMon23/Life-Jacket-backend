@@ -29,16 +29,26 @@ export const getRoles = async (req, res) => {
 export const getRol = async (req,res) => {
     try {
         const {idRol} = req.params;
-        await Roles.findById(idRol);
-        return res.status(200).json(idRol);
+        
+        const rol = await Roles.findOne({
+            where : {idRol}
+        });
+         res.status(200).json(rol);
     } catch (error) {
+        console.log(error)
         return res.status(500).json({message : error.message});
     }
 };
 
 export const updateRol = async (req,res) => {
     try {
-        
+        const {idRol} = req.params;
+        const {rolName} = req.body;
+
+        const rol = await Roles.findByPk(idRol);
+        rol.rolName = rolName;
+        await rol.save();
+        return res.status(200).json(rol);
     } catch (error) {
         
     }
@@ -49,8 +59,8 @@ export const deleteRol = async (req,res) => {
         const {idRol} = req.params;
         await Roles.destroy({
             where : {idRol}
-        })
-        return res.status(200)
+        });
+        return res.sendStatus(200)
     } catch (error) {
         return res.status(500).json({message : error.message});
     }

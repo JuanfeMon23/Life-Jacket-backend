@@ -1,8 +1,7 @@
 import { DataTypes} from 'sequelize';
 import { sequelize } from '../database/database.js';
-import { Roles } from './Roles.model.js';
 
-export const User = sequelize.define('users', {
+export const User = sequelize.define('Users', {
     idUser : {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -51,8 +50,3 @@ export const User = sequelize.define('users', {
         defaultValue : true
     }
 })
-
-
-User.hasOne(Roles);
-Roles.belongsTo(User);
-
