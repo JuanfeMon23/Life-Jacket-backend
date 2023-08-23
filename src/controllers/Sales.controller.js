@@ -1,4 +1,5 @@
 import {Sale} from '../models/Sales.model.js';
+import {Client} from '../models/Clients.model.js';
 import { Op } from 'sequelize';
 import app from '../app.js';
 
@@ -30,7 +31,7 @@ export const getSale = async (req,res) => {
 
 export const postSale = async (req, res) => {
     try {
-        const {saleDate, salePrice, salePaymentMethod, saleLimitations, saleCity, salePecuniaryPenalty, saleStatus} = req.body;
+        const {saleDate, salePrice, salePaymentMethod, saleLimitations, saleCity, salePecuniaryPenalty, saleStatus, idClientSale} = req.body;
 
         const newSale = await Sale.create({
             saleDate,
@@ -39,7 +40,8 @@ export const postSale = async (req, res) => {
             saleLimitations,
             saleCity,
             salePecuniaryPenalty,
-            saleStatus
+            saleStatus,
+            idClientSale
         });
         return res.status(200).json(newSale);
     } catch (error) {

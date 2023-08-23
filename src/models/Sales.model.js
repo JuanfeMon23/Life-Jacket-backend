@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import  { sequelize } from "../database/database.js";
+import { Client } from "../models/Clients.model.js"
 
 export const Sale = sequelize.define('sales', {
     idSale: {
@@ -100,6 +101,22 @@ export const Sale = sequelize.define('sales', {
         type: DataTypes.BOOLEAN,
         allowNull : false,
         defaultValue: true
+    },
+    clienteId: {
+      type: DataTypes.INTEGER(11),
+      references: {
+        model: 'Client', 
+        key: 'idClient',     
+      },
     }
 }); 
 
+Client.hasMany(Sale, {
+  foreignKey : 'idClientSale',
+  sourceKey : 'idClient'
+})
+
+Sale.belongsTo(Client, {
+  foreignKey: 'idClientSale',
+  targetId: 'idClient'
+})
