@@ -3,12 +3,12 @@ import  { sequelize } from "../database/database.js";
 
 export const Client = sequelize.define('clients', {
     idClient: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER(11),
         primaryKey: true,
         autoIncrement: true
     },
     clientDocument: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(12),
         allowNull: false,
         validate: {
             notNull: {
@@ -35,7 +35,7 @@ export const Client = sequelize.define('clients', {
         } 
     }, 
     clientName: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(20),
         allowNull: false,
         validate: {
             notNull: {
@@ -59,7 +59,7 @@ export const Client = sequelize.define('clients', {
         }
     },
     clientLastName: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(20),
         allowNull : false,
         validate: {
             notNull: {
@@ -95,7 +95,7 @@ export const Client = sequelize.define('clients', {
         }   
     },
     clientAddress: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(40),
         allowNull : false,
         validate: {
             notNull: {
@@ -108,7 +108,7 @@ export const Client = sequelize.define('clients', {
         }  
     },
     clientPhoneNumber: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(15),
         allowNull : false,
         validate: {
             notNull: {
@@ -127,7 +127,7 @@ export const Client = sequelize.define('clients', {
         }  
     },
     clientOtherContact: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(30),
         allowNull : true,
         validate: {
             noNumbers(value) {
@@ -148,7 +148,7 @@ export const Client = sequelize.define('clients', {
         }
     },
     clientOtherPhoneNumber: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(15),
         allowNull : true,
         validate: {
             len: {
@@ -169,13 +169,3 @@ export const Client = sequelize.define('clients', {
         defaultValue: true
     }
 }); 
-
-Client.hasMany(Sale, {
-  foreignKey : 'idClientSale',
-  sourceKey : 'idClient'
-})
-
-Sale.belongsTo(Client, {
-  foreignKey: 'idClientSale',
-  targetId: 'idClient'
-})
