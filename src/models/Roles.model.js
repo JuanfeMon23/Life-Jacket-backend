@@ -17,15 +17,6 @@ export const Roles = sequelize.define('Roles', {
 })
 
 
-Roles.hasMany(User, {
-    foreignKey : 'idUser',
-     sourceKey: 'idRol'
-})
 
-
-User.belongsTo(Roles, {
-    foreignKey : 'idUser',
-    targetKey : 'idRol'
-}) 
 
 

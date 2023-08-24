@@ -1,5 +1,6 @@
 import { DataTypes} from 'sequelize';
 import { sequelize } from '../database/database.js';
+import { Roles } from './Roles.model.js';
 
 export const User = sequelize.define('Users', {
     idUser : {
@@ -45,8 +46,27 @@ export const User = sequelize.define('Users', {
             notEmpty : true
         } 
     },
+        idRolUser : {
+            type: DataTypes.INTEGER,
+            references: {
+                model: Roles,
+                key: 'idRol'
+            }
+        }
+    ,
     userStatus : {
         type: DataTypes.BOOLEAN,
         defaultValue : true
     }
-})
+});
+
+Roles.hasMany(User, {
+    foreignKey : 'idRolUser',
+     sourceKey: 'idRol'
+});
+
+
+User.belongsTo(Roles, {
+    foreignKey : 'idRolUser',
+    targetKey : 'idRol'
+});

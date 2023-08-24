@@ -13,7 +13,7 @@ export const getUsers = async  (req,res) => {
 };
 
 export const postUser = async  (req,res) => {
-    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber} = req.body
+    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, idUserRol} = req.body
     
     try {
         const userPasswordHash = await bcrypts.hash(userPassword, 10);
@@ -23,7 +23,8 @@ export const postUser = async  (req,res) => {
             userEmail,
             userPassword : userPasswordHash,
             userAddress,
-            userPhoneNumber
+            userPhoneNumber,
+            idUserRol
         });
         return res.status(200).json(newUser);
     } catch (error) {
