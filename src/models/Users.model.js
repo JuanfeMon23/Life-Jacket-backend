@@ -46,6 +46,12 @@ export const User = sequelize.define('Users', {
             notEmpty : true
         } 
     },
+    userOtherPhoneNumber : {
+        type: DataTypes.STRING,
+        validate : {
+            notEmpty : true
+        } 
+    },
         idRolUser : {
             type: DataTypes.INTEGER,
             references: {

@@ -13,7 +13,7 @@ export const getUsers = async  (req,res) => {
 };
 
 export const postUser = async  (req,res) => {
-    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, idUserRol} = req.body
+    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idUserRol} = req.body
     
     try {
         const userPasswordHash = await bcrypts.hash(userPassword, 10);
@@ -24,6 +24,7 @@ export const postUser = async  (req,res) => {
             userPassword : userPasswordHash,
             userAddress,
             userPhoneNumber,
+            userOtherPhoneNumber , 
             idUserRol
         });
         return res.status(200).json(newUser);
@@ -35,7 +36,7 @@ export const postUser = async  (req,res) => {
 
 export const updateUser = async (req,res) => {
     const {idUser} = req.params;
-    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber} = req.body
+    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idUserRol } = req.body
     try {
         const user = await User.findByPk(idUser)
         user.userName = userName;
@@ -44,6 +45,8 @@ export const updateUser = async (req,res) => {
         user.userPassword = userPassword;
         user.userAddress = userAddress;
         user.userPhoneNumber = userPhoneNumber;
+        user.userOtherPhoneNumber = userOtherPhoneNumber;
+        user.idUserRol = idUserRol;
         await user.save();
         res.json(user);
 
