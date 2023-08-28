@@ -95,7 +95,7 @@ export const Client = sequelize.define('clients', {
         }   
     },
     clientAddress: {
-        type: DataTypes.STRING(40),
+        type: DataTypes.STRING(80),
         allowNull : false,
         validate: {
             notNull: {
@@ -127,7 +127,7 @@ export const Client = sequelize.define('clients', {
         }  
     },
     clientOtherContact: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(40),
         allowNull : true,
         validate: {
             noNumbers(value) {
