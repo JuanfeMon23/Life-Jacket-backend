@@ -4,7 +4,7 @@ import { Client } from "../models/Clients.model.js"
 
 export const Sale = sequelize.define('sales', {
     idSale: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER(11),
         primaryKey: true,
         autoIncrement: true
     },
@@ -21,7 +21,7 @@ export const Sale = sequelize.define('sales', {
         }   
     },
     salePrice: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER(11),
         allowNull: false,
         validate: {
             notNull: {
@@ -32,7 +32,7 @@ export const Sale = sequelize.define('sales', {
             },
             len: {
               args: [6, 12],
-              msg: 'Este campo debe tener entre 6 y 12 números',
+              msg: 'Este campo debe tener entre 5 y 11 números',
             },
             customValidation(value) {
               if (value.startsWith('0')) {
@@ -57,7 +57,7 @@ export const Sale = sequelize.define('sales', {
         }
     },
     saleLimitations: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(200),
         allowNull : false,
         validate: {
             notNull: {
@@ -70,7 +70,7 @@ export const Sale = sequelize.define('sales', {
         }
     },
     saleCity: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(20),
         allowNull : false,
         validate: {
             notNull: {
@@ -79,7 +79,7 @@ export const Sale = sequelize.define('sales', {
         }  
     },
     salePecuniaryPenalty: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER(11),
         allowNull : false,
         validate: {
             notNull: {
@@ -87,7 +87,7 @@ export const Sale = sequelize.define('sales', {
             },
             len: {
                 args: [7, 12],
-                msg: 'Este campo debe tener entre 7 y 12 numeros',
+                msg: 'Este campo debe tener entre 5 y 11 numeros',
               },
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
