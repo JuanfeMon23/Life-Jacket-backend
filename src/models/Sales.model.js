@@ -102,7 +102,7 @@ export const Sale = sequelize.define('sales', {
         allowNull : false,
         defaultValue: true
     },
-    clienteId: {
+    idClientSale: {
       type: DataTypes.INTEGER(11),
       references: {
         model: 'Client', 
