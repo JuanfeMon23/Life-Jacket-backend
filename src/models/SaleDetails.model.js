@@ -1,4 +1,4 @@
-/* import { DataTypes } from "sequelize";
+import { DataTypes } from "sequelize";
 import  { sequelize } from "../database/database.js";
 import { Sale } from "./Sales.model.js";
 import { Vehicle } from "./Vehicles.model.js";
@@ -12,4 +12,4 @@ export const SaleDetail = sequelize.define('saledetails', {
 });
 
 Sale.belongsToMany(Vehicle, {through : 'SaleDetails'});
-Vehicle.belongsToMany(Sale, {through : 'SaleDetails'}); */
+Vehicle.belongsToMany(Sale, {through : 'SaleDetails'}); 
