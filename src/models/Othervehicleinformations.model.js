@@ -29,7 +29,7 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
     },
 
     series : {
-        type: DataTypes.STRING(17),
+        type: DataTypes.STRING(20),
         allowNull: true,
         validate : {
             isAlphanumeric: true,
@@ -68,7 +68,7 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
     },
 
     motor : {
-        type: DataTypes.STRING(12),
+        type: DataTypes.STRING(20),
         allowNull: true,
         validate : {
             isAlphanumeric: true,
@@ -88,6 +88,7 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
     },
 
     register : {
+
         type: DataTypes.STRING(20),
         allowNull: true,
         validate : {
@@ -103,7 +104,7 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
     },
 
     chassis : {
-        type: DataTypes.STRING(18),
+        type: DataTypes.STRING(20),
         allowNull: true,
         validate : {
             isAlphanumeric: true,
@@ -162,7 +163,8 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
     },
 
     identificationCard : {
-        type: DataTypes.STRING(12),
+         
+        type: DataTypes.STRING(20),
         allowNull: true,
         validate: {
             isNumeric: {
