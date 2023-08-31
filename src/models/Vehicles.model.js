@@ -1,7 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 import { othervehicleinformation } from "./Othervehicleinformations.model.js";
-import { pictures } from "./Pictures.model.js";
 
 
 export const Vehicle = sequelize.define('vehicles', {
@@ -233,14 +232,3 @@ othervehicleinformation.belongsTo(Vehicle, {
     targetId : 'idVehicle'
 })
 
-
-//Pictures
-Vehicle.hasMany(pictures, {
-    foreignKey : 'idVehiclePicture',
-    sourceKey : 'idVehicle'
-})
-
-pictures.belongsTo(Vehicle, {
-    foreignKey : 'idVehiclePicture',
-    targetId : 'idVehicle'
-})

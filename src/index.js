@@ -2,7 +2,6 @@ import app from './app.js'
 import { sequelize } from './database/database.js'
 import './models/Vehicles.model.js'
 import './models/Othervehicleinformations.model.js'
-import './models/Pictures.model.js'
 
 const connection = async (req, res) => {
     try {
