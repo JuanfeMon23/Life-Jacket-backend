@@ -13,7 +13,7 @@ export const getUsers = async  (req,res) => {
 };
 
 export const postUser = async  (req,res) => {
-    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idUserRol} = req.body
+    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idRolUser} = req.body
     
     try {
         const userPasswordHash = await bcrypts.hash(userPassword, 10);
@@ -25,7 +25,7 @@ export const postUser = async  (req,res) => {
             userAddress,
             userPhoneNumber,
             userOtherPhoneNumber , 
-            idUserRol
+            idRolUser
         });
         return res.status(200).json(newUser);
     } catch (error) {
@@ -36,7 +36,7 @@ export const postUser = async  (req,res) => {
 
 export const updateUser = async (req,res) => {
     const {idUser} = req.params;
-    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idUserRol } = req.body
+    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idRolUser } = req.body
     try {
         const user = await User.findByPk(idUser)
         user.userName = userName;
@@ -46,7 +46,7 @@ export const updateUser = async (req,res) => {
         user.userAddress = userAddress;
         user.userPhoneNumber = userPhoneNumber;
         user.userOtherPhoneNumber = userOtherPhoneNumber;
-        user.idUserRol = idUserRol;
+        user.idRolUser = idRolUser;
         await user.save();
         res.json(user);
 
