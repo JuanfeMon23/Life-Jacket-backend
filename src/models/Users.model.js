@@ -52,14 +52,6 @@ export const User = sequelize.define('Users', {
             notEmpty : true
         } 
     },
-        idRolUser : {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Roles,
-                key: 'idRol'
-            }
-        }
-    ,
     userStatus : {
         type: DataTypes.BOOLEAN,
         defaultValue : true
