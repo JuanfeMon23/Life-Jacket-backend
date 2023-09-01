@@ -1,4 +1,4 @@
 /node_modules/
-/database.js/
-/index.js/
-/app.js/
+database.js
+index.js/
+app.js
