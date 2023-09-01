@@ -1,6 +1,5 @@
 import {Sale} from '../models/Sales.model.js';
 import {Client} from '../models/Clients.model.js';
-import { Vehicle } from "../models/Vehicles.model.js";
 import { Op } from 'sequelize';
 import app from '../app.js';
 
@@ -106,7 +105,7 @@ export const searchSale = async (req, res) => {
 };
 
 
-export const reportSale = async (req, res) => {
+/* export const reportSale = async (req, res) => {
     const startDateSale = new Date(req.params.startDateSale);
     const finalDateSale = new Date(req.params.finalDateSale);
     try {
@@ -124,4 +123,4 @@ export const reportSale = async (req, res) => {
         console.error(error);
         return res.status(500).json({message : error.message});
     }
-};
+};  */

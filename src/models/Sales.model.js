@@ -101,13 +101,6 @@ export const Sale = sequelize.define('sales', {
         type: DataTypes.BOOLEAN,
         allowNull : false,
         defaultValue: true
-    },
-    idClientSale: {
-      type: DataTypes.INTEGER(11),
-      references: {
-        model: 'Client', 
-        key: 'idClient',     
-      },
     }
 }); 
 
