@@ -83,14 +83,11 @@ export const Client = sequelize.define('clients', {
         }
     },
     clientExpeditionPlace: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING(15),
         allowNull : false,
         validate: {
             notNull: {
               msg: 'Este campo es obligatorio',
-            },
-            isDate: {
-              msg: 'La fecha debe tener un formato válido',
             }
         }   
     },

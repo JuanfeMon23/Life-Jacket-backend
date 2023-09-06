@@ -1,12 +1,35 @@
 import { User } from "../models/Users.model.js";
+import { Roles } from "../models/Roles.model.js";
 import app from "../app.js";
 import bcrypts from 'bcryptjs';
 import { Op } from "sequelize";
 
+
 export const getUsers = async  (req,res) => {
     try {
-        const users = await User.findAll();
+        const users = await User.findAll({ include: Roles });
         return res.status(200).json(users);
+    } catch (error) {
+        return res.status(500).json({message : error.message});
+    }
+};
+
+export const getUser = async (req,res) => {
+    try {
+        const {idUser} = req.params;
+        const user = await User.findOne({
+            where :{idUser}
+        });
+
+        const roles = await Roles.findOne({
+            where : {idRol : user.idRolUser}
+        });
+
+        const object = {user,
+            Roles : roles.rolName
+        }
+
+         res.json(object);
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
@@ -67,18 +90,7 @@ export const deleteUser = async (req,res) => {
     }
 };
 
-export const getUser = async (req,res) => {
-    try {
-        const {idUser} = req.params;
-        const user = await User.findOne({
-            where :{idUser}
-        });
-         res.json(user);
-    } catch (error) {
-        return res.status(500).json({message : error.message});
 
-    }
-};
 
 export const userSearch = async (req,res) => {
     const search = req.params;
