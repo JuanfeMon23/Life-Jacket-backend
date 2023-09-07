@@ -1,4 +1,5 @@
 import {Sale} from '../models/Sales.model.js';
+// import {Vehicle} from '../models/Vehicles.model.js';
 import {Client} from '../models/Clients.model.js';
 import { Op } from 'sequelize';
 import app from '../app.js';
@@ -43,6 +44,13 @@ export const postSale = async (req, res) => {
             saleStatus,
             idClientSale
         });
+/* 
+        Sale.afterCreate(async (sale) => {
+            const vehicles = await sale.getVehicles();
+            await Promise.all(vehicles.map((Vehicle) => Vehicle.update({ vehicleStatus : false })));
+          }); */
+
+
         return res.status(200).json(newSale);
     } catch (error) {
         return res.status(500).json({message : error.message});
