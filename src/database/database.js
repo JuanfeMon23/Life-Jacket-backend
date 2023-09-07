@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 
 export const sequelize = new Sequelize(
+
     'proyectop' ,
     'root' ,
     '' ,
@@ -8,4 +9,3 @@ export const sequelize = new Sequelize(
     host : 'localhost',
     dialect : 'mysql'
 })
-
