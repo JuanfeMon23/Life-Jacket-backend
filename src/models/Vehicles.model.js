@@ -27,9 +27,7 @@ export const Vehicle = sequelize.define('vehicles', {
                 if (specialCharacters.test(value)) {
                     throw new Error('Este campo no puede contener caracteres especiales')
                 }
-            },
-            
-            isAlphanumeric : true
+            }
         }
     },
 
