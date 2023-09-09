@@ -1,4 +1,5 @@
 import { Vehicle } from "../models/Vehicles.model.js";
+import { Op } from 'sequelize';
 import app from '../app.js'
 import { othervehicleinformation } from "../models/Othervehicleinformations.model.js";
 
