@@ -113,3 +113,6 @@ Sale.belongsTo(Client, {
   foreignKey: 'idClientSale',
   targetId: 'idClient'
 })
+
+Sale.belongsToMany(Vehicle, {through : 'SaleDetails', foreignKey: 'saleId', as: 'vehiclesAs' });
+Vehicle.belongsToMany(Sale, {through : 'SaleDetails', foreignKey: 'vehicleId' });
