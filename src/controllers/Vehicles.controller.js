@@ -98,9 +98,20 @@ export const statusVehicle = async (req, res) => {
     const { idVehicle } = req.params;
     try {
         const vehicle = await Vehicle.findByPk(idVehicle)
-        vehicle.vehicleStatus = !vehicle.vehicleStatus;
 
+        // Disable the vehicle
+        vehicle.vehicleStatus = !vehicle.vehicleStatus;        
         await vehicle.save();
+
+        // If the vehicle is disabled, we disable the associated improvements
+        if (!vehicle.vehicleStatus) {
+            const improvements = await Improvements.findAll({ where: { idVehicleImprovement: idVehicle } });
+            for (let Improvements of improvements) {
+                Improvements.improvementStatus = false;
+                await Improvements.save();
+            }
+        }
+
         res.json(vehicle);
 
     } catch (error) {
