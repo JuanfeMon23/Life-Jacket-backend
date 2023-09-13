@@ -1,22 +1,19 @@
 import { Router } from "express";
-import { getVehicles, getVehicle, postVehicles, updateVehicle, statusVehicle, getSearchVehicle} from '../controllers/Vehicles.controller.js'
+import { getImprovements, postImprovements, updateImprovements, statusImprovement, getSearchImprovements } from "../controllers/Improvements.controller.js";
 
-export const VehiclesRoutes = Router();
+export const ImprovementsRoute = Router();
 
-//Get 
-VehiclesRoutes.get('/Vehicles', getVehicles);
-
-//GetOne and OtherInformation
-VehiclesRoutes.get('/Vehicles/:idVehicle', getVehicle);
+//Get
+ImprovementsRoute.get('/Improvements', getImprovements);
 
 //Create
-VehiclesRoutes.post('/Vehicles', postVehicles);
+ImprovementsRoute.post('/Improvements', postImprovements);
 
 //Update
-VehiclesRoutes.put('/Vehicles/:idVehicle', updateVehicle);
+ImprovementsRoute.put('/Improvements/:idImprovements', updateImprovements);
 
 //Disable
-VehiclesRoutes.patch('/Vehicles/:idVehicle', statusVehicle);
+ImprovementsRoute.patch('/Improvements/:idImprovements', statusImprovement);
 
 //Get Search
-VehiclesRoutes.get('/Vehicles/SearchE/:search', getSearchVehicle)
+ImprovementsRoute.get('/Improvements/Search/:search', getSearchImprovements);
