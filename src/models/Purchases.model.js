@@ -3,13 +3,13 @@ import  { sequelize } from "../database/database.js";
 import { Client } from "../models/Clients.model.js";
 import { Vehicle } from "../models/Vehicles.model.js"
 
-export const Sale = sequelize.define('sales', {
-    idSale: {
+export const Purchase = sequelize.define('purchases', {
+    idPurchase: {
         type: DataTypes.INTEGER(11),
         primaryKey: true,
         autoIncrement: true
     },
-    saleDate: {
+    purchaseDate: {
         type: DataTypes.DATE,
         allowNull : false,
         validate: {
@@ -21,7 +21,7 @@ export const Sale = sequelize.define('sales', {
             }
         }   
     },
-    salePrice: {
+    purchasePrice: {
         type: DataTypes.INTEGER(11),
         allowNull: false,
         validate: {
@@ -48,7 +48,7 @@ export const Sale = sequelize.define('sales', {
             }
         } 
     }, 
-    salePaymentMethod: {
+    purchasePaymentMethod: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -57,7 +57,7 @@ export const Sale = sequelize.define('sales', {
             }
         }
     },
-    saleLimitations: {
+    purchaseLimitations: {
         type: DataTypes.STRING(200),
         allowNull : false,
         validate: {
@@ -70,7 +70,7 @@ export const Sale = sequelize.define('sales', {
             }
         }
     },
-    saleCity: {
+    purchaseCity: {
         type: DataTypes.STRING(20),
         allowNull : false,
         validate: {
@@ -79,7 +79,7 @@ export const Sale = sequelize.define('sales', {
             }
         }  
     },
-    salePecuniaryPenalty: {
+    purchasePecuniaryPenalty: {
         type: DataTypes.INTEGER(11),
         allowNull : false,
         validate: {
@@ -98,31 +98,31 @@ export const Sale = sequelize.define('sales', {
             } 
         }  
     },
-    saleStatus: {
+    purchaseStatus: {
         type: DataTypes.BOOLEAN,
         allowNull : false,
         defaultValue: true
     }
 }); 
 
-Client.hasMany(Sale, {
-  foreignKey : 'idClientSale',
+Client.hasMany(Purchase, {
+  foreignKey : 'idClientPurchase',
   sourceKey : 'idClient'
 })
 
-Sale.belongsTo(Client, {
-  foreignKey: 'idClientSale',
+Purchase.belongsTo(Client, {
+  foreignKey: 'idClientPurchase',
   targetId: 'idClient'
 })
 
 
-Sale.hasOne(Vehicle, {
-  foreignKey : 'idVehicleSale',
-  sourceKey : 'idSale'
+Purchase.hasOne(Vehicle, {
+  foreignKey : 'idVehiclePurchase',
+  sourceKey : 'idPurchase'
 })
 
-Vehicle.belongsTo(Sale, {
-  foreignKey : 'idVehicleSale',
-  targetId : 'idSale'
+Vehicle.belongsTo(Purchase, {
+  foreignKey : 'idVehiclePurchase',
+  targetId : 'idPurchase'
 })
 

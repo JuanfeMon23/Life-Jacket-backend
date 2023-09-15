@@ -5,7 +5,7 @@ import {UserRoutes} from './routes/Users.routes.js'
 import {LoginRouter } from './routes/Login.routes.js';
 import {RolRoutes } from './routes/Roles.routes.js';
 import {LicenseRoutes } from './routes/Licenses.routes.js';
-import { VehiclesRoutes } from './routes/Vehicles.routes.js'
+import { VehiclesRoutes } from './routes/Vehicles.routes.js';
 import { OtherRoutes } from './routes/Othervehicleinformations.routes.js';
 
 const app = express();
@@ -17,8 +17,8 @@ app.use(cors({
     origin : 'http://localhost:5173'
 }));
 
-app.use('/modulo', VehiclesRoutes);
-app.use('/modulo', OtherRoutes);
+app.use('/api', VehiclesRoutes);
+app.use('/api', OtherRoutes);
 
 
 export default app;

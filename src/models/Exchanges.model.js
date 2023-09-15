@@ -1,15 +1,15 @@
 import { DataTypes } from "sequelize";
 import  { sequelize } from "../database/database.js";
-import { Client } from "../models/Clients.model.js";
-import { Vehicle } from "../models/Vehicles.model.js"
+import { Client } from "./Clients.model.js";
+import { Vehicle } from "./Vehicles.model.js"
 
-export const Sale = sequelize.define('sales', {
-    idSale: {
+export const Exchange = sequelize.define('exchanges', {
+    idExchange: {
         type: DataTypes.INTEGER(11),
         primaryKey: true,
         autoIncrement: true
     },
-    saleDate: {
+    exchangeDate: {
         type: DataTypes.DATE,
         allowNull : false,
         validate: {
@@ -21,7 +21,7 @@ export const Sale = sequelize.define('sales', {
             }
         }   
     },
-    salePrice: {
+    exchangePrice: {
         type: DataTypes.INTEGER(11),
         allowNull: false,
         validate: {
@@ -48,7 +48,7 @@ export const Sale = sequelize.define('sales', {
             }
         } 
     }, 
-    salePaymentMethod: {
+    exchangePaymentMethod: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -57,7 +57,7 @@ export const Sale = sequelize.define('sales', {
             }
         }
     },
-    saleLimitations: {
+    exchangeLimitations: {
         type: DataTypes.STRING(200),
         allowNull : false,
         validate: {
@@ -70,7 +70,7 @@ export const Sale = sequelize.define('sales', {
             }
         }
     },
-    saleCity: {
+    exchangeCity: {
         type: DataTypes.STRING(20),
         allowNull : false,
         validate: {
@@ -79,7 +79,7 @@ export const Sale = sequelize.define('sales', {
             }
         }  
     },
-    salePecuniaryPenalty: {
+    exchangePecuniaryPenalty: {
         type: DataTypes.INTEGER(11),
         allowNull : false,
         validate: {
@@ -98,31 +98,25 @@ export const Sale = sequelize.define('sales', {
             } 
         }  
     },
-    saleStatus: {
+    exchangeStatus: {
         type: DataTypes.BOOLEAN,
         allowNull : false,
         defaultValue: true
     }
 }); 
 
-Client.hasMany(Sale, {
-  foreignKey : 'idClientSale',
-  sourceKey : 'idClient'
+
+
+Client.hasMany(Exchange, {
+    foreignKey : 'idClientExchange',
+    sourceKey : 'idClient'
 })
-
-Sale.belongsTo(Client, {
-  foreignKey: 'idClientSale',
-  targetId: 'idClient'
+  
+Exchange.belongsTo(Client, {
+    foreignKey: 'idClientExchange',
+    targetId: 'idClient'
 })
-
-
-Sale.hasOne(Vehicle, {
-  foreignKey : 'idVehicleSale',
-  sourceKey : 'idSale'
-})
-
-Vehicle.belongsTo(Sale, {
-  foreignKey : 'idVehicleSale',
-  targetId : 'idSale'
-})
-
+  
+  
+Exchange.belongsToMany(Vehicle, {through : 'ExchangeDetails', foreignKey: 'exchangeId', as: 'vehiclesExchange'});
+Vehicle.belongsToMany(Exchange, {through : 'ExchangeDetails', foreignKey: 'vehicleId' });

@@ -1,4 +1,4 @@
-import {Sale} from '../models/Sales.model.js';
+/* import {Sale} from '../models/Sales.model.js';
 import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
 import { Op } from 'sequelize';
@@ -89,27 +89,6 @@ export const postSale = async (req, res) => {
     }
 };
 
-/* export const updateSale = async (req, res) => {
-    const { idSale } = req.params;
-    try {
-        const {saleDate, salePrice, salePaymentMethod, saleLimitations, saleCity, salePecuniaryPenalty} = req.body;
-
-        const sale = await Sale.findByPk(idSale)
-
-        sale.saleDate = saleDate
-        sale.salePrice = salePrice
-        sale.salePaymentMethod = salePaymentMethod
-        sale.saleLimitations = saleLimitations
-        sale.saleCity = saleCity
-        sale.salePecuniaryPenalty = salePecuniaryPenalty
-        
-        await sale.save()
-
-        res.json(sale);
-    } catch (error) {
-        return res.status(500).json({message : error.message});
-    }
-}; */
 
 export const statusSale = async (req, res) => {
     const { idSale } = req.params;
@@ -176,6 +155,9 @@ export const reportSale = async (req, res) => {
             },
             include: [
                 {
+                    model: Client
+                },
+                {
                     model: Vehicle, 
                     as: 'vehiclesAs' 
                 }
@@ -186,4 +168,4 @@ export const reportSale = async (req, res) => {
         console.error(error);
         return res.status(500).json({message : error.message});
     }
-};
+}; */

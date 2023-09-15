@@ -1,6 +1,10 @@
 
 import app from './app.js'
 import { sequelize } from './database/database.js'
+import './models/Sales.model.js'
+import './models/Purchases.model.js'
+import './models/Exchanges.model.js'
+import './models/Clients.model.js'
 import './models/Vehicles.model.js'
 import './models/Othervehicleinformations.model.js'
 
