@@ -9,7 +9,9 @@ import { VehiclesRoutes } from './routes/Vehicles.routes.js';
 import { OtherRoutes } from './routes/Othervehicleinformations.routes.js';
 import { ExchangeRoutes } from './routes/Exchanges.routes.js';
 import { ClientRoutes } from './routes/Clients.routes.js';
-
+import { ImprovementsRoutes } from './routes/Improvements.routes.js';
+import { SalesRoutes } from './routes/Sales.routes.js';
+import { PurchaseRoutes } from './routes/Purchases.routes.js';
 
 const app = express();
 
