@@ -20,7 +20,7 @@ export const Purchase = sequelize.define('purchases', {
             }
         }   
     },
-    purchasePrice: {
+    purchaseFinalPrice: {
         type: DataTypes.INTEGER(11),
         allowNull: false,
         validate: {
@@ -47,6 +47,33 @@ export const Purchase = sequelize.define('purchases', {
             }
         } 
     }, 
+    purchaseIncrementPrice: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      validate: {
+          notNull: {
+            msg: 'Este campo es obligatorio',
+          },
+          isNumeric: {
+            msg: 'Este campo debe contener solo números',
+          },
+          len: {
+            args: [6, 12],
+            msg: 'Este campo debe tener entre 5 y 11 números',
+          },
+          customValidation(value) {
+            if (value.startsWith('0')) {
+              throw new Error('Este campo no puede empezar en 0');
+            }
+          },
+          noSpecialCharacters(value) {
+            const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+            if (specialCharacters.test(value)) {
+              throw new Error('Este campo no puede contener caracteres especiales');
+            }
+          }
+      } 
+    }, 
     purchasePaymentMethod: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -69,14 +96,23 @@ export const Purchase = sequelize.define('purchases', {
             }
         }
     },
-    purchaseCity: {
-        type: DataTypes.STRING(20),
+    purchaseDepartment: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      validate: {
+          notNull: {
+            msg: 'Este campo es obligatorio',
+          }
+      }   
+    },
+    purchaseMunicipality: {
+        type: DataTypes.STRING,
         allowNull : false,
         validate: {
             notNull: {
               msg: 'Este campo es obligatorio',
             }
-        }  
+        }
     },
     purchasePecuniaryPenalty: {
         type: DataTypes.INTEGER(11),
@@ -113,3 +149,6 @@ Purchase.belongsTo(Client, {
   foreignKey: 'idClientPurchase',
   targetId: 'idClient'
 })
+
+
+

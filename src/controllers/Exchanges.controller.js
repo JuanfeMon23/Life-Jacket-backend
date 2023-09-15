@@ -58,16 +58,17 @@ export const getExchange = async (req,res) => {
 
 export const postExchange = async (req, res) => {
 /*     try {
-        const {exchangeDate, exchangePrice, exchangePaymentMethod, exchangeLimitations, exchangeCity, exchangePecuniaryPenalty, exchangeStatus, idClientExchange, vehicleId} = req.body;
+        const {exchangeDate, exchangeIncrementPrice, exchangeFinalPrice, exchangePaymentMethod, exchangeLimitations, exchangeDepartment, exchangeMunicipality, exchangePecuniaryPenalty, idClientExchange, vehicleId} = req.body;
 
         const newExchange = await Exchange.create({
             exchangeDate,
-            exchangePrice,
+            exchangeIncrementPrice,
+            exchangeFinalPrice,
             exchangePaymentMethod,
             exchangeLimitations,
-            exchangeCity,
+            exchangeDepartment,
+            exchangeMunicipality,
             exchangePecuniaryPenalty,
-            exchangeStatus,
             idClientExchange,
             vehicle : [vehicleId]
         });
@@ -121,9 +122,10 @@ export const searchExchange = async (req, res) => {
             where: {
                 [Op.or]: [
                     { exchangeDate: { [Op.like]: `%${search}%` } },
-                    { exchangePrice: { [Op.like]: `%${search}%` } },
+                    { exchangeFinalPrice: { [Op.like]: `%${search}%` } },
                     { exchangePaymentMethod: { [Op.like]: `%${search}%` } },
-                    { exchangeCity: { [Op.like]: `%${search}%` } },
+                    { exchangeDepartment: { [Op.like]: `%${search}%` } },
+                    { exchangeMunicipality: { [Op.like]: `%${search}%` } },
                     {'$Client.clientDocument$': { [Op.like]: `%${search}%` } },
                     {'$Client.clientName$': { [Op.like]: `%${search}%` } },
                     {'$Client.clientLastName$': { [Op.like]: `%${search}%` } },

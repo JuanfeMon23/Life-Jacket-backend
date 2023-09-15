@@ -10,7 +10,7 @@ import { OtherRoutes } from './routes/Othervehicleinformations.routes.js';
 import { ExchangeRoutes } from './routes/Exchanges.routes.js';
 import { ClientRoutes } from './routes/Clients.routes.js';
 import { ImprovementsRoutes } from './routes/Improvements.routes.js';
-import { SalesRoutes } from './routes/Sales.routes.js';
+import { SaleRoutes } from './routes/Sales.routes.js';
 import { PurchaseRoutes } from './routes/Purchases.routes.js';
 
 const app = express();
@@ -25,8 +25,11 @@ app.use(cors({
 
 app.use('/api', ClientRoutes);
 app.use('/api', ExchangeRoutes);
+app.use('/api', SaleRoutes);
+app.use('/api', PurchaseRoutes);
 app.use('/api', VehiclesRoutes);
 app.use('/api', OtherRoutes);
+app.use('/api', ImprovementsRoutes);
 
 
 export default app;

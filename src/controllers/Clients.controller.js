@@ -30,13 +30,15 @@ export const getClient = async (req,res) => {
 
 export const postClient = async (req, res) => {
     try {
-        const {clientDocument, clientName, clientLastName, clientExpeditionPlace, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber, clientStatus} = req.body;
+        const {clientTypeDocument, clientDocument, clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber, clientStatus} = req.body;
 
         const newClient = await Client.create({
+            clientTypeDocument,
             clientDocument,
             clientName,
             clientLastName,
-            clientExpeditionPlace,
+            clientDepartment,
+            clientMunicipality,
             clientAddress,
             clientPhoneNumber,
             clientOtherContact,
@@ -52,14 +54,16 @@ export const postClient = async (req, res) => {
 export const updateClient = async (req, res) => {
     const { idClient } = req.params;
     try {
-        const {clientDocument, clientName, clientLastName, clientExpeditionPlace, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber} = req.body;
+        const {clientTypeDocument, clientDocument, clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber} = req.body;
 
         const client = await Client.findByPk(idClient)
 
+        client.clientTypeDocument = clientTypeDocument
         client.clientDocument = clientDocument
         client.clientName = clientName
         client.clientLastName = clientLastName
-        client.clientExpeditionPlace = clientExpeditionPlace
+        client.clientDepartment = clientDepartment
+        client.clientMunicipality = clientMunicipality
         client.clientAddress = clientAddress
         client.clientPhoneNumber = clientPhoneNumber
         client.clientOtherContact = clientOtherContact

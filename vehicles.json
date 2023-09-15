@@ -1,8 +1,14 @@
 {
     "vehicleType": [
       {
-        "type": "Automovil",
+        "type": "Carros y derivados",
         "brand": [
+          {
+            "name": "Agrale",
+            "line" : [
+              "MA"
+            ]
+          },
           {
             "name": "Alfa Romeo",
             "line" : [
@@ -17,9 +23,21 @@
             ]
           },
           {
+            "name": "Angler",
+            "line" : [
+              "204"
+            ]
+          },
+          {
             "name": "Asia",
             "line" : [
               "Rocsta"
+            ]
+          },
+          {
+            "name": "Autocar",
+            "line" : [
+              "ACL Tractomula"
             ]
           },
           {
@@ -47,8 +65,11 @@
             "name": "BAIC",
             "line" : [
               "Kenbo",
+              "MZ40", 
               "MZ45",
-              "X35"
+              "Minivan",
+              "X35",
+              "Van"
             ]
           },
           {
@@ -108,13 +129,27 @@
               "E3",
               "F-Zero",
               "F0",
+              "Movil 3",
               "Song"
+            ]
+          },
+          {
+            "name": "Case",
+            "line" : [
+              "Retroexcavadora"
+            ]
+          },
+          {
+            "name": "Champion",
+            "line" : [
+              "710"
             ]
           },
           {
             "name": "Chana",
             "line" : [
               "Benni",
+              "Star Leopard",
               "Star Truck",
               "Star Van"
             ]
@@ -139,12 +174,15 @@
               "970",
               "Freedom",
               "Freedom Van",
+              "MiniVan",
               "Q35"
             ]
           },
           {
             "name": "Chery",
             "line" : [
+              "Chery Taxi",
+              "Grand City Taxi",
               "Cowin",
               "Fulwin",
               "Grand Tiggo",
@@ -153,6 +191,8 @@
               "QQ",
               "Tiggo",
               "Vancargo",
+              "Van Cargo2",
+              "Van Pass2",
               "Vanpass",
               "Xcross",
               "Y380",
@@ -164,45 +204,63 @@
           {
             "name": "Chevrolet",
             "line" : [
-              "39",
+              "7:24",
               "3100",
+              "39",
+              "Astra",
               "Alto",
               "Apache",
-              "Astra",
               "Aveo",
               "Beat",
               "Bel Air",
               "Blazer",
               "Blazer 4x4",
+              "B7R 260",
               "C10",
               "Camaro",
               "Captiva",
               "Carry",
               "Chevy",
+              "Chevytaxi",
               "Cheyenne",
+              "CHR",
               "Cobalt",
               "Colorado",
               "Corsa",
               "Corvette",
               "Cruze",
               "Dmax",
+              "Elite",
               "Epica",
               "Equinox",
               "Esteem",
+              "FRR",
+              "FSR",
+              "FTR",
+              "FVR",
+              "FVZ",
               "Grand Blazer",
               "Grand Vitara",
               "HHR",
               "Jimmy",
               "Joy",
+              "Kodiak",
               "Luv",
               "Luv 1.6",
               "Luv 2.2",
               "Luv 2.3",
               "Luv D-max",
+              "LV",
               "Malibu",
               "Monza",
               "N200",
               "N300",
+              "N400",
+              "NHR",
+              "NKR",
+              "NNR",
+              "NPR",
+              "NQR",
               "Onix",
               "Optra",
               "Orlando",
@@ -213,6 +271,7 @@
               "Sonic",
               "Spark",
               "Sprint",
+              "Super Brigadier",
               "Super Carry",
               "Swift",
               "Tahoe",
@@ -245,6 +304,7 @@
               "C5",
               "DS3",
               "DS4",
+              "Jumper",
               "Saxo",
               "Xantia",
               "Xantia II",
@@ -277,30 +337,69 @@
             "name": "Daihatsu",
             "line" : [
               "Charade",
+              "Delta",
+              "FG1J",
               "F20",
               "Feroza",
               "Rocky",
               "Sirion",
-              "Terios"
+              "Terios",
+              "V126"
+            ]
+          },
+          {
+            "name": "Delta",
+            "line" : [
+              "V126", 
+              "V128"
+            ]
+          },
+          {
+            "name": "DFA",
+            "line" : [
+              "Minitruck 1020"
+            ]
+          },
+          {
+            "name": "DFAC",
+            "line" : [
+              "L 4700"
             ]
           },
           {
             "name": "DFSK",
             "line" : [
               "1.3",
+              "C31", 
+              "C35", 
               "C37",
               "Chasis",
               "Glory",
+              "K01S", 
+              "K05S", 
               "Pick Up",
               "Seres",
               "V21",
               "V22",
-              "Van"
+              "V25", 
+              "V27", 
+              "Van",
+              "Van Cargo"
+            ]
+          },
+          {
+            "name": "Dite",
+            "line" : [
+              "Trailer Tanque"
             ]
           },
           {
             "name": "Dodge",
             "line" : [
+              "300", 
+              "500", 
+              "600", 
+              "6500",
               "Alpine",
               "Caliber",
               "D100",
@@ -318,9 +417,13 @@
           {
             "name": "Dongfeng",
             "line" : [
+              "Camión", 
+              "Duolika", 
+              "Jinba", 
               "Joyear",
               "Mini Van",
-              "Rich"
+              "Rich",
+              "Star"
             ]
           },
           {
@@ -334,7 +437,8 @@
             "name": "FAW",
             "line" : [
               "Minivan",
-              "R7"
+              "R7",
+              "Taxi"
             ]
           },
           {
@@ -344,11 +448,13 @@
               "147",
               "500",
               "500 X",
+              "673",
               "Argo",
               "Bertone",
               "Bravo",
               "Cronos",
               "Fiorino",
+              "Fiorino Furgon",
               "Idea",
               "Linea",
               "Mobi",
@@ -370,7 +476,11 @@
             "name": "Ford",
             "line" : [
               "Bronco",
+              "Cargo 1721",
+              "Cargo 815",
+              "Cargo 816",
               "Courier",
+              "Econoline",
               "Ecosport",
               "Edge",
               "Escape",
@@ -380,6 +490,12 @@
               "F100",
               "F150",
               "F250",
+              "F350",
+              "F600",
+              "F5000",
+              "F7000",
+              "F8000",
+              "F9000",
               "Falcon",
               "Festiva",
               "Fiesta",
@@ -389,6 +505,7 @@
               "Llanero",
               "Mustang",
               "Nueva Ranger",
+              "Piragua",
               "Panel",
               "Ranger"
             ]
@@ -396,9 +513,50 @@
           {
             "name": "Foton",
             "line" : [
+              "5129",
+              "Auman",
+              "Aumark",
+              "BJ1039",
+              "BJ1041",
+              "BJ1043",
+              "BJ1061",
+              "BJ1065",
+              "BJ1129",
+              "BJ3122",
+              "Cabina Sencilla",
+              "Cabina y Media",
+              "Camion Cummins",
+              "Cummins 1129",
+              "Cummins 1133",
+              "Doble Cabina",
+              "FHR",
+              "FKR",
+              "FPR",
+              "FQR",
+              "FRR",
+              "FRR-S",
+              "Forland",
+              "Microbus",
               "Mini Truck",
               "Mini Van",
-              "Tunland"
+              "Tunland",
+              "Olin"
+            ]
+          },
+          {
+            "name": "Freightliner",
+            "line" : [
+              "CL", 
+              "Columbia", 
+              "M2", 
+              "M2 106", 
+              "M2 112"
+            ]
+          },
+          {
+            "name": "Fuso",
+            "line" : [
+              "Canter"
             ]
           },
           {
@@ -446,9 +604,11 @@
           {
             "name": "Hafei",
             "line" : [
-              "Luzun",
-              "Minyi",
-              "Ruiyi",
+              "Junyi", 
+              "Luzun", 
+              "Minyi", 
+              "Ruiyi", 
+              "Xinyi", 
               "Zhongyi"
             ]
           },
@@ -474,6 +634,21 @@
             ]
           },
           {
+            "name": "Hino",
+            "line" : [
+              "Dutro",
+              "FC",
+              "FC114",
+              "FC9J",
+              "FG1J",
+              "FG8J",
+              "GB",
+              "GD1J",
+              "GH8J",
+              "SG1A"
+            ]
+          },
+          {
             "name": "Hummer",
             "line" : [
               "H3"
@@ -489,16 +664,28 @@
               "EON",
               "Elantra",
               "Elantra Supreme",
+              "EX100",
               "Excel",
+              "GraceSuper",
+              "Grand City Taxi",
+              "Grand I10",
+              "Grand i10 Illusion",
+              "Grand Metro Taxi",
+              "Grand Pony Taxi",
+              "Grand Starex",
+              "Graviti",
               "Genesis",
               "Genesis Coupe",
               "Getz",
-              "Grand I10",
-              "Grand i10 Illusion",
-              "Graviti",
               "H1",
+              "H100",
               "HB20",
               "HB20s",
+              "HD65",
+              "HD72",
+              "HD78",
+              "HD120",
+              "HD270",
               "Ioniq",
               "Kona",
               "New Elantra",
@@ -507,11 +694,13 @@
               "Santro",
               "Scoupe",
               "Sonata",
+              "Starex",
               "Terracan",
               "Tucson",
               "Veloster",
               "Venue",
               "Veracruz",
+              "Vision",
               "i10",
               "i20",
               "i25",
@@ -523,24 +712,59 @@
           {
             "name": "International",
             "line" : [
-              "Harvester"
+              "1700", 
+              "2674", 
+              "4300", 
+              "4700", 
+              "4900", 
+              "7300", 
+              "7600", 
+              "9400i", 
+              "9900i", 
+              "DT466", "Eagle", 
+              "Harvester",
+              "Pro Star"
+            ]
+          },
+          {
+            "name": "Iveco",
+            "line" : [
+              "65C14G", 
+              "Camion"
             ]
           },
           {
             "name": "JAC",
             "line" : [
+              "1035",
+              "1042",
+              "1048",
+              "1061KN",
+              "1083",
+              "1120KN",
+              "Arana",
               "B Class",
               "B-Cross",
+              "Buseta",
+              "Camion",
               "Cross",
+              "Furgon",
+              "Grua",
               "Hfc 6451",
               "IEV7S",
               "J3",
+              "JHR",
+              "JKR",
+              "JPR",
+              "JQR",
+              "JRR",
               "JS2",
               "Rein",
               "S2",
               "S3",
               "S5",
               "Smile",
+              "Star",
               "T6",
               "T8",
               "Veloce"
@@ -581,12 +805,32 @@
             ]
           },
           {
+            "name": "Jinbei",
+            "line" : [
+              "Microbus"
+            ]
+          },
+          {
             "name": "JMC",
             "line" : [
+              "Carrying",
               "Doble Cabina",
+              "JX 1020 T3",
+              "JX 1043 DL2",
+              "JX 1043 DSL2",
+              "JX 1053 DC",
+              "JX1041",
+              "JX1050",
               "Landwind",
+              "Touring",
               "Tiger 7",
               "Vigus"
+            ]
+          },
+          {
+            "name": "Joylong",
+            "line" : [
+              "H3"
             ]
           },
           {
@@ -597,8 +841,18 @@
             ]
           },
           {
+            "name": "Kenworth",
+            "line" : [
+              "T370", 
+              "T460", 
+              "T600A", 
+              "T800"
+            ]
+          },
+          {
             "name": "KIA",
             "line" : [
+              "Besta",
               "Cadenza",
               "Carens",
               "Carens Rondo",
@@ -609,7 +863,14 @@
               "Cerato Koup",
               "Cerato Pro",
               "Cerato Vivro",
+              "Eko",
+              "Ekotaxi",
+              "Grand Ekotaxi",
+              "Grand Sephia",
               "Grand Sportage",
+              "K 2700",
+              "K 3000S",
+              "K 3600S",
               "Magentis",
               "Master",
               "Mohave",
@@ -638,6 +899,7 @@
               "Sportage II",
               "Sportage Revolution",
               "Stonic",
+              "Taxi 5-5",
               "Tonic",
               "X-LINE"
             ]
@@ -677,6 +939,7 @@
             "line" : [
               "520",
               "Cabina Sencilla",
+              "Foison",
               "X60"
             ]
           },
@@ -687,6 +950,16 @@
               "PIK UP",
               "Scorpio",
               "Xuv 500"
+            ]
+          },
+          {
+            "name": "Mack",
+            "line" : [
+              "CH 613", 
+              "CV 713", 
+              "DM 690S", 
+              "GU 813", 
+              "Granite Gold"
             ]
           },
           {
@@ -716,13 +989,19 @@
               "MPV",
               "MX3",
               "Matsuri 626",
-              "Speed 3"
+              "Speed 3",
+              "T45"
             ]
           },
           {
             "name": "Mercedes Benz",
             "line" : [
+              "413", 
+              "1720", 
+              "Actros", 
               "Amg",
+              "Atego", 
+              "Bus",
               "Clase A",
               "Clase B",
               "Clase C",
@@ -741,7 +1020,9 @@
               "Clase S",
               "Clase SLC",
               "Clase SLK",
-              "Sprinter"
+              "O500 RS",
+              "Sprinter",
+              "Vito"
             ]
           },
           {
@@ -776,8 +1057,10 @@
             "name": "Mitsubishi",
             "line" : [
               "ASX",
+              "Canter",
               "Eclipse",
               "Endeavor",
+              "Fuso", 
               "Galant",
               "Grandis",
               "L200",
@@ -799,11 +1082,18 @@
             ]
           },
           {
+            "name": "Naveco",
+            "line" : [
+              "X100-33"
+            ]
+          },
+          {
             "name": "Nissan",
             "line" : [
               "AD Wagon",
               "Almera",
               "Bluebird",
+              "Cabstar",
               "Chasis Frontier",
               "D21",
               "D22",
@@ -832,6 +1122,7 @@
               "Nuevo Primera",
               "Pathfinder",
               "Patrol",
+              "PKC",
               "Primera",
               "Qashqai",
               "Qashqai 2",
@@ -840,7 +1131,9 @@
               "Teana",
               "Terrano II",
               "Tiida",
+              "TK55",
               "Tl720",
+              "U41",
               "Urvan",
               "Versa",
               "X-Trail",
@@ -864,6 +1157,18 @@
             ]
           },
           {
+            "name": "Oshkosh",
+            "line" : [
+              "1070f"
+            ]
+          },
+          {
+            "name": "Pegaso",
+            "line" : [
+              "3080"
+            ]
+          },
+          {
             "name": "Peugeot",
             "line" : [
               "107",
@@ -881,7 +1186,9 @@
               "508",
               "2008",
               "3008",
-              "5008"
+              "5008",
+              "Boxer", 
+              "Partner"
             ]
           },
           {
@@ -905,7 +1212,8 @@
               "700",
               "1500",
               "2500",
-              "SLT"
+              "SLT",
+              "V700"
             ]
           },
           {
@@ -925,10 +1233,12 @@
               "Kwid",
               "Laguna",
               "Logan",
+              "Master",
               "Megane",
               "Megane II",
               "Megane III",
               "Nueva Koleos",
+              "Nueva Master", 
               "Nuevo Twingo",
               "Oroch",
               "Sandero",
@@ -942,6 +1252,7 @@
               "Twizy",
               "Zen",
               "Zoe",
+              "r9",
               "r12",
               "r18",
               "r19",
@@ -954,8 +1265,15 @@
           {
             "name": "Saic Wuling",
             "line" : [
-              "Minivan Basica",
-              "Supervan Basica"
+              "Minivan",
+              "Supervan"
+            ]
+          },
+          {
+            "name": "Scania",
+            "line" : [
+              "K 124IB", 
+              "K360B"
             ]
           },
           {
@@ -974,6 +1292,7 @@
           {
             "name": "Shineray",
             "line" : [
+              "Mini Truck",
               "Van"
             ]
           },
@@ -981,6 +1300,12 @@
             "name": "Simca",
             "line" : [
               "1.300 GLS"
+            ]
+          },
+          {
+            "name": "Sinotruk",
+            "line" : [
+              "Semi Trailer"
             ]
           },
           {
@@ -1062,6 +1387,12 @@
             ]
           },
           {
+            "name": "Tecnipesados",
+            "line" : [
+              "Cama Baja"
+            ]
+          },
+          {
             "name": "Toyota",
             "line" : [
               "4Runner",
@@ -1100,46 +1431,68 @@
             ]
           },
           {
+            "name": "Valtra",
+            "line" : [
+              "Tractor"
+            ]
+          },
+          {
+            "name": "Volco",
+            "line" : [
+              "Hidraulico"
+            ]
+          },
+          {
             "name": "Volkswagen",
             "line" : [
-              "Gol Trendline",
-              "Amarok",
-              "Beetle",
-              "Bora",
-              "Comfortline",
-              "Crafter 35",
-              "Cross Up",
-              "Crossfox",
-              "Derby",
-              "Escarabajo",
-              "Fox",
-              "Gol",
-              "Gol Comfortline",
-              "Golf",
-              "Jetta",
-              "Jetta Sportline Beats",
-              "New Beetle",
-              "Nivus",
-              "Nuevo Jetta",
-              "Parati",
-              "Passat",
-              "Polo",
-              "Saveiro",
-              "Space Fox",
-              "T-Cross",
-              "T-Cross Highline",
-              "T5 Multivans",
-              "Taos",
-              "Teramont",
-              "Tiguan",
-              "Tiguan Allspace Highline",
-              "Touareg",
-              "Transporter",
-              "Vento",
-              "Virtus",
-              "Voyage",
-              "Voyage Comfortline",
-              "Voyage Trendline"
+                "13-180",
+                "15-180",
+                "17-210",
+                "31-310",
+                "8-120",
+                "9-150",
+                "Amarok",
+                "Beetle",
+                "Bora",
+                "Caddy",
+                "Comfortline",
+                "Constellation",
+                "Crafter 35",
+                "Crafter 50",
+                "Cross Up",
+                "Crossfox",
+                "Delivery",
+                "Derby",
+                "Escarabajo",
+                "Fox",
+                "Gol",
+                "Gol Comfortline",
+                "Gol Trendline",
+                "Golf",
+                "Jetta",
+                "Jetta Sportline Beats",
+                "New Beetle",
+                "Nivus",
+                "Nuevo Jetta",
+                "Parati",
+                "Passat",
+                "Polo",
+                "Saveiro",
+                "Space Fox",
+                "T-Cross",
+                "T-Cross Highline",
+                "T5 Multivans",
+                "Taos",
+                "Teramont",
+                "Tiguan",
+                "Tiguan Allspace Highline",
+                "Touareg",
+                "Transporter",
+                "Vento",
+                "Virtus",
+                "Voyage",
+                "Voyage Comfortline",
+                "Voyage Trendline"
             ]
           },
           {
@@ -1149,6 +1502,7 @@
               "C30",
               "C40",
               "NEW S60",
+              "NH12",
               "S40",
               "S60",
               "S80",
@@ -1164,6 +1518,18 @@
             "name": "Willys",
             "line" : [
               "Aero"
+            ]
+          },
+          {
+            "name": "Yamaha",
+            "line" : [
+              "WaveRunner"
+            ]
+          },
+          {
+            "name": "Yutong",
+            "line" : [
+              "Bus"
             ]
           },
           {
@@ -1691,604 +2057,9 @@
           }
           
         ]  
-      },
-      {
-        "type": "Camiones",
-        "brand": [
-          {
-            "name": "Agrale",
-            "line" : [
-              "MA"
-            ]
-          },
-          {
-            "name": "Angler",
-            "line" : [
-              "204"
-            ]
-          },
-          {
-            "name": "Autocar",
-            "line" : [
-              "ACL Tractomula"
-            ]
-          },
-          {
-            "name": "BAIC",
-            "line" : [
-              "Kenbo", 
-              "MZ40", 
-              "Minivan", 
-              "Van"
-            ]
-          },
-          {
-            "name": "BYD",
-            "line" : [
-              "Movil 3"
-            ]
-          },
-          {
-            "name": "Case",
-            "line" : [
-              "Retroexcavadora"
-            ]
-          },
-          {
-            "name": "Champion",
-            "line" : [
-              "710"
-            ]
-          },
-          {
-            "name": "Chana",
-            "line" : [
-              "Star Leopard"
-            ]
-          },
-          {
-            "name": "Changan",
-            "line" : [
-              "MiniVan"
-            ]
-          },
-          {
-            "name": "Changhe",
-            "line" : [
-              "Freedom", 
-              "MiniVan"
-            ]
-          },
-          {
-            "name": "Chevrolet",
-            "line" : [
-              "7:24",
-              "B7R 260",
-              "Brigadier",
-              "C10",
-              "C30",
-              "C70",
-              "CHR",
-              "Carry",
-              "Chevytaxi",
-              "Cheyenne",
-              "DMAX",
-              "Elite",
-              "FRR",
-              "FSR",
-              "FTR",
-              "FVR",
-              "FVZ",
-              "Kodiak",
-              "LV",
-              "Luv",
-              "Luv D-max",
-              "N300",
-              "N400",
-              "NHR",
-              "NKR",
-              "NNR",
-              "NPR",
-              "NQR",
-              "Spark",
-              "Super Brigadier"
-            ]
-          },
-          {
-            "name": "Chery",
-            "line" : [
-              "Chery Taxi",
-              "Grand City Taxi",
-              "Van Cargo",
-              "Van Cargo2",
-              "Van Pass2",
-              "Y380"
-            ]
-          },
-          {
-            "name": "Citroen",
-            "line" : [
-              "Jumper"
-            ]
-          },
-          {
-            "name": "Daihatsu",
-            "line" : [
-              "Delta", 
-              "FG1J", 
-              "V126"
-            ]
-          },
-          {
-            "name": "Delta",
-            "line" : [
-              "V126", 
-              "V128"
-            ]
-          },
-          {
-            "name": "DFA",
-            "line" : [
-              "Minitruck 1020"
-            ]
-          },
-          {
-            "name": "DFAC",
-            "line" : [
-              "L 4700"
-            ]
-          },
-          {
-            "name": "DFSK",
-            "line" : [
-              "C31", 
-              "C35", 
-              "K01S", 
-              "K05S", 
-              "V25", 
-              "V27", 
-              "Van Cargo"
-            ]
-          },
-          {
-            "name": "Dite",
-            "line" : [
-              "Trailer Tanque"
-            ]
-          },
-          {
-            "name": "Dodge",
-            "line" : [
-              "300", 
-              "500", 
-              "600", 
-              "6500", 
-              "Ram"
-            ]
-          },
-          {
-            "name": "Dongfeng",
-            "line" : [
-              "Camión", 
-              "Duolika", 
-              "Jinba", 
-              "Star"
-            ]
-          },
-          {
-            "name": "FAW",
-            "line" : [
-              "Minivan", 
-              "Taxi"
-            ]
-          },
-          {
-            "name": "Fiat",
-            "line" : [
-              "673", 
-              "Fiorino", 
-              "Fiorino Furgon"
-            ]
-          },
-          {
-            "name": "Ford",
-            "line" : [
-              "Cargo 1721",
-              "Cargo 815",
-              "Cargo 816",
-              "Econoline",
-              "F 350 [7]",
-              "F 350 [9]",
-              "F 600",
-              "F-150",
-              "F350",
-              "F5000",
-              "F600",
-              "F7000",
-              "F8000",
-              "F900",
-              "Piragua"
-            ]
-          },
-          {
-            "name": "Foton",
-            "line" : [
-              "5129",
-              "Auman",
-              "Aumark",
-              "BJ1039",
-              "BJ1041",
-              "BJ1043",
-              "BJ1061",
-              "BJ1065",
-              "BJ1129",
-              "BJ3122",
-              "Cabina Sencilla",
-              "Cabina y Media",
-              "Camion Cummins",
-              "Cummins 1129",
-              "Cummins 1133",
-              "Doble Cabina",
-              "FHR",
-              "FKR",
-              "FPR",
-              "FQR",
-              "FRR",
-              "FRR-S",
-              "Forland",
-              "Microbus",
-              "Mini Truck",
-              "Mini Van",
-              "Olin"
-            ]
-          },
-          {
-            "name": "Freightliner",
-            "line" : [
-              "CL", 
-              "Columbia", 
-              "M2", 
-              "M2 106", 
-              "M2 112"
-            ]
-          },
-          {
-            "name": "Fuso",
-            "line" : [
-              "Canter"
-            ]
-          },
-          {
-            "name": "Hafei",
-            "line" : [
-              "Junyi", 
-              "Luzun", 
-              "Minyi", 
-              "Ruiyi", 
-              "Xinyi", 
-              "Zhongyi"
-            ]
-          },
-          {
-            "name": "Hino",
-            "line" : [
-              "Dutro",
-              "FC",
-              "FC114",
-              "FC9J",
-              "FG1J",
-              "FG8J",
-              "GB",
-              "GD1J",
-              "GH8J",
-              "SG1A"
-            ]
-          },
-          {
-            "name": "Hyundai",
-            "line" : [
-              "Accent",
-              "Atos",
-              "EX100",
-              "GraceSuper",
-              "Grand City Taxi",
-              "Grand I10",
-              "Grand Metro Taxi",
-              "Grand Pony Taxi",
-              "Grand Starex",
-              "H1",
-              "H100",
-              "HD 120",
-              "HD 270",
-              "HD 65",
-              "HD65",
-              "HD72",
-              "HD78",
-              "I10",
-              "Starex",
-              "Vision"
-            ]
-          },
-          {
-            "name": "International",
-            "line" : [
-              "1700", 
-              "2674", 
-              "4300", 
-              "4700", 
-              "4900", 
-              "7300", 
-              "7600", 
-              "9400i", 
-              "9900i", 
-              "DT466", "Eagle", 
-              "Pro Star"
-            ]
-          },
-          {
-            "name": "Iveco",
-            "line" : [
-              "65C14G", 
-              "Camion"
-            ]
-          },
-          {
-            "name": "JAC",
-            "line" : [
-              "1035",
-              "1042",
-              "1048",
-              "1083",
-              "1061KN",
-              "1120KN",
-              "Arana",
-              "B-Cross",
-              "Buseta",
-              "Camion",
-              "Furgon",
-              "Grua",
-              "J3",
-              "JHR",
-              "JKR",
-              "JPR",
-              "JQR",
-              "JRR",
-              "Star"
-            ]
-          },
-          {
-            "name": "Jinbei",
-            "line" : [
-              "Microbus"
-            ]
-          },
-          {
-            "name": "JMC",
-            "line" : [
-              "Carrying",
-              "JX 1020 T3",
-              "JX 1043 DL2",
-              "JX 1043 DSL2",
-              "JX 1053 DC",
-              "JX1041",
-              "JX1050",
-              "Touring"
-            ]
-          },
-          {
-            "name": "Joylong",
-            "line" : [
-              "H3"
-            ]
-          },
-          {
-            "name": "Kenworth",
-            "line" : [
-              "T370", 
-              "T460", 
-              "T600A", 
-              "T800"
-            ]
-          },
-          {
-            "name": "KIA",
-            "line" : [
-              "Besta",
-              "Carnival",
-              "Ceres",
-              "Eko",
-              "Ekotaxi",
-              "Grand Ekotaxi",
-              "Grand Sephia",
-              "K 2700",
-              "K 3000S",
-              "K 3600S",
-              "Picanto",
-              "Pregio",
-              "Rio",
-              "Sephia",
-              "Super Eko",
-              "Taxi 5-5"
-            ]
-          },
-          {
-            "name": "Lifan",
-            "line" : [
-              "Foison"
-            ]
-          },
-          {
-            "name": "Mack",
-            "line" : [
-              "CH 613", 
-              "CV 713", 
-              "DM 690S", 
-              "GU 813", 
-              "Granite Gold"
-            ]
-          },
-          {
-            "name": "Mazda",
-            "line" : [
-              "T 45", 
-              "T45"
-            ]
-          },
-          {
-            "name": "Mercedes Benz",
-            "line" : [
-              "413", 
-              "1720", 
-              "Actros", 
-              "Atego", 
-              "Bus", 
-              "O500 RS", 
-              "Sprinter", 
-              "Vito"
-            ]
-          },
-          {
-            "name": "Mitsubishi",
-            "line" : [
-              "Canter", 
-              "Fuso", 
-              "L200", 
-              "L300"
-            ]
-          },
-          {
-            "name": "Naveco",
-            "line" : [
-              "X100-33"
-            ]
-          },
-          {
-            "name": "Nissan",
-            "line" : [
-              "Cabstar", 
-              "Nuevo Urvan", 
-              "PKC", 
-              "TK55", 
-              "U41", 
-              "Urvan"
-            ]
-          },
-          {
-            "name": "Oshkosh",
-            "line" : [
-              "1070f"
-            ]
-          },
-          {
-            "name": "Pegaso",
-            "line" : [
-              "3080"
-            ]
-          },
-          {
-            "name": "Peugeot",
-            "line" : [
-              "Boxer", 
-              "Partner"
-            ]
-          },
-          {
-            "name": "RAM",
-            "line" : [
-              "V700"
-            ]
-          },
-          {
-            "name": "Renault",
-            "line" : [
-              "Kangoo", 
-              "Logan", 
-              "Master", 
-              "Nueva Master", 
-              "R9", 
-              "Trafic"
-            ]
-          },
-          {
-            "name": "Saic Wuling",
-            "line" : [
-              "Minivan"
-            ]
-          },
-          {
-            "name": "Scania",
-            "line" : [
-              "K 124IB", 
-              "K360B"
-            ]
-          },
-          {
-            "name": "Shineray",
-            "line" : [
-              "Mini Truck"
-            ]
-          },
-          {
-            "name": "Sinotruk",
-            "line" : [
-              "Semi Trailer"
-            ]
-          },
-          {
-            "name": "Tecnipesados",
-            "line" : [
-              "Cama Baja"
-            ]
-          },
-          {
-            "name": "Valtra",
-            "line" : [
-              "Tractor"
-            ]
-          },
-          {
-            "name": "Volco",
-            "line" : [
-              "Hidraulico"
-            ]
-          },
-          {
-            "name": "Volkswagen",
-            "line" : [
-              "13-180",
-              "15-180",
-              "17-210",
-              "31-310",
-              "8-120",
-              "9-150",
-              "Caddy",
-              "Constellation",
-              "Crafter 50",
-              "Delivery",
-              "Transporter"
-            ]
-          },
-          {
-            "name": "Volvo",
-            "line" : [
-              "NH12"
-            ]
-          },
-          {
-            "name": "Yamaha",
-            "line" : [
-              "WaveRunner"
-            ]
-          },
-          {
-            "name": "Yutong",
-            "line" : [
-              "Bus"
-            ]
-          }
-        ]
       }
     ],
+
     "model": [
       1990, 
       1991, 
@@ -2325,6 +2096,7 @@
       2022, 
       2023
     ],
+
     "fuel" : [
       "Gasolina",
       "Gasolina Corriente",
@@ -2335,6 +2107,7 @@
       "Energía electrica",
       "Hibrido"
     ],
+
     "color": [
       "Rojo",
       "Azul",
@@ -2381,8 +2154,10 @@
       "Topacio",
       "Violeta"
     ],
+    
     "service" : [
       "Público",
-      "Privado"
+      "Privado",
+      "No aplica"
     ]
 }

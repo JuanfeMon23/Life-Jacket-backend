@@ -41,13 +41,15 @@ export const getPurchase = async (req, res) => {
 
 export const postPurchase = async (req, res) => {
     try {
-        const {PurchaseDate, purchasePrice, purchasePayMethod, purchaseLimitations, purchaseCity, purchasePecunaryPenalty, purchaseStatus, idClientPurchase, idVehiclePurchase} = req.body;
+        const {PurchaseDate, purchaseIncrementPrice, purchaseFinalPrice, purchasePayMethod, purchaseLimitations, purchaseDepartment, purchaseMunicipality, purchasePecunaryPenalty, idClientPurchase, idVehiclePurchase} = req.body;
         const newPurchase = await Purchase.create({
             PurchaseDate,
-            purchasePrice,
+            purchaseIncrementPrice,
+            purchaseFinalPrice,
             purchasePayMethod,
             purchaseLimitations,
-            purchaseCity,
+            purchaseDepartment,
+            purchaseMunicipality,
             purchasePecunaryPenalty,
             idClientPurchase,
             idVehiclePurchase
@@ -71,7 +73,7 @@ export const statusPurchase = async (req, res) => {
     }
 };
 
-export const searchPurchases = async (req, res) => {
+export const searchPurchase = async (req, res) => {
     const {search} = req.params;
     try {
         const Purchase = await Purchase.findAll({
@@ -86,8 +88,9 @@ export const searchPurchases = async (req, res) => {
             where: {
                 [Op.or]: [
                     { saleDate: { [Op.like]: `%${search}%` } },
-                    { salePrice: { [Op.like]: `%${search}%` } },
-                    { saleCity: { [Op.like]: `%${search}%` } },
+                    { saleFinalPrice: { [Op.like]: `%${search}%` } },
+                    { purchaseDepartment: { [Op.like]: `%${search}%` } },
+                    { purchaseMunicipality: { [Op.like]: `%${search}%` } },
                     {'$Client.clientDocument$': { [Op.like]: `%${search}%` } },
                     {'$Client.clientName$': { [Op.like]: `%${search}%` } },
                     {'$Client.clientLastName$': { [Op.like]: `%${search}%` } },

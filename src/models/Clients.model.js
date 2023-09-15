@@ -7,6 +7,15 @@ export const Client = sequelize.define('clients', {
         primaryKey: true,
         autoIncrement: true
     },
+    clientTypeDocument: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      validate: {
+          notNull: {
+            msg: 'Este campo es obligatorio',
+          }
+      } 
+  }, 
     clientDocument: {
         type: DataTypes.STRING(12),
         allowNull: false,
@@ -82,14 +91,23 @@ export const Client = sequelize.define('clients', {
             }
         }
     },
-    clientExpeditionPlace: {
-        type: DataTypes.STRING(15),
+    clientDepartment: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      validate: {
+          notNull: {
+            msg: 'Este campo es obligatorio',
+          }
+      }   
+    },
+    clientMunicipality: {
+        type: DataTypes.STRING,
         allowNull : false,
         validate: {
             notNull: {
               msg: 'Este campo es obligatorio',
             }
-        }   
+        }
     },
     clientAddress: {
         type: DataTypes.STRING(80),
@@ -166,3 +184,4 @@ export const Client = sequelize.define('clients', {
         defaultValue: true
     }
 }); 
+
