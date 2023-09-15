@@ -1,6 +1,9 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 import { othervehicleinformation } from "./Othervehicleinformations.model.js";
+import { Purchase } from "./Purchases.model.js";
+import { Sale } from "./Sales.model.js";
+import { Improvements } from "./Improvements.model.js";
 
 
 export const Vehicle = sequelize.define('vehicles', {
@@ -227,6 +230,39 @@ Vehicle.hasOne(othervehicleinformation, {
 
 othervehicleinformation.belongsTo(Vehicle, {
     foreignKey : 'idVehicleOtherVehicleInformation',
+    targetId : 'idVehicle'
+})
+
+//Purchase
+Vehicle.hasOne(Purchase, {
+    foreignKey : 'idVehiclePurchase',
+    sourceKey : 'idVehicle'
+})
+
+Purchase.belongsTo(Vehicle, {
+    foreignKey : 'idVehiclePurchase',
+    targetId : 'idVehicle'
+})
+
+//Sale
+Vehicle.hasOne(Sale, {
+    foreignKey : 'idVehicleSale',
+    sourceKey : 'idVehicle'
+})
+
+Sale.belongsTo(Vehicle, {
+    foreignKey : 'idVehicleSale',
+    targetId : 'idVehicle'
+})
+
+//Improvements
+Vehicle.hasMany(Improvements, {
+    foreignKey : 'idVehicleImprovement',
+    sourceKey : 'idVehicle'
+})
+
+Improvements.belongsTo(Vehicle, {
+    foreignKey : 'idVehicleImprovement',
     targetId : 'idVehicle'
 })
 

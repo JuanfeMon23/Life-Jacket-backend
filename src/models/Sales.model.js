@@ -1,7 +1,6 @@
 import { DataTypes } from "sequelize";
 import  { sequelize } from "../database/database.js";
 import { Client } from "../models/Clients.model.js";
-import { Vehicle } from "../models/Vehicles.model.js"
 
 export const Sale = sequelize.define('sales', {
     idSale: {
@@ -114,15 +113,3 @@ Sale.belongsTo(Client, {
   foreignKey: 'idClientSale',
   targetId: 'idClient'
 })
-
-
-Sale.hasOne(Vehicle, {
-  foreignKey : 'idVehicleSale',
-  sourceKey : 'idSale'
-})
-
-Vehicle.belongsTo(Sale, {
-  foreignKey : 'idVehicleSale',
-  targetId : 'idSale'
-})
-
