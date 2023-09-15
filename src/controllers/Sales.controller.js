@@ -1,4 +1,4 @@
-/* import {Sale} from '../models/Sales.model.js';
+import {Sale} from '../models/Sales.model.js';
 import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
 import { Op } from 'sequelize';
@@ -12,8 +12,7 @@ export const getSales = async (req, res) => {
                     model : Client
                 },
                 {
-                    model: Vehicle, 
-                    as: 'vehiclesAs' // nombre de la asosiacion con Sale
+                    model: Vehicle
                 },
                 
             ],
@@ -38,18 +37,10 @@ export const getSale = async (req,res) => {
                     model : Client
                 },
                 {
-                    model: Vehicle, 
-                    as: 'vehiclesAs'
+                    model: Vehicle
                 },
             ],
         });
-
-        if (sale) {
-            const vehiclesAss = sale.SaleDetails;
-            res.json({ sale, vehiclesAss });
-        } else {
-            return res.status(404).json({ message: 'Venta no encontrada' });
-        }
     } catch (error) {
         return res.status(500).json({message : error.message});
 
@@ -58,7 +49,7 @@ export const getSale = async (req,res) => {
 
 export const postSale = async (req, res) => {
     try {
-        const {saleDate, salePrice, salePaymentMethod, saleLimitations, saleCity, salePecuniaryPenalty, saleStatus, idClientSale, vehicleId} = req.body;
+        const {saleDate, salePrice, salePaymentMethod, saleLimitations, saleCity, salePecuniaryPenalty, saleStatus, idClientSale, idVehicleSale} = req.body;
 
         const newSale = await Sale.create({
             saleDate,
@@ -69,19 +60,8 @@ export const postSale = async (req, res) => {
             salePecuniaryPenalty,
             saleStatus,
             idClientSale,
-            vehicle : [vehicleId]
+            idVehicleSale
         });
-
-    try {
-    const vehicle = await Vehicle.findByPk(vehicleId);
-    if (vehicle) {
-        await newSale.setVehicles([vehicle]);
-    } else {
-        console.error('No se pudo encontrar el vehículo.');
-    }
-    } catch (error) {
-    console.error('Error al buscar el vehículo:', error);
-    }
 
     return res.status(200).json(newSale);
     } catch (error) {
@@ -114,8 +94,7 @@ export const searchSale = async (req, res) => {
                     model: Client, 
                 },
                 {
-                    model: Vehicle, 
-                    as: 'vehiclesAs',
+                    model: Vehicle
                 }
             ],
             where: {
@@ -158,8 +137,7 @@ export const reportSale = async (req, res) => {
                     model: Client
                 },
                 {
-                    model: Vehicle, 
-                    as: 'vehiclesAs' 
+                    model: Vehicle
                 }
             ],
         });
@@ -168,4 +146,4 @@ export const reportSale = async (req, res) => {
         console.error(error);
         return res.status(500).json({message : error.message});
     }
-}; */
+};
