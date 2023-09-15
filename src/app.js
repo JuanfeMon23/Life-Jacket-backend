@@ -7,6 +7,9 @@ import {RolRoutes } from './routes/Roles.routes.js';
 import {LicenseRoutes } from './routes/Licenses.routes.js';
 import { VehiclesRoutes } from './routes/Vehicles.routes.js';
 import { OtherRoutes } from './routes/Othervehicleinformations.routes.js';
+import { ExchangeRoutes } from './routes/Exchanges.routes.js';
+import { ClientRoutes } from './routes/Clients.routes.js';
+
 
 const app = express();
 
@@ -17,6 +20,9 @@ app.use(cors({
     origin : 'http://localhost:5173'
 }));
 
+
+app.use('/api', ClientRoutes);
+app.use('/api', ExchangeRoutes);
 app.use('/api', VehiclesRoutes);
 app.use('/api', OtherRoutes);
 
