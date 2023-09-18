@@ -58,7 +58,7 @@ export const getExchange = async (req,res) => {
 
 export const postExchange = async (req, res) => {
 /*     try {
-        const {exchangeDate, exchangeIncrementPrice, exchangeFinalPrice, exchangePaymentMethod, exchangeLimitations, exchangeDepartment, exchangeMunicipality, exchangePecuniaryPenalty, idClientExchange, vehicleId} = req.body;
+        const {exchangeDate, exchangeIncrementPrice, exchangeFinalPrice, exchangePaymentMethod, exchangeLimitations, exchangeDepartment, exchangeMunicipality, exchangePecuniaryPenalty, idClientExchange, idVehicleDetail} = req.body;
 
         const newExchange = await Exchange.create({
             exchangeDate,
@@ -70,11 +70,11 @@ export const postExchange = async (req, res) => {
             exchangeMunicipality,
             exchangePecuniaryPenalty,
             idClientExchange,
-            vehicle : [vehicleId]
+            vehicle : [idVehicleDetail]
         });
 
     try {
-    const vehicle = await Vehicle.findByPk(vehicleId);
+    const vehicle = await Vehicle.findByPk(idVehicleDetail);
     if (vehicle) {
         await newExchange.setVehicles([vehicle]);
     } else {

@@ -15,7 +15,7 @@ export const Client = sequelize.define('clients', {
             msg: 'Este campo es obligatorio',
           }
       } 
-  }, 
+    }, 
     clientDocument: {
         type: DataTypes.STRING(12),
         allowNull: false,
@@ -184,4 +184,3 @@ export const Client = sequelize.define('clients', {
         defaultValue: true
     }
 }); 
-

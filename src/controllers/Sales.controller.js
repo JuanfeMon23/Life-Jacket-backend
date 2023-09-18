@@ -51,6 +51,8 @@ export const postSale = async (req, res) => {
     try {
         const {saleDate, saleIncrementPrice, saleFinalPrice, salePaymentMethod, saleLimitations, saleDepartment, saleMunicipality, salePecuniaryPenalty, idClientSale, idVehicleSale} = req.body;
 
+        const vehicle = await Vehicle.findByPk(idVehicleSale);
+        
         const newSale = await Sale.create({
             saleDate,
             saleIncrementPrice,
@@ -63,6 +65,9 @@ export const postSale = async (req, res) => {
             idClientSale,
             idVehicleSale
         });
+
+
+        await vehicle.update({ vehicleStatus : false });
 
     return res.status(200).json(newSale);
     } catch (error) {

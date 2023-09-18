@@ -41,19 +41,25 @@ export const getPurchase = async (req, res) => {
 
 export const postPurchase = async (req, res) => {
     try {
-        const {PurchaseDate, purchaseIncrementPrice, purchaseFinalPrice, purchasePayMethod, purchaseLimitations, purchaseDepartment, purchaseMunicipality, purchasePecunaryPenalty, idClientPurchase, idVehiclePurchase} = req.body;
+        const {purchaseDate, purchaseIncrementPrice, purchaseFinalPrice, purchasePaymentMethod, purchaseLimitations, purchaseDepartment, purchaseMunicipality, purchasePecuniaryPenalty, idClientPurchase, idVehiclePurchase} = req.body;
+        
+        const vehicle = await Vehicle.findByPk(idVehiclePurchase);
+
         const newPurchase = await Purchase.create({
-            PurchaseDate,
+            purchaseDate,
             purchaseIncrementPrice,
             purchaseFinalPrice,
-            purchasePayMethod,
+            purchasePaymentMethod,
             purchaseLimitations,
             purchaseDepartment,
             purchaseMunicipality,
-            purchasePecunaryPenalty,
+            purchasePecuniaryPenalty,
             idClientPurchase,
             idVehiclePurchase
         });
+
+        await vehicle.update({ vehicleStatus : false });
+
         return res.status(200).json(newPurchase);   
     } catch (error) {
         return res.status(500).json({message : error.message});
@@ -87,13 +93,20 @@ export const searchPurchase = async (req, res) => {
             ],
             where: {
                 [Op.or]: [
-                    { saleDate: { [Op.like]: `%${search}%` } },
-                    { saleFinalPrice: { [Op.like]: `%${search}%` } },
+                    { purchaseDate: { [Op.like]: `%${search}%` } },
+                    { purchaseFinalPrice: { [Op.like]: `%${search}%` } },
+                    { purchasePaymentMethod: { [Op.like]: `%${search}%` } },
                     { purchaseDepartment: { [Op.like]: `%${search}%` } },
                     { purchaseMunicipality: { [Op.like]: `%${search}%` } },
                     {'$Client.clientDocument$': { [Op.like]: `%${search}%` } },
                     {'$Client.clientName$': { [Op.like]: `%${search}%` } },
                     {'$Client.clientLastName$': { [Op.like]: `%${search}%` } },
+                    {'$Vehicle.licensePlate$': { [Op.like]: `%${search}%` } },
+                    {'$Vehicle.vehicleType$': { [Op.like]: `%${search}%` } },
+                    {'$Vehicle.brand$': { [Op.like]: `%${search}%` } },
+                    {'$Vehicle.model$': { [Op.like]: `%${search}%` } },
+                    {'$Vehicle.type$': { [Op.like]: `%${search}%` } },
+                    {'$Vehicle.line$': { [Op.like]: `%${search}%` } }
                 ],
             },
         });
