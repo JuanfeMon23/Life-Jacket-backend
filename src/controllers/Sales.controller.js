@@ -49,7 +49,7 @@ export const getSale = async (req,res) => {
 
 export const postSale = async (req, res) => {
     try {
-        const {saleDate, saleIncrementPrice, saleFinalPrice, salePaymentMethod, saleLimitations, saleDepartment, saleMunicipality, salePecuniaryPenalty, idClientSale, idVehicleSale} = req.body;
+        const {saleDate, saleIncrementPrice, saleFinalPrice, saleLimitations, saleDepartment, saleMunicipality, salePecuniaryPenalty, idClientSale, idVehicleSale} = req.body;
 
         const vehicle = await Vehicle.findByPk(idVehicleSale);
         
@@ -57,7 +57,6 @@ export const postSale = async (req, res) => {
             saleDate,
             saleIncrementPrice,
             saleFinalPrice,
-            salePaymentMethod,
             saleLimitations,
             saleDepartment, 
             saleMunicipality,
@@ -107,7 +106,6 @@ export const searchSale = async (req, res) => {
                 [Op.or]: [
                     { saleDate: { [Op.like]: `%${search}%` } },
                     { saleFinalPrice: { [Op.like]: `%${search}%` } },
-                    { salePaymentMethod: { [Op.like]: `%${search}%` } },
                     { saleDepartment: { [Op.like]: `%${search}%` } },
                     { saleMunicipality: { [Op.like]: `%${search}%` } },
                     {'$Client.clientDocument$': { [Op.like]: `%${search}%` } },

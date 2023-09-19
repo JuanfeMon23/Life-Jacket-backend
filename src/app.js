@@ -22,7 +22,10 @@ app.use(cors({
     origin : 'http://localhost:5173'
 }));
 
-
+app.use('/api', UserRoutes);
+app.use('/api', LoginRouter);
+app.use('/api', RolRoutes);
+app.use('/api', LicenseRoutes);
 app.use('/api', ClientRoutes);
 app.use('/api', ExchangeRoutes);
 app.use('/api', SaleRoutes);

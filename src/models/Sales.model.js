@@ -49,7 +49,7 @@ export const Sale = sequelize.define('sales', {
     },
     saleIncrementPrice: {
       type: DataTypes.INTEGER(11),
-      allowNull: false,
+      allowNull: true,
       validate: {
           notNull: {
             msg: 'Este campo es obligatorio',
@@ -74,15 +74,6 @@ export const Sale = sequelize.define('sales', {
           }
       } 
     }, 
-    salePaymentMethod: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notNull: {
-              msg: 'Este campo es obligatorio',
-            }
-        }
-    },
     saleLimitations: {
         type: DataTypes.STRING(200),
         allowNull : false,

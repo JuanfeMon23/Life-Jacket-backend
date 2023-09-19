@@ -41,7 +41,7 @@ export const getPurchase = async (req, res) => {
 
 export const postPurchase = async (req, res) => {
     try {
-        const {purchaseDate, purchaseIncrementPrice, purchaseFinalPrice, purchasePaymentMethod, purchaseLimitations, purchaseDepartment, purchaseMunicipality, purchasePecuniaryPenalty, idClientPurchase, idVehiclePurchase} = req.body;
+        const {purchaseDate, purchaseIncrementPrice, purchaseFinalPrice, purchaseLimitations, purchaseDepartment, purchaseMunicipality, purchasePecuniaryPenalty, idClientPurchase, idVehiclePurchase} = req.body;
         
         const vehicle = await Vehicle.findByPk(idVehiclePurchase);
 
@@ -49,7 +49,6 @@ export const postPurchase = async (req, res) => {
             purchaseDate,
             purchaseIncrementPrice,
             purchaseFinalPrice,
-            purchasePaymentMethod,
             purchaseLimitations,
             purchaseDepartment,
             purchaseMunicipality,
@@ -95,7 +94,6 @@ export const searchPurchase = async (req, res) => {
                 [Op.or]: [
                     { purchaseDate: { [Op.like]: `%${search}%` } },
                     { purchaseFinalPrice: { [Op.like]: `%${search}%` } },
-                    { purchasePaymentMethod: { [Op.like]: `%${search}%` } },
                     { purchaseDepartment: { [Op.like]: `%${search}%` } },
                     { purchaseMunicipality: { [Op.like]: `%${search}%` } },
                     {'$Client.clientDocument$': { [Op.like]: `%${search}%` } },
