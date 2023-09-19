@@ -12,6 +12,7 @@ import { ClientRoutes } from './routes/Clients.routes.js';
 import { ImprovementsRoutes } from './routes/Improvements.routes.js';
 import { SaleRoutes } from './routes/Sales.routes.js';
 import { PurchaseRoutes } from './routes/Purchases.routes.js';
+import cors from 'cors';
 
 const app = express();
 
