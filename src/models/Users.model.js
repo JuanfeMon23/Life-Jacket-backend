@@ -56,6 +56,10 @@ export const User = sequelize.define('Users', {
         type: DataTypes.BOOLEAN,
         defaultValue : true
     }
+},
+{
+    timestamps : false
+
 });
 
 Roles.hasMany(User, {

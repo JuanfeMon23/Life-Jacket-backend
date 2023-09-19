@@ -183,4 +183,8 @@ export const Client = sequelize.define('clients', {
         allowNull : false,
         defaultValue: true
     }
+  },
+  {
+      timestamps : false
+  
 }); 

@@ -51,9 +51,6 @@ export const Sale = sequelize.define('sales', {
       type: DataTypes.INTEGER(11),
       allowNull: true,
       validate: {
-          notNull: {
-            msg: 'Este campo es obligatorio',
-          },
           isNumeric: {
             msg: 'Este campo debe contener solo números',
           },
@@ -129,7 +126,11 @@ export const Sale = sequelize.define('sales', {
         allowNull : false,
         defaultValue: true
     }
-}); 
+  },
+  {
+      timestamps : false
+  
+});
 
 Client.hasMany(Sale, {
   foreignKey : 'idClientSale',

@@ -51,9 +51,6 @@ export const Purchase = sequelize.define('purchases', {
       type: DataTypes.INTEGER(11),
       allowNull: true,
       validate: {
-          notNull: {
-            msg: 'Este campo es obligatorio',
-          },
           isNumeric: {
             msg: 'Este campo debe contener solo números',
           },
@@ -129,6 +126,10 @@ export const Purchase = sequelize.define('purchases', {
         allowNull : false,
         defaultValue: true
     }
+  },
+  {
+      timestamps : false
+  
 }); 
 
 Client.hasMany(Purchase, {
