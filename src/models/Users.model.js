@@ -8,6 +8,30 @@ export const User = sequelize.define('Users', {
         primaryKey: true,
         autoIncrement: true
     },
+    userDocumentType: {
+        type: DataTypes.STRING,
+        validate : {
+            notEmpty : true
+        }
+    },
+    userDocumentNumber : {
+        type: DataTypes.INTEGER,
+        validate : {
+            notEmpty : true
+        }
+    },
+    userDepartment: {
+        type: DataTypes.STRING,
+        validate : {
+            notEmpty : true
+        }
+    },
+    userMunicipality: {
+        type: DataTypes.STRING,
+        validate : {
+            notEmpty : true
+        }
+    },
     userName : {
         type: DataTypes.STRING,
         validate : {
