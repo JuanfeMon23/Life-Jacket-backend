@@ -49,13 +49,13 @@ export const getSale = async (req,res) => {
 
 export const postSale = async (req, res) => {
     try {
-        const {saleDate, saleIncrementPrice, saleFinalPrice, saleLimitations, saleDepartment, saleMunicipality, salePecuniaryPenalty, idClientSale, idVehicleSale} = req.body;
+        const {saleDate, saleFinalPrice, saleLimitations, saleDepartment, saleMunicipality, salePecuniaryPenalty, idClientSale, idVehicleSale} = req.body;
 
         const vehicle = await Vehicle.findByPk(idVehicleSale);
         
         const newSale = await Sale.create({
             saleDate,
-            saleIncrementPrice,
+            // saleIncrementPrice,
             saleFinalPrice,
             saleLimitations,
             saleDepartment, 
