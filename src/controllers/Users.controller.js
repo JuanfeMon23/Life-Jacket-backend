@@ -36,11 +36,15 @@ export const getUser = async (req,res) => {
 };
 
 export const postUser = async  (req,res) => {
-    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idRolUser} = req.body
+    const {userDocumentType, userDocumentNumber, userDepartment, userMunicipality,  userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idRolUser} = req.body
     
     try {
         const userPasswordHash = await bcrypts.hash(userPassword, 10);
         const newUser = await User.create({
+            userDocumentType,
+            userDocumentNumber,
+            userDepartment,
+            userMunicipality,
             userName,
             userLastName,
             userEmail,
@@ -59,9 +63,11 @@ export const postUser = async  (req,res) => {
 
 export const updateUser = async (req,res) => {
     const {idUser} = req.params;
-    const {userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idRolUser } = req.body
+    const {userDocumentType, userDocumentNumber, userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idRolUser } = req.body
     try {
         const user = await User.findByPk(idUser)
+        user.userDocumentType = userDocumentType;
+        user.userDocumentNumber = userDocumentNumber;
         user.userName = userName;
         user.userLastName = userLastName;
         user.userEmail = userEmail;

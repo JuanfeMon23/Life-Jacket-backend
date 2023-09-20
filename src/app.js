@@ -1,4 +1,3 @@
-
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import {UserRoutes} from './routes/Users.routes.js'
@@ -12,6 +11,7 @@ import { ClientRoutes } from './routes/Clients.routes.js';
 import { ImprovementsRoutes } from './routes/Improvements.routes.js';
 import { SaleRoutes } from './routes/Sales.routes.js';
 import { PurchaseRoutes } from './routes/Purchases.routes.js';
+import cors from 'cors';
 
 const app = express();
 
@@ -30,6 +30,9 @@ app.use('/api', PurchaseRoutes);
 app.use('/api', VehiclesRoutes);
 app.use('/api', OtherRoutes);
 app.use('/api', ImprovementsRoutes);
+app.use('/api', UserRoutes);
+app.use('/api', RolRoutes);
+app.use('/api', LicenseRoutes);
 
 
 export default app;

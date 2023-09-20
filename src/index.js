@@ -1,4 +1,3 @@
-
 import app from './app.js'
 import { sequelize } from './database/database.js'
 import './models/Sales.model.js'
@@ -7,6 +6,8 @@ import './models/Exchanges.model.js'
 import './models/Clients.model.js'
 import './models/Vehicles.model.js'
 import './models/Othervehicleinformations.model.js'
+import './models/Users.model.js'
+import './models/Roles.model.js'
 
 const connection = async (req, res) => {
     try {
