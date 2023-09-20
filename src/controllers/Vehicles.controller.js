@@ -2,12 +2,21 @@ import { Vehicle } from "../models/Vehicles.model.js";
 import { Op } from 'sequelize';
 import app from '../app.js'
 import { othervehicleinformation } from "../models/Othervehicleinformations.model.js";
-
+import { Improvements } from "../models/Improvements.model.js";
 
 // Get vehicles 
 export const getVehicles = async (req, res) => {
     try {
-        const vehicles = await Vehicle.findAll();
+        const vehicles = await Vehicle.findAll({
+            include : [
+                {
+                    model : othervehicleinformation
+                },
+                {
+                    model : Improvements
+                }
+            ]
+        });
         res.json(vehicles);
     } catch (error) {
         return res.status(500).json({message : error.message})
@@ -39,27 +48,44 @@ export const getVehicle = async (req, res) => {
 // Create
 export const postVehicles = async (req, res) => {
     try {
-        const {licensePlate, vehicleType, brand, model, type, line, mileage, cylinderCapacity, fuel, 
-            traction, soat, technomechanics, timingBelt, vehicleStatus } = req.body
-        const newVehicle = await Vehicle.create({
-            licensePlate,
-            vehicleType,
-            brand,
-            model,
-            type,
-            line,
-            mileage,
-            cylinderCapacity,
-            fuel,
-            traction,
-            soat,
-            technomechanics,
-            timingBelt,
-            vehicleStatus
-        });
-        return res.status(200).json(newVehicle);
+      const { licensePlate, vehicleType, brand, model, type, line, mileage, cylinderCapacity, fuel,
+        traction, soat, technomechanics, timingBelt, vehicleStatus, business, series, color, motor,
+        register, chassis, capacity, service, identificationCard, idVehicleOtherVehicleInformation } = req.body;
+  
+      const newVehicle = await Vehicle.create({
+        licensePlate,
+        vehicleType,
+        brand,
+        model,
+        type,
+        line,
+        mileage,
+        cylinderCapacity,
+        fuel,
+        traction,
+        soat,
+        technomechanics,
+        timingBelt,
+        vehicleStatus
+      });
+  
+      const newOthers = await othervehicleinformation.create({
+          business,
+          series,
+          color,
+          motor,
+          register,
+          chassis,
+          capacity,
+          service,
+          identificationCard,
+          idVehicleOtherVehicleInformation
+      });
+      // await newVehicle.setothervehicleinformation(newOthers);
+  
+      return res.status(200).json(newVehicle);
     } catch (error) {
-        return res.status(500).json({message : error.message})
+      return res.status(500).json({ message: error.message });
     }
 };
 
