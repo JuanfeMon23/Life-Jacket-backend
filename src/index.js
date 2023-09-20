@@ -11,7 +11,6 @@ import './models/Sales.model.js'
 import './models/Purchases.model.js'
 import './models/Exchanges.model.js'
 import './models/Vehicles.model.js'
-import './models/Othervehicleinformations.model.js'
 import './models/Improvements.model.js'
 
 const connection = async (req, res) => {

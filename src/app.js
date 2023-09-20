@@ -6,7 +6,6 @@ import {LoginRouter } from './routes/Login.routes.js';
 import {RolRoutes } from './routes/Roles.routes.js';
 import {LicenseRoutes } from './routes/Licenses.routes.js';
 import { VehiclesRoutes } from './routes/Vehicles.routes.js';
-import { OtherRoutes } from './routes/Othervehicleinformations.routes.js';
 import { ExchangeRoutes } from './routes/Exchanges.routes.js';
 import { ClientRoutes } from './routes/Clients.routes.js';
 import { ImprovementsRoutes } from './routes/Improvements.routes.js';
@@ -32,7 +31,6 @@ app.use('/api', ExchangeRoutes);
 app.use('/api', SaleRoutes);
 app.use('/api', PurchaseRoutes);
 app.use('/api', VehiclesRoutes);
-app.use('/api', OtherRoutes);
 app.use('/api', ImprovementsRoutes);
 
 
