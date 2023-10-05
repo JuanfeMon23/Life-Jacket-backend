@@ -131,7 +131,23 @@ export const reportPurchase = async (req, res) => {
                 }
             ],
         });
-        res.json(purchase);
+
+        const formattedPurchases = purchase.map((purchase) => ({
+            idPurchase: purchase.idPurchase,
+            purchaseDate: purchase.purchaseDate,
+            purchaseFinalPrice: purchase.purchaseFinalPrice,
+            purchaseDepartment: purchase.purchaseDepartment,
+            purchaseMunicipality: purchase.purchaseMunicipality,
+            clientDocument: purchase.client.clientDocument,
+            clientName: purchase.client.clientName,
+            clientLastName: purchase.client.clientLastName,
+            licensePlate: purchase.vehicle.licensePlate,
+            vehicleType: purchase.vehicle.vehicleType,
+            brand: purchase.vehicle.brand,
+            model: purchase.vehicle.model
+        }));
+
+        res.json(formattedPurchases);
     } catch (error) {
         console.error(error);
         return res.status(500).json({message : error.message});

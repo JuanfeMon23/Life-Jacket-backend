@@ -29,7 +29,7 @@ export const getSalesData = async (req, res) => {
       console.error('Error al obtener datos de ventas', error);
       res.status(500).json({ error: 'Error al obtener datos de ventas' });
     }
-  };
+};
 
 
 export const getPurchasesData = async (req, res) => {
@@ -55,8 +55,33 @@ export const getPurchasesData = async (req, res) => {
       console.error('Error al obtener datos de compras', error);
       res.status(500).json({ error: 'Error al obtener datos de compras' });
     }
-  };
+};
 
+
+/* export const getExchangesData = async (req, res) => {
+  try {
+    const monthlyExchanges = await Purchase.findAll({
+      attributes: [
+        [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
+        [sequelize.fn('YEAR', sequelize.col('exchangeDate')), 'year'],
+        [sequelize.fn('COUNT', '*'), 'totalExchanges']
+      ],
+      group: ['month', 'year'],
+    });
+    const formattedData = monthlyExchanges.map((result) => {
+      return {
+        month: result.getDataValue('month'),
+        year: result.getDataValue('year'),
+        totalExchanges: result.getDataValue('totalExchanges')
+      };
+    });
+
+    res.json(formattedData);
+  } catch (error) {
+    console.error('Error al obtener datos de compras', error);
+    res.status(500).json({ error: 'Error al obtener datos de compras' });
+  }
+}; */
 
 
 
