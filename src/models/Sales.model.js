@@ -47,30 +47,6 @@ export const Sale = sequelize.define('sales', {
             }
         } 
     },
-    // saleIncrementPrice: {
-    //   type: DataTypes.INTEGER(11),
-    //   allowNull: true,
-    //   validate: {
-    //       isNumeric: {
-    //         msg: 'Este campo debe contener solo números',
-    //       },
-    //       len: {
-    //         args: [6, 12],
-    //         msg: 'Este campo debe tener entre 5 y 11 números',
-    //       },
-    //       customValidation(value) {
-    //         if (value.startsWith('0')) {
-    //           throw new Error('Este campo no puede empezar en 0');
-    //         }
-    //       },
-    //       noSpecialCharacters(value) {
-    //         const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-    //         if (specialCharacters.test(value)) {
-    //           throw new Error('Este campo no puede contener caracteres especiales');
-    //         }
-    //       }
-    //   } 
-    // }, 
     saleLimitations: {
         type: DataTypes.STRING(200),
         allowNull : false,

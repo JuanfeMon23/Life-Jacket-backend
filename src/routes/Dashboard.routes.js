@@ -1,6 +1,6 @@
 import {Router} from 'express';
-import {getSalesData} from '../controllers/Dashboard.controller.js';
+import {getSalesData, getPurchasesData} from '../controllers/Dashboard.controller.js';
 
 export const DashboardRoutes = Router();
 
-DashboardRoutes.get('/Dashboard/Sales/withMonth', getSalesData);
+DashboardRoutes.get('/Dashboard/withMonth', getSalesData, getPurchasesData);
