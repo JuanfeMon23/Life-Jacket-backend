@@ -114,6 +114,13 @@ export const statusVehicle = async (req, res) => {
                 await Improvements.save();
             }
         }
+        else { // If the vehicle is enabled, we enable the associated improvements
+            const improvements = await Improvements.findAll({ where: { idVehicleImprovement: idVehicle } });
+            for (let Improvements of improvements) {
+                Improvements.improvementStatus = true;
+                await Improvements.save();
+            }
+        }
 
         res.json(vehicle);
 
