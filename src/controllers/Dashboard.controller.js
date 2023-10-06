@@ -1,6 +1,8 @@
 import { sequelize } from "../database/database.js";
 import { Sale } from '../models/Sales.model.js';
 import { Purchase } from '../models/Purchases.model.js';
+import { Vehicle } from '../models/Vehicles.model.js';
+import { Client } from '../models/Clients.model.js';
 import { Op } from 'sequelize';
 import app from '../app.js';
 
@@ -16,7 +18,8 @@ export const getSalesData = async (req, res) => {
         ],
         group: ['month', 'year'],
       });
-      const formattedData = monthlySales.map((result) => {
+  
+      const formattedDataSales = monthlySales.map((result) => {
         return {
           month: result.getDataValue('month'),
           year: result.getDataValue('year'),
@@ -24,12 +27,12 @@ export const getSalesData = async (req, res) => {
         };
       });
   
-      res.json(formattedData);
+      res.json(formattedDataSales);
     } catch (error) {
-      console.error('Error al obtener datos de ventas', error);
+      console.error('Error al obtener datos de ventas:', error);
       res.status(500).json({ error: 'Error al obtener datos de ventas' });
     }
-};
+  };
 
 
 export const getPurchasesData = async (req, res) => {
@@ -42,7 +45,7 @@ export const getPurchasesData = async (req, res) => {
         ],
         group: ['month', 'year'],
       });
-      const formattedData = monthlyPurchases.map((result) => {
+      const formattedDataPurchases = monthlyPurchases.map((result) => {
         return {
           month: result.getDataValue('month'),
           year: result.getDataValue('year'),
@@ -50,12 +53,50 @@ export const getPurchasesData = async (req, res) => {
         };
       });
   
-      res.json(formattedData);
+      res.json(formattedDataPurchases);
     } catch (error) {
       console.error('Error al obtener datos de compras', error);
       res.status(500).json({ error: 'Error al obtener datos de compras' });
     }
 };
+
+
+export const getTotalVehicles = async (req, res) => {
+  try {
+    const totalVehicles = await Vehicle.count({
+      where: {
+        vehicleStatus: true,
+      },
+    });
+
+    res.json({ totalVehicles });
+  } catch (error) {
+    console.error('Error al obtener el total de vehículos :', error);
+    res.status(500).json({ error: 'Error al obtener el total de vehículos' });
+  }
+};
+
+
+
+export const getTotalClients = async (req, res) => {
+  try {
+    const totalClients = await Client.count({
+      where: {
+        clientStatus: true,
+      },
+    });
+
+    res.json({ totalClients });
+  } catch (error) {
+    console.error('Error al obtener el total de clientes :', error);
+    res.status(500).json({ error: 'Error al obtener el total de clientes' });
+  }
+};
+
+
+
+
+
 
 
 /* export const getExchangesData = async (req, res) => {
