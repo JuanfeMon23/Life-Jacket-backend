@@ -204,14 +204,15 @@ export const reportSale = async (req, res) => {
         const options = { format: 'Letter' };
         
         //genera el pdf y lo guarda en el archivo
-        pdf.create(html, options).toFile(path.join(__dirname, 'reporteVenta.pdf'), function(err, pdfRes) {
-          if (err) {
-            console.error(err);
-            return res.status(500).json({ message: err.message });
-          }
-          //se envia el pdf al cliente
-          const routeArchive = path.join(__dirname, 'reporteVenta.pdf');
-          res.download(routeArchive);
+        pdf.create(html, options).toStream(function(err, stream) {
+            if (err) {
+              console.error(err);
+              return res.status(500).json({ message: err.message });
+            }
+            // envia el stream al cliente
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=reporteVenta.pdf');
+            stream.pipe(res);
         });
     } catch (error) {
         console.error(error);
