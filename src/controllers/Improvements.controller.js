@@ -6,7 +6,7 @@ import { Vehicle } from "../models/Vehicles.model.js";
 // Get
 export const getImprovements = async (req, res) => {
     try {
-        const improvement = await Improvements.findAll();
+        const improvement = await Improvements.findAll({include : {model : Vehicle}});
         res.json(improvement);
     } catch (error) {
         return res.status(500).json({message : error.message})

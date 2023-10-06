@@ -200,7 +200,7 @@ export const Vehicle = sequelize.define('vehicles', {
 
     technomechanics : {
         type : DataTypes.DATE,
-        allowNull: false
+        allowNull: true
     },
 
     timingBelt : {

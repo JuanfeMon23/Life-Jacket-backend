@@ -117,3 +117,17 @@ export const userSearch = async (req,res) => {
         return res.status(500).json({message : error.message});
     }
 };
+
+
+export const statusUser = async (req,res) => {
+    const { idUser } = req.params;
+    try {
+        const user = await User.findByPk(idUser)
+        user.userStatus = !user.userStatus;
+        await user.save();
+        res.json(user);
+    } catch (error) {
+        return res.status(500).json({message : error.message})
+    }
+
+};
