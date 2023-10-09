@@ -10,7 +10,6 @@
 //         primaryKey : true,
 //         autoIncrement : true
 //     },
-
 //     VehicleType : {
 //         type: DataTypes.STRING(20),
 //         allowNull: false,

@@ -3,15 +3,31 @@ import { sequelize } from '../database/database.js';
 
 export const License = sequelize.define('License',{
     idLicense : {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER(11),
         primaryKey: true,
         autoIncrement: true
     },
     licenseName : {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(20),
         validate : {
-            notEmpty: true
+            notNull: {
+                msg: 'Este campo es obligatorio',
+            },
+            len: {
+                args: [1, 20],
+                msg: 'Este campo debe tener entre 1 y 20 letras',
+            },
+            noSpecialCharacters(value) {
+                const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+                if (specialCharacters.test(value)) {
+                  throw new Error('Este campo no puede contener caracteres especiales');
+                }
+            }
         }
     }
-});
+},
+{
+    timestamps : false
+}
+);
 

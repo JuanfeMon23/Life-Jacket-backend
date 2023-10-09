@@ -139,7 +139,11 @@ export const Exchange = sequelize.define('exchanges', {
         allowNull : false,
         defaultValue: true
     }
-}); 
+},
+{
+  timestamps : false
+}
+); 
 
 
 
