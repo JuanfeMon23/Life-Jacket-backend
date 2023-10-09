@@ -37,9 +37,14 @@ export const Brands = sequelize.define('Brand', {
                 msg : 'Campo obligatorio.'
             }
         }
-        }
+    }
     
-})
+},
+{
+    timestamps : false
+}
+
+)
 
 //Vehicles
 Brands.hasOne(Vehicle, {

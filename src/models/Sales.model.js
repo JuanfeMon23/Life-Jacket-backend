@@ -61,7 +61,7 @@ export const Sale = sequelize.define('sales', {
         }
     },
     saleDepartment: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(80),
       allowNull : false,
       validate: {
           notNull: {
@@ -70,7 +70,7 @@ export const Sale = sequelize.define('sales', {
       }   
     },
     saleMunicipality: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(80),
         allowNull : false,
         validate: {
             notNull: {
@@ -98,11 +98,12 @@ export const Sale = sequelize.define('sales', {
         allowNull : false,
         defaultValue: true
     }
-  },
-  {
+},
+{
       timestamps : false
   
-});
+}
+);
 
 Client.hasMany(Sale, {
   foreignKey : 'idClientSale',

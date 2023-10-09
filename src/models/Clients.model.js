@@ -19,6 +19,7 @@ export const Client = sequelize.define('clients', {
     clientDocument: {
         type: DataTypes.STRING(12),
         allowNull: false,
+        unique: true,
         validate: {
             notNull: {
               msg: 'Este campo es obligatorio',
@@ -92,7 +93,7 @@ export const Client = sequelize.define('clients', {
         }
     },
     clientDepartment: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(80),
       allowNull : false,
       validate: {
           notNull: {
@@ -101,7 +102,7 @@ export const Client = sequelize.define('clients', {
       }   
     },
     clientMunicipality: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(80),
         allowNull : false,
         validate: {
             notNull: {
@@ -117,8 +118,8 @@ export const Client = sequelize.define('clients', {
               msg: 'Este campo es obligatorio',
             },
             len: {
-                args: [1, 40],
-                msg: 'La dirección debe tener entre 1 y 40 caracteres.',
+                args: [1, 80],
+                msg: 'La dirección debe tener entre 1 y 80 caracteres',
             }
         }  
     },
@@ -152,7 +153,7 @@ export const Client = sequelize.define('clients', {
             },    
             len: {
               args: [1, 30],
-              msg: 'Este campo debe tener entre 1 y 30 letras',
+              msg: 'Este campo debe tener entre 1 y 40 letras',
             },
             noSpecialCharacters(value) {
               const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -186,5 +187,5 @@ export const Client = sequelize.define('clients', {
   },
   {
       timestamps : false
-  
-}); 
+  }
+); 

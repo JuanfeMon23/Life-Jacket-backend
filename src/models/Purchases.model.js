@@ -34,11 +34,11 @@ export const Purchase = sequelize.define('purchases', {
               args: [6, 12],
               msg: 'Este campo debe tener entre 5 y 11 números',
             },
-            // customValidation(value) {
-            //   if (value.startsWith('0')) {
-            //     throw new Error('Este campo no puede empezar en 0');
-            //   }
-            // },
+            customValidation(value) {
+              if (value.startsWith('0')) {
+                throw new Error('Este campo no puede empezar en 0');
+              }
+            },
             noSpecialCharacters(value) {
               const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
               if (specialCharacters.test(value)) {
@@ -61,7 +61,7 @@ export const Purchase = sequelize.define('purchases', {
         }
     },
     purchaseDepartment: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(80),
       allowNull : false,
       validate: {
           notNull: {
@@ -70,7 +70,7 @@ export const Purchase = sequelize.define('purchases', {
       }   
     },
     purchaseMunicipality: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(80),
         allowNull : false,
         validate: {
             notNull: {
@@ -98,11 +98,12 @@ export const Purchase = sequelize.define('purchases', {
         allowNull : false,
         defaultValue: true
     }
-  },
-  {
-      timestamps : false
+},
+{
+  timestamps : false
   
-}); 
+}
+); 
 
 Client.hasMany(Purchase, {
   foreignKey : 'idClientPurchase',

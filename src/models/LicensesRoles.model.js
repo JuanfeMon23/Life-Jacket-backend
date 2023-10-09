@@ -5,13 +5,15 @@ import { License } from './Licenses.model.js';
 
 export const LicensesRol = sequelize.define('LicensesRol',{
     idLicenseRol: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER(11),
         primaryKey: true,
         autoIncrement: true,
     },
-}, {
+}, 
+{
     timestamps : false
-})
+}
+)
 
 Roles.belongsToMany(License, {
     through: LicensesRol
