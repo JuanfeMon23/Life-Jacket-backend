@@ -47,7 +47,13 @@ export const Improvements = sequelize.define('improvements', {
 
             isNumeric : {
                 msg : 'Este campo debe contener solo números'
-            }
+            },
+
+            customValidation (value) {
+                if (value.startsWith('0')) {
+                    throw new Error('Este campo no puede empezar en 0')
+                }
+            },
         }
     },
 
