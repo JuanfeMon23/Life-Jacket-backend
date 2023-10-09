@@ -128,9 +128,7 @@ export const Vehicle = sequelize.define('vehicles', {
         validate : {
             notNull: {
                 msg: 'Este campo es obligatorio'
-            }, 
-
-            isAlphanumeric : true
+            }
         }
     },
 
@@ -202,7 +200,7 @@ export const Vehicle = sequelize.define('vehicles', {
 
     technomechanics : {
         type : DataTypes.DATE,
-        allowNull: false
+        allowNull: true
     },
 
     timingBelt : {
