@@ -136,8 +136,11 @@ export const Vehicle = sequelize.define('vehicles', {
         type : DataTypes.STRING(20),
         allowNull: true,
         validate : {
-            isNumeric: {
-                msg: 'Este campo debe contener solo números'
+            noSpecialCharacters(value) {
+                const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+                if (specialCharacters.test(value)) {
+                  throw new Error('Este campo no puede contener caracteres especiales');
+                }
             }
         }
     },
@@ -146,10 +149,6 @@ export const Vehicle = sequelize.define('vehicles', {
         type : DataTypes.STRING(20),
         allowNull: true,
         validate : {
-            isNumeric: {
-                msg: 'Este campo debe contener solo números'
-            },
-
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
                 if (specialCharacters.test(value)) {
@@ -200,7 +199,7 @@ export const Vehicle = sequelize.define('vehicles', {
 
     technomechanics : {
         type : DataTypes.DATE,
-        allowNull: true
+        allowNull: false
     },
 
     timingBelt : {
@@ -216,8 +215,8 @@ export const Vehicle = sequelize.define('vehicles', {
 },
     {
         timestamps : false
-    
-})
+    }
+)
 
 //Purchase
 Vehicle.hasOne(Purchase, {
