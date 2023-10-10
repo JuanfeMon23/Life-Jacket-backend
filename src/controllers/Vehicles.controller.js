@@ -2,6 +2,7 @@ import { Vehicle } from "../models/Vehicles.model.js";
 import { Op } from 'sequelize';
 import app from '../app.js'
 import { Improvements } from "../models/Improvements.model.js";
+// import { Sales } from "../controllers/"
 
 // Get vehicles 
 export const getVehicles = async (req, res) => {
@@ -75,6 +76,11 @@ export const updateVehicle = async (req, res) => {
             traction, soat, technomechanics, timingBelt} = req.body
         
         const vehicle = await Vehicle.findByPk(idVehicle)
+
+        if (vehicle.vehicleStatus === false) {
+            return res.status(400).json({ message: 'No puedes editar este vehículo esta deshabilitado.' });
+        }
+
         vehicle.vehicleType = vehicleType
         vehicle.brand =  brand
         vehicle.model = model
@@ -142,6 +148,32 @@ export const getSearchVehicle = async (req, res) => {
             }
         });
         res.json(vehicles)
+    } catch (error) {
+        return res.status(500).json({message : error.message});
+    }
+};
+
+//Delete
+export const deleteVehicle = async (req, res) => {
+    const { idVehicle } = req.params;
+    try {
+        const vehicle = await Vehicle.findByPk(idVehicle)
+
+        const saleCount = await vehicle.countSales();
+        const purchaseCount = await vehicle.countPurchases();
+
+        if (saleCount > 0){
+            return res.status(400).json({ message :"No se puede eliminar un vehiculo con una venta asociada"});
+        }
+
+        if (purchaseCount > 0){
+            return res.status(400).json({ message :"No se puede eliminar un vehiculo con una compra asociada"});
+        }
+        
+        await vehicle.destroy();
+        
+        res.json(vehicle);
+
     } catch (error) {
         return res.status(500).json({message : error.message});
     }

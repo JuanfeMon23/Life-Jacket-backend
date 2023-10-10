@@ -37,6 +37,11 @@ export const updateImprovements = async (req, res) => {
         const {improvementDescription, improvementDate, improvementPrice, idVehicleImprovement} = req.body
         
         const improvement = await Improvements.findByPk(idImprovements)
+
+        if(improvement.improvementStatus === false) {
+            return res.status(400).json({ message: 'No puedes editar esta mejora esta deshabilitada.' });
+        }
+
         improvement.improvementDescription = improvementDescription
         improvement.improvementDate =  improvementDate
         improvement.improvementPrice = improvementPrice
