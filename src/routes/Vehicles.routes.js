@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getVehicles, getVehicle, postVehicles, updateVehicle, statusVehicle, getSearchVehicle} from '../controllers/Vehicles.controller.js'
+import { getVehicles, getVehicle, postVehicles, updateVehicle, statusVehicle, getSearchVehicle, deleteVehicle} from '../controllers/Vehicles.controller.js'
 
 export const VehiclesRoutes = Router();
 
@@ -20,3 +20,6 @@ VehiclesRoutes.patch('/Vehicles/:idVehicle', statusVehicle);
 
 //Get Search
 VehiclesRoutes.get('/Vehicles/SearchE/:search', getSearchVehicle)
+
+//Delete
+VehiclesRoutes.delete('/Vehicles/:idVehicle', deleteVehicle)
