@@ -49,11 +49,13 @@ export const Improvements = sequelize.define('improvements', {
                 msg : 'Este campo debe contener solo números'
             },
 
-            customValidation (value) {
-                if (value.startsWith('0')) {
-                    throw new Error('Este campo no puede empezar en 0')
+            customValidation(value) {
+                const integerValue = parseInt(value, 10); // Convierte el valor en un entero
+                if (isNaN(integerValue) || integerValue.toString() !== value.toString() || integerValue.toString().startsWith('0')) {
+                    throw new Error('Este campo debe ser un número entero que no comience en 0');
                 }
-            },
+            }
+            
         }
     },
 

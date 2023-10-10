@@ -17,7 +17,6 @@ export const Vehicle = sequelize.define('vehicles', {
 
     licensePlate : {
         type: DataTypes.STRING(7),
-        unique: true,
         allowNull: false,
         validate : {
             notNull : {
@@ -85,10 +84,6 @@ export const Vehicle = sequelize.define('vehicles', {
         validate : {
             notNull: {
                 msg: 'Este campo es obligatorio'
-            },
-
-            isNumeric: {
-                msg: 'Este campo debe contener solo números'
             },
 
             customValidation (value) {
