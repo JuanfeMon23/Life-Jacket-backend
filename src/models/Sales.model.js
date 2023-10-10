@@ -35,8 +35,9 @@ export const Sale = sequelize.define('sales', {
               msg: 'Este campo debe tener entre 5 y 11 números',
             },
             customValidation(value) {
-              if (value.startsWith('0')) {
-                throw new Error('Este campo no puede empezar en 0');
+              const integerValue = parseInt(value, 10); // Convierte el valor en un entero
+              if (isNaN(integerValue) || integerValue.toString() !== value.toString() || integerValue.toString().startsWith('0')) {
+                  throw new Error('Este campo debe ser un número entero que no comience en 0');
               }
             },
             noSpecialCharacters(value) {
@@ -97,6 +98,14 @@ export const Sale = sequelize.define('sales', {
         type: DataTypes.BOOLEAN,
         allowNull : false,
         defaultValue: true
+    },
+    idClientSale :{
+      type: DataTypes.INTEGER,
+        allowNull : false
+    },
+    idVehicleSale :{
+      type: DataTypes.INTEGER,
+        allowNull : false
     }
 },
 {
@@ -107,12 +116,14 @@ export const Sale = sequelize.define('sales', {
 
 Client.hasMany(Sale, {
   foreignKey : 'idClientSale',
-  sourceKey : 'idClient'
+  sourceKey : 'idClient',
+  allowNull : false
 })
 
 Sale.belongsTo(Client, {
   foreignKey: 'idClientSale',
-  targetId: 'idClient'
+  targetId: 'idClient',
+  allowNull : false
 })
 
 

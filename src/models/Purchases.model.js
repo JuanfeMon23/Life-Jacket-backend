@@ -107,7 +107,8 @@ export const Purchase = sequelize.define('purchases', {
 
 Client.hasMany(Purchase, {
   foreignKey : 'idClientPurchase',
-  sourceKey : 'idClient'
+  sourceKey : 'idClient',
+  allowNull : false
 })
 
 Purchase.belongsTo(Client, {

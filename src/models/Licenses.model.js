@@ -9,6 +9,7 @@ export const License = sequelize.define('License',{
     },
     licenseName : {
         type: DataTypes.STRING(20),
+        allowNull : false,
         validate : {
             notNull: {
                 msg: 'Este campo es obligatorio',

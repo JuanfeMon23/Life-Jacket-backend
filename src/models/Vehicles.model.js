@@ -90,13 +90,6 @@ export const Vehicle = sequelize.define('vehicles', {
             isNumeric: {
                 msg: 'Este campo debe contener solo números'
             },
-
-            customValidation (value) {
-                if (value.startsWith('0')) {
-                    throw new Error('Este campo no puede empezar en 0')
-                }
-            },
-
             noSpecialCharacters (value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
                 if (specialCharacters.test(value)) {
@@ -221,18 +214,20 @@ export const Vehicle = sequelize.define('vehicles', {
 //Purchase
 Vehicle.hasOne(Purchase, {
     foreignKey : 'idVehiclePurchase',
-    sourceKey : 'idVehicle'
+    sourceKey : 'idVehicle',
+    allowNull : false
 })
 
 Purchase.belongsTo(Vehicle, {
     foreignKey : 'idVehiclePurchase',
-    targetId : 'idVehicle'
+    targetId : 'idVehicle',
 })
 
 //Sale
 Vehicle.hasOne(Sale, {
     foreignKey : 'idVehicleSale',
-    sourceKey : 'idVehicle'
+    sourceKey : 'idVehicle',
+    allowNull : false
 })
 
 Sale.belongsTo(Vehicle, {
@@ -243,11 +238,37 @@ Sale.belongsTo(Vehicle, {
 //Improvements
 Vehicle.hasMany(Improvements, {
     foreignKey : 'idVehicleImprovement',
-    sourceKey : 'idVehicle'
+    sourceKey : 'idVehicle',
+    allowNull : false
 })
 
 Improvements.belongsTo(Vehicle, {
     foreignKey : 'idVehicleImprovement',
-    targetId : 'idVehicle'
+    targetId : 'idVehicle',
+    allowNull : false
 })
 
+
+function insertVehicle(){
+    try {
+      Vehicle.create({
+        licensePlate : "BBB-000",
+        vehicleType : "Prueba",
+        brand : "Prueba",
+        model : "0000",
+        type : "Prueba",
+        line : "Prueba",
+        mileage : "2222222",
+        cylinderCapacity : "3333333",
+        fuel : "Prueba",
+        traction : "Prueba00",
+        soat : "01/01/2001",
+        technomechanics : "01/01/2001",
+        timingBelt : "Prueba00"
+      })
+    } catch (error) {
+        //return res.status(500).json({message : error.message});
+    }
+};
+
+insertVehicle();
