@@ -1,9 +1,7 @@
 import {Sale} from '../models/Sales.model.js';
 import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
-import path from 'path';
 import pdf from 'html-pdf';
-import { fileURLToPath } from 'url';
 import { Op } from 'sequelize';
 import app from '../app.js';
 
@@ -58,7 +56,6 @@ export const postSale = async (req, res) => {
         
         const newSale = await Sale.create({
             saleDate,
-            // saleIncrementPrice,
             saleFinalPrice,
             saleLimitations,
             saleDepartment, 
@@ -81,11 +78,25 @@ export const postSale = async (req, res) => {
 export const statusSale = async (req, res) => {
     const { idSale } = req.params;
     try {
-        const sale = await Sale.findByPk(idSale)
-        sale.saleStatus = !sale.saleStatus;
+        const sale = await Sale.findByPk(idSale, {
+            include : [{
+                model: Vehicle
+            }]
+        })
 
-        await sale.save();
-        res.json(sale);
+        await sale.vehicle.update({
+            vehicleStatus : true
+        });
+
+        await sale.setVehicle(1);
+
+        await sale.setClient(1);
+
+        await sale.update({
+            saleStatus : false
+        });
+
+        return res.status(200).json({ message: 'Venta anulada con éxito' });
 
     } catch (error) {
         return res.status(500).json({message : error.message});
@@ -137,9 +148,6 @@ export const reportSale = async (req, res) => {
     const startDateSale = new Date(req.params.startDateSale);
     const finalDateSale = new Date(req.params.finalDateSale);
     
-    //para que guarde bien el reporte
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
 
     try {
         const sale = await Sale.findAll({

@@ -149,12 +149,14 @@ export const Exchange = sequelize.define('exchanges', {
 
 Client.hasMany(Exchange, {
     foreignKey : 'idClientExchange',
-    sourceKey : 'idClient'
+    sourceKey : 'idClient',
+    allowNull : false
 })
   
 Exchange.belongsTo(Client, {
     foreignKey: 'idClientExchange',
-    targetId: 'idClient'
+    targetId: 'idClient',
+    allowNull : false
 })
   
   

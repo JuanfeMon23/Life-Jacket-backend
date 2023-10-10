@@ -195,7 +195,8 @@ export const User = sequelize.define('Users', {
 
 Roles.hasMany(User, {
     foreignKey : 'idRolUser',
-     sourceKey: 'idRol'
+     sourceKey: 'idRol',
+     allowNull : false
 });
 
 

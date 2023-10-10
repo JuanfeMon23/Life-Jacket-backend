@@ -1,4 +1,6 @@
 import {Client} from '../models/Clients.model.js';
+import {Sale} from '../models/Sales.model.js';
+import {Purchase} from '../models/Purchases.model.js';
 import { Op } from 'sequelize';
 import app from '../app.js';
 
@@ -54,12 +56,14 @@ export const postClient = async (req, res) => {
 export const updateClient = async (req, res) => {
     const { idClient } = req.params;
     try {
-        const {clientTypeDocument, clientDocument, clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber} = req.body;
+        const {clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber} = req.body;
 
         const client = await Client.findByPk(idClient)
 
-        client.clientTypeDocument = clientTypeDocument
-        client.clientDocument = clientDocument
+        if(client.clientStatus === false){
+            return res.status(400).json({ message : "No puedes editar un cliente deshabilitado"});
+        }
+
         client.clientName = clientName
         client.clientLastName = clientLastName
         client.clientDepartment = clientDepartment
@@ -80,9 +84,35 @@ export const statusClient = async (req, res) => {
     const { idClient } = req.params;
     try {
         const client = await Client.findByPk(idClient)
+
         client.clientStatus = !client.clientStatus;
 
         await client.save();
+        res.json(client);
+
+    } catch (error) {
+        return res.status(500).json({message : error.message});
+    }
+};
+
+export const deleteClient = async (req, res) => {
+    const { idClient } = req.params;
+    try {
+        const client = await Client.findByPk(idClient)
+
+        const saleCount = await client.countSales();
+        const purchaseCount = await client.countPurchases();
+
+        if (saleCount > 0){
+            return res.status(400).json({ message :"No se puede eliminar un cliente con ventas asociadas"});
+        }
+
+        if (purchaseCount > 0){
+            return res.status(400).json({ message :"No se puede eliminar un cliente con compras asociadas"});
+        }
+        
+        await client.destroy();
+        
         res.json(client);
 
     } catch (error) {
@@ -99,7 +129,10 @@ export const searchClient  = async (req, res) => {
                 [Op.or]: [
                     {clientDocument : { [Op.like] : `%${search}%`}},
                     {clientName : { [Op.like] : `%${search}%`}},
-                    {clientLastName : { [Op.like] : `%${search}%`}}
+                    {clientLastName : { [Op.like] : `%${search}%`}},
+                    {clientDepartment : { [Op.like] : `%${search}%`}},
+                    {clientMunicipality : { [Op.like] : `%${search}%`}},
+                    {clientPhoneNumber : { [Op.like] : `%${search}%`}}
                 ],
             }
         });
