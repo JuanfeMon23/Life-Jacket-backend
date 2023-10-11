@@ -186,6 +186,10 @@ export const User = sequelize.define('Users', {
         type: DataTypes.BOOLEAN,
         allowNull : false,
         defaultValue : true
+    },
+    idRolUser: {
+        type: DataTypes.INTEGER,
+        allowNull : false
     }
 },
 {

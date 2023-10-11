@@ -3,6 +3,7 @@ import { sequelize } from "../database/database.js";
 import { Purchase } from "./Purchases.model.js";
 import { Sale } from "./Sales.model.js";
 import { Improvements } from "./Improvements.model.js";
+import { Op } from 'sequelize';
 
 
 export const Vehicle = sequelize.define('vehicles', {
@@ -195,12 +196,11 @@ export const Vehicle = sequelize.define('vehicles', {
         type : DataTypes.STRING(20),
         allowNull: true
     },
-
     vehicleStatus : {
         type : DataTypes.BOOLEAN(4),
+        allowNull: false,
         defaultValue : true
-    },
-    
+    }  
 },
     {
         timestamps : false
@@ -241,27 +241,32 @@ Vehicle.hasMany(Improvements, {
 Improvements.belongsTo(Vehicle, {
     foreignKey : 'idVehicleImprovement',
     targetId : 'idVehicle',
-    allowNull : false
 })
 
 
-function insertVehicle(){
+async function insertVehicle(){
+
+    const existingVehicle = await Vehicle.findOne({ idVehicle: 1 });
     try {
-      Vehicle.create({
-        licensePlate : "BBB-000",
-        vehicleType : "Prueba",
-        brand : "Prueba",
-        model : "0000",
-        type : "Prueba",
-        line : "Prueba",
-        mileage : "2222222",
-        cylinderCapacity : "3333333",
-        fuel : "Prueba",
-        traction : "Prueba00",
-        soat : "01/01/2001",
-        technomechanics : "01/01/2001",
-        timingBelt : "Prueba00"
-      })
+
+        if(!existingVehicle){
+            await Vehicle.create({
+                licensePlate : "AAA-000",
+                vehicleType : "Prueba",
+                brand : "Prueba",
+                model : "0000",
+                type : "Prueba",
+                line : "Prueba",
+                mileage : "2222222",
+                cylinderCapacity : "3333333",
+                fuel : "Prueba",
+                traction : "Prueba00",
+                soat : "01/01/2001",
+                technomechanics : "01/01/2001",
+                timingBelt : "Prueba00"
+            });
+        }
+        
     } catch (error) {
         //return res.status(500).json({message : error.message});
     }

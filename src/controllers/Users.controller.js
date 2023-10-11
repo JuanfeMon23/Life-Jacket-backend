@@ -63,9 +63,15 @@ export const postUser = async  (req,res) => {
 
 export const updateUser = async (req,res) => {
     const {idUser} = req.params;
-    const {userDocumentType, userDocumentNumber, userDepartment,  userMunicipality,  userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idRolUser } = req.body
     try {
+        const {userDocumentType, userDocumentNumber, userDepartment,  userMunicipality,  userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber, idRolUser } = req.body
+
         const user = await User.findByPk(idUser)
+
+        if(user.userStatus === false){
+            return res.status(400).json({ message : 'No puedes editar un usuario deshabilitado'});
+        }
+
         user.userDocumentType = userDocumentType;
         user.userDocumentNumber = userDocumentNumber;
         user.userDepartment = userDepartment;
@@ -78,6 +84,22 @@ export const updateUser = async (req,res) => {
         user.userPhoneNumber = userPhoneNumber;
         user.userOtherPhoneNumber = userOtherPhoneNumber;
         user.idRolUser = idRolUser;
+
+        await user.save();
+        res.json(user);
+
+    } catch (error) {
+        return res.status(500).json({message : error.message});
+    }
+};
+
+export const statusUser = async (req, res) => {
+    const { idClient } = req.params;
+    try {
+        const user = await User.findByPk(idClient)
+
+        user.userStatus = !user.userStatus;
+
         await user.save();
         res.json(user);
 
@@ -89,10 +111,11 @@ export const updateUser = async (req,res) => {
 export const deleteUser = async (req,res) => {
     const {idUser} = req.params;
     try {
-        await User.destroy({
-            where :{idUser}       
-        });
-        return res.sendStatus(204)
+        const user = await Client.findByPk(idUser)
+
+        await user.destroy();
+
+        return res.sendStatus(204);
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
@@ -116,18 +139,4 @@ export const userSearch = async (req,res) => {
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
-};
-
-
-export const statusUser = async (req,res) => {
-    const { idUser } = req.params;
-    try {
-        const user = await User.findByPk(idUser)
-        user.userStatus = !user.userStatus;
-        await user.save();
-        res.json(user);
-    } catch (error) {
-        return res.status(500).json({message : error.message})
-    }
-
 };

@@ -39,7 +39,7 @@ export const getSale = async (req,res) => {
                 },
                 {
                     model: Vehicle
-                },
+                }
             ],
         });
     } catch (error) {
@@ -65,10 +65,9 @@ export const postSale = async (req, res) => {
             idVehicleSale
         });
 
-
         await vehicle.update({ vehicleStatus : false });
 
-    return res.status(200).json(newSale);
+        return res.status(200).json(newSale);
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
@@ -82,7 +81,7 @@ export const statusSale = async (req, res) => {
             include : [{
                 model: Vehicle
             }]
-        })
+        });
 
         await sale.vehicle.update({
             vehicleStatus : true
@@ -102,6 +101,25 @@ export const statusSale = async (req, res) => {
         return res.status(500).json({message : error.message});
     }
 };
+
+export const deleteSale = async (req, res) => {
+    const { idSale } = req.params;
+    try {
+        const sale = await Sale.findByPk(idSale);
+
+        if(sale.saleStatus === false){
+            await sale.destroy();
+        }else {
+            return res.status(500).json({ message: 'La venta no se puede eliminar' });
+        };
+
+        return res.status(200).json({ message: 'Venta eliminada con éxito' });
+
+    } catch (error) {
+        return res.status(500).json({message : error.message});
+    }
+};
+
 
 
 export const searchSale = async (req, res) => {

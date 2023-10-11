@@ -138,6 +138,10 @@ export const Exchange = sequelize.define('exchanges', {
         type: DataTypes.BOOLEAN,
         allowNull : false,
         defaultValue: true
+    },
+    idClientExchange: {
+      type: DataTypes.INTEGER,
+      allowNull : false
     }
 },
 {
@@ -160,5 +164,5 @@ Exchange.belongsTo(Client, {
 })
   
   
-Exchange.belongsToMany(Vehicle, {through : 'ExchangeDetails', foreignKey: 'idExchangeDetail', as: 'vehiclesExchange'});
-Vehicle.belongsToMany(Exchange, {through : 'ExchangeDetails', foreignKey: 'idVehicleDetail' });
+Exchange.belongsToMany(Vehicle, {through : 'ExchangeDetails', foreignKey: 'idExchangeVehicle', as: 'vehiclesExchange'});
+Vehicle.belongsToMany(Exchange, {through : 'ExchangeDetails', foreignKey: 'idVehicleExchange' });

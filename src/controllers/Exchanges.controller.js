@@ -94,8 +94,13 @@ export const postExchange = async (req, res) => {
 export const statusExchange = async (req, res) => {
     const { idExchange } = req.params;
     try {
-        const exchange = await Exchange.findByPk(idExchange)
-        exchange.exchangeStatus = !exchange.exchangeStatus;
+        const exchange = await Exchange.findByPk(idExchange, {
+            include : [{
+                model : Vehicle
+            }]
+        });
+
+        
 
         await exchange.save();
         res.json(exchange);

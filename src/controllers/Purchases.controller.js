@@ -1,9 +1,7 @@
 import {Purchase} from '../models/Purchases.model.js';
 import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
-import path from 'path';
 import pdf from 'html-pdf';
-import { fileURLToPath } from 'url';
 import { Op } from 'sequelize';
 import app from '../app.js';
 
@@ -31,12 +29,19 @@ export const getPurchases = async (req, res) => {
 export const getPurchase = async (req, res) => {
     try {
         const {idPurchase} = req.params;
-        const Purchase = await Purchase.findOne({
+        const purchase = await Purchase.findOne({
             where: {
                 idPurchase
-            }
+            },
+            include : [
+                {
+                    model : Client
+                },
+                {
+                    model : Vehicle
+                }
+            ]
         });
-        res.json(idPurchase);
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
@@ -46,11 +51,8 @@ export const postPurchase = async (req, res) => {
     try {
         const {purchaseDate, purchaseFinalPrice, purchaseLimitations, purchaseDepartment, purchaseMunicipality, purchasePecuniaryPenalty, idClientPurchase, idVehiclePurchase} = req.body;
         
-        const vehicle = await Vehicle.findByPk(idVehiclePurchase);
-
         const newPurchase = await Purchase.create({
             purchaseDate,
-            // purchaseIncrementPrice,
             purchaseFinalPrice,
             purchaseLimitations,
             purchaseDepartment,
@@ -67,17 +69,44 @@ export const postPurchase = async (req, res) => {
 };
 
 export const statusPurchase = async (req, res) => {
+    const {idPurchase} = req.params;
     try {
-        const {idPurchase} = req.params;
         const purchase = await Purchase.findByPk(idPurchase);
-        purchase.purchaseStatus = !purchase.purchaseStatus;
 
-        await purchase.save();
-        res.json(purchase);
+        await purchase.setVehicle(1);
+
+        await purchase.setClient(1);
+
+        await purchase.update({
+            purchaseStatus : false
+        });
+
+        return res.status(200).json({message : 'Compra anulada con éxito'});
+
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
 };
+
+export const deletePurchase = async (req, res) => {
+    const {idPurchase} = req.params;
+    try {
+        const purchase = await Purchase.findByPk(idPurchase);
+
+        if(purchase.purchaseStatus === false){
+            await purchase.destroy();
+        }else {
+            return res.status(500).json({ message: 'La compra no se puede eliminar' });
+        };
+
+        return res.status(200).json({message : 'Compra eliminada con éxito'});
+
+    } catch (error) {
+        
+    }
+}
+
+
 
 export const searchPurchase = async (req, res) => {
     const {search} = req.params;
@@ -124,9 +153,6 @@ export const reportPurchase = async (req, res) => {
     const startDatePurchase = new Date(req.params.startDatePurchase);
     const finalDatePurchase = new Date(req.params.finalDatePurchase);
     
-    //para que guarde bien el reporte
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
 
     try {
         const purchase = await Purchase.findAll({
@@ -191,14 +217,15 @@ export const reportPurchase = async (req, res) => {
         const options = { format: 'Letter' };
         
         //genera el pdf y lo guarda en el archivo
-        pdf.create(html, options).toFile(path.join(__dirname, 'reportePurchase.pdf'), function(err, pdfRes) {
-          if (err) {
-            console.error(err);
-            return res.status(500).json({ message: err.message });
-          }
-          //se envia el pdf al cliente
-          const routeArchive = path.join(__dirname, 'reportePurchase.pdf');
-          res.download(routeArchive);
+        pdf.create(html, options).toStream(function(err, stream) {
+            if (err) {
+              console.error(err);
+              return res.status(500).json({ message: err.message });
+            }
+            // envia el stream al cliente
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=reporteCompra.pdf');
+            stream.pipe(res);
         });
     } catch (error) {
         console.error(error);

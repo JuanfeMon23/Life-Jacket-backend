@@ -31,7 +31,9 @@ export const getRol = async (req,res) => {
         const {idRol} = req.params;
         
         const rol = await Roles.findOne({
-            where : {idRol}
+            where : {
+                idRol
+            }
         });
          res.status(200).json(rol);
     } catch (error) {
@@ -46,7 +48,9 @@ export const updateRol = async (req,res) => {
         const {rolName} = req.body;
 
         const rol = await Roles.findByPk(idRol);
+
         rol.rolName = rolName;
+
         await rol.save();
         return res.status(200).json(rol);
     } catch (error) {
@@ -55,12 +59,19 @@ export const updateRol = async (req,res) => {
 };
 
 export const deleteRol = async (req,res) => {
+    const { idRol } = req.params;
     try {
-        const {idRol} = req.params;
-        await Roles.destroy({
-            where : {idRol}
-        });
-        return res.sendStatus(200)
+        const rol = await Roles.findByPk(idRol)
+
+        const userCount = await rol.countUsers();
+
+        if (userCount > 0){
+            return res.status(400).json({ message :"No se puede eliminar un rol con usuarios asociados"});
+        }
+
+        await rol.destroy();
+
+        return res.sendStatus(200).json({ message: 'Rol eliminado con éxito' });
     } catch (error) {
         return res.status(500).json({message : error.message});
     }

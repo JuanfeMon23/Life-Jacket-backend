@@ -99,13 +99,13 @@ export const Sale = sequelize.define('sales', {
         allowNull : false,
         defaultValue: true
     },
-    idClientSale :{
+    idClientSale: {
       type: DataTypes.INTEGER,
-        allowNull : false
+      allowNull : false
     },
-    idVehicleSale :{
+    idVehicleSale: {
       type: DataTypes.INTEGER,
-        allowNull : false
+      allowNull : false
     }
 },
 {
@@ -122,8 +122,7 @@ Client.hasMany(Sale, {
 
 Sale.belongsTo(Client, {
   foreignKey: 'idClientSale',
-  targetId: 'idClient',
-  allowNull : false
+  targetId: 'idClient'
 })
 
 

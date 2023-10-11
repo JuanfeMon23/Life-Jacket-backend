@@ -97,7 +97,15 @@ export const Purchase = sequelize.define('purchases', {
         type: DataTypes.BOOLEAN,
         allowNull : false,
         defaultValue: true
-    }
+    },
+    idClientPurchase: {
+      type: DataTypes.INTEGER,
+      allowNull : false
+    },
+    idVehiclePurchase: {
+      type: DataTypes.INTEGER,
+      allowNull : false
+    } 
 },
 {
   timestamps : false

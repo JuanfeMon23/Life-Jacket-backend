@@ -113,7 +113,7 @@ export const deleteClient = async (req, res) => {
         
         await client.destroy();
         
-        res.json(client);
+        return res.status(200).json({ message: 'Cliente eliminado con éxito' });
 
     } catch (error) {
         return res.status(500).json({message : error.message});

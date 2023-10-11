@@ -58,12 +58,17 @@ export const Improvements = sequelize.define('improvements', {
             
         }
     },
-
     improvementStatus : {
         type : DataTypes.BOOLEAN(1),
+        allowNull : false,
         defaultValue: true
     },
+    idVehicleImprovement: {
+        type: DataTypes.INTEGER,
+        allowNull : false
+    }
 },
-    {
-        timestamps : false 
-})
+{
+    timestamps : false 
+}
+);

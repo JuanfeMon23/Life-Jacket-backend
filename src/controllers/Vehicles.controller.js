@@ -72,8 +72,7 @@ export const postVehicles = async (req, res) => {
 export const updateVehicle = async (req, res) => {
     const {idVehicle} = req.params;
     try {
-        const {vehicleType, brand, model, type, line, mileage, cylinderCapacity, fuel, 
-            traction, soat, technomechanics, timingBelt} = req.body
+        const {vehicleType, brand, model, type, line, mileage, cylinderCapacity, fuel, traction, soat, technomechanics, timingBelt} = req.body
         
         const vehicle = await Vehicle.findByPk(idVehicle)
 
