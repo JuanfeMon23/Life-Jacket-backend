@@ -122,7 +122,7 @@ export const User = sequelize.define('Users', {
         }
     },
     userPassword : {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING,
         allowNull : false,
         validate : {
             notNull: {

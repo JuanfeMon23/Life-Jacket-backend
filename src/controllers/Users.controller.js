@@ -36,13 +36,13 @@ export const getUser = async (req,res) => {
 };
 
 export const postUser = async  (req,res) => {
-    const {userDocumentType, userDocumentNumber, userDepartment,  userMunicipality, userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idRolUser} = req.body
+    const {userTypeDocument, userDocument, userDepartment,  userMunicipality, userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idRolUser} = req.body
     
     try {
         const userPasswordHash = await bcrypts.hash(userPassword, 10);
         const newUser = await User.create({
-            userDocumentType,   
-            userDocumentNumber, 
+            userTypeDocument,   
+            userDocument, 
             userDepartment,
             userMunicipality,
             userName,
@@ -64,7 +64,7 @@ export const postUser = async  (req,res) => {
 export const updateUser = async (req,res) => {
     const {idUser} = req.params;
     try {
-        const {userDocumentType, userDocumentNumber, userDepartment,  userMunicipality,  userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber, idRolUser } = req.body
+        const {userTypeDocument, userDocument, userDepartment,  userMunicipality,  userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber, idRolUser } = req.body
 
         const user = await User.findByPk(idUser)
 
@@ -72,8 +72,8 @@ export const updateUser = async (req,res) => {
             return res.status(400).json({ message : 'No puedes editar un usuario deshabilitado'});
         }
 
-        user.userDocumentType = userDocumentType;
-        user.userDocumentNumber = userDocumentNumber;
+        user.userTypeDocument = userTypeDocument;
+        user.userDocument = userDocument;
         user.userDepartment = userDepartment;
         user.userMunicipality = userMunicipality;
         user.userName = userName;
