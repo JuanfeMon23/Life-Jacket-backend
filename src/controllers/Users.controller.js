@@ -94,9 +94,9 @@ export const updateUser = async (req,res) => {
 };
 
 export const statusUser = async (req, res) => {
-    const { idClient } = req.params;
+    const { idUser } = req.params;
     try {
-        const user = await User.findByPk(idClient)
+        const user = await User.findByPk(idUser)
 
         user.userStatus = !user.userStatus;
 
@@ -111,7 +111,7 @@ export const statusUser = async (req, res) => {
 export const deleteUser = async (req,res) => {
     const {idUser} = req.params;
     try {
-        const user = await Client.findByPk(idUser)
+        const user = await User.findByPk(idUser)
 
         await user.destroy();
 
