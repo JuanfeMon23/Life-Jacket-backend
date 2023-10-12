@@ -1,12 +1,21 @@
 import {Client} from '../models/Clients.model.js';
 import {Sale} from '../models/Sales.model.js';
 import {Purchase} from '../models/Purchases.model.js';
-import { Op } from 'sequelize';
+import { Op , Sequelize  } from 'sequelize';
 import app from '../app.js';
 
 export const getClients = async (req, res) => {
     try {
-        const clients = await Client.findAll();
+        const clientIdExcluded = 1;
+
+        const clients = await Client.findAll({
+            where: {
+                idClient: {
+                    [Sequelize.Op.not]: clientIdExcluded
+                },
+            },
+        }); 
+        
         res.json(clients);
     } catch (error) {
         console.error(error);

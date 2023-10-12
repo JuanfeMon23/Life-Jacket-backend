@@ -1,5 +1,5 @@
 import { Vehicle } from "../models/Vehicles.model.js";
-import { Op } from 'sequelize';
+import { Op , Sequelize  } from 'sequelize';
 import app from '../app.js'
 import { Improvements } from "../models/Improvements.model.js";
 // import { Sales } from "../controllers/"
@@ -7,13 +7,21 @@ import { Improvements } from "../models/Improvements.model.js";
 // Get vehicles 
 export const getVehicles = async (req, res) => {
     try {
+        const vehicleIdExcluded  = 1; 
+        
         const vehicles = await Vehicle.findAll({
             include : [
                 {
                     model : Improvements
-                }
-            ]
+                },
+            ],
+            where: {
+                idVehicle: {
+                    [Sequelize.Op.not]: vehicleIdExcluded
+                },
+            },
         });
+        
         res.json(vehicles);
     } catch (error) {
         return res.status(500).json({message : error.message})
