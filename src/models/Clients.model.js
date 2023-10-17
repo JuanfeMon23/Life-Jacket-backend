@@ -186,7 +186,7 @@ export const Client = sequelize.define('clients', {
   }
 ); 
 
-async function insertClient(){
+/* async function insertClient(){
 
   const existingClient = await Client.findOne({ idClient: 1 });
   try {
@@ -211,4 +211,4 @@ async function insertClient(){
   }
 };
 
-insertClient(); 
+insertClient();  */

@@ -244,7 +244,7 @@ Improvements.belongsTo(Vehicle, {
 })
 
 
-async function insertVehicle(){
+/* async function insertVehicle(){
 
     const existingVehicle = await Vehicle.findOne({ idVehicle: 1 });
     try {
@@ -272,4 +272,4 @@ async function insertVehicle(){
     }
 };
 
-insertVehicle();
+insertVehicle(); */

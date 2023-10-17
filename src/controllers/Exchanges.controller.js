@@ -1,6 +1,7 @@
 import {Exchange} from '../models/Exchanges.model.js';
 import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
+import {ExchangesDetails} from '../models/ExchangesDetails.model.js';
 import { Op } from 'sequelize';
 import app from '../app.js';
 
@@ -15,7 +16,9 @@ export const getExchanges = async (req, res) => {
                     model: Vehicle, 
                     as: 'vehiclesExchange' // nombre de la asosiacion con Exchange
                 },
-                
+                {
+                    model : ExchangesDetails
+                }
             ],
         });
         res.json(exchanges);
@@ -41,15 +44,18 @@ export const getExchange = async (req,res) => {
                     model: Vehicle, 
                     as: 'vehiclesExchange'
                 },
+                {
+                    model : ExchangesDetails
+                }
             ],
         });
 
-        if (exchange) {
+        /* if (exchange) {
             const vehiclesAss = exchange.ExchangeDetails;
             res.json({ exchange, vehiclesAss });
         } else {
             return res.status(404).json({ message: 'Intercambio no encontrado' });
-        }
+        } */
     } catch (error) {
         return res.status(500).json({message : error.message});
 
@@ -122,6 +128,9 @@ export const searchExchange = async (req, res) => {
                 {
                     model: Vehicle, 
                     as: 'vehiclesExchange',
+                },
+                {
+                    model : ExchangesDetails
                 }
             ],
             where: {
@@ -149,8 +158,97 @@ export const searchExchange = async (req, res) => {
     }
 };
 
-
 export const reportExchange = async (req, res) => {
+    //los parametros que se necesitan pa que se ejecute
+    const startDateExchange = new Date(req.params.startDateExchange);
+    const finalDateExchange = new Date(req.params.finalDateExchange); 
+
+    try {
+        const exchange = await Exchange.findAll({
+            where: {
+                exchangeDate: {
+                    [Op.between]: [startDateExchange, finalDateExchange]
+                }
+            },
+            include: [
+                {
+                    model: Client
+                },
+                {
+                    model: Vehicle
+                },
+                {
+                    model : ExchangesDetails
+                }
+            ],
+        });
+
+        //para mostrarlo en forme de tabla
+        let exchangesRows = '';
+        sale.forEach(e => {
+          exchangesRows += `<tr>
+            <td>${e.idExchange}</td>
+            <td>${e.exchangeDate}</td>
+            <td>${e.exchangeCashPrice}</td>
+            <td>${e.exchangeDepartment}</td>
+            <td>${e.exchangeMunicipality}</td>
+            <td>${e.client.clientName}</td>
+            <td>${e.client.clientLastName}</td>
+            <td>${e.vehicle.licensePlate}</td>
+            <td>${e.exchangesdetails.exchangeFinalPrice}</td>
+          </tr>`;
+        });
+        
+        //codigo html
+        const html = `
+          <html>
+            <head>
+              <style>
+                /* css */
+              </style>
+            </head>
+            <body>
+              <h1>Informe de intercambios</h1>
+              <p>Fecha del reporte: ${new Date().toLocaleDateString()}</p>
+              <table>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha</th>
+                  <th>Efectivo involucrado</th>
+                  <th>Departamento</th>
+                  <th>Municipio</th>
+                  <th>Nonbre del cliente</th>
+                  <th>Apellido del cliente</th>
+                  <th>Placa de vehículo</th>
+                  <th>Precio intercambio</th>
+                </tr>
+                ${exchangesRows}
+              </table>
+            </body>
+          </html>
+        `;
+        
+        const options = { format: 'Letter' };
+        
+        //genera el pdf y lo guarda en el archivo
+        pdf.create(html, options).toStream(function(err, stream) {
+            if (err) {
+              console.error(err);
+              return res.status(500).json({ message: err.message });
+            }
+            // envia el stream al cliente
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=reporteIntercambio.pdf');
+            stream.pipe(res);
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+
+/* export const reportExchange = async (req, res) => {
     const startDateExchange = new Date(req.params.startDateExchange);
     const finalDateExchange = new Date(req.params.finalDateExchange);
     try {
@@ -167,6 +265,9 @@ export const reportExchange = async (req, res) => {
                 {
                     model: Vehicle, 
                     as: 'vehiclesExchange' 
+                },
+                {
+                    model : ExchangesDetails
                 }
             ],
         });
@@ -175,4 +276,4 @@ export const reportExchange = async (req, res) => {
         console.error(error);
         return res.status(500).json({message : error.message});
     }
-}; 
+};  */
