@@ -1,7 +1,9 @@
 import {Exchange} from '../models/Exchanges.model.js';
 import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
+import {postVehicles} from '../controllers/Vehicles.controller.js';
 import {ExchangesDetails} from '../models/ExchangesDetails.model.js';
+import pdf from 'html-pdf';
 import { Op } from 'sequelize';
 import app from '../app.js';
 
@@ -13,8 +15,7 @@ export const getExchanges = async (req, res) => {
                     model : Client
                 },
                 {
-                    model: Vehicle, 
-                    as: 'vehiclesExchange' // nombre de la asosiacion con Exchange
+                    model: Vehicle
                 },
                 {
                     model : ExchangesDetails
@@ -41,8 +42,7 @@ export const getExchange = async (req,res) => {
                     model : Client
                 },
                 {
-                    model: Vehicle, 
-                    as: 'vehiclesExchange'
+                    model: Vehicle
                 },
                 {
                     model : ExchangesDetails
@@ -50,51 +50,86 @@ export const getExchange = async (req,res) => {
             ],
         });
 
-        /* if (exchange) {
-            const vehiclesAss = exchange.ExchangeDetails;
-            res.json({ exchange, vehiclesAss });
-        } else {
-            return res.status(404).json({ message: 'Intercambio no encontrado' });
-        } */
+        res.json(exchange);
     } catch (error) {
         return res.status(500).json({message : error.message});
 
     }
 };
+
+// async function vehicleExists(idVehicleExchange) {
+//     const vehicle = await Vehicle.findByPk(idVehicleExchange);
+//     // return vehicle !== null;
+//     if(vehicle !== null){
+//         return true
+//     }else {
+//         false
+//     }
+// }
 
 export const postExchange = async (req, res) => {
-/*     try {
-        const {exchangeDate, exchangeIncrementPrice, exchangeFinalPrice, exchangePaymentMethod, exchangeLimitations, exchangeDepartment, exchangeMunicipality, exchangePecuniaryPenalty, idClientExchange, idVehicleDetail} = req.body;
+     try {
 
         const newExchange = await Exchange.create({
-            exchangeDate,
-            exchangeIncrementPrice,
-            exchangeFinalPrice,
-            exchangePaymentMethod,
-            exchangeLimitations,
-            exchangeDepartment,
-            exchangeMunicipality,
-            exchangePecuniaryPenalty,
-            idClientExchange,
-            vehicle : [idVehicleDetail]
+            exchangeDate : "01/01/2021",
+            exchangeCashPrice : 0,
+            exchangeLimitations : "Ninguna",
+            exchangeDepartment : "",
+            exchangeMunicipality : "",
+            exchangePecuniaryPenalty : 0,
+            idClientExchange : 1,
         });
 
-    try {
-    const vehicle = await Vehicle.findByPk(idVehicleDetail);
-    if (vehicle) {
-        await newExchange.setVehicles([vehicle]);
-    } else {
-        console.error('No se pudo encontrar el vehículo.');
-    }
-    } catch (error) {
-    console.error('Error al buscar el vehículo:', error);
-    }
+        return res.status(200).json(newExchange);
 
-    return res.status(200).json(newExchange);
     } catch (error) {
         return res.status(500).json({message : error.message});
-    } */
+    }
 };
+
+/* export const updateExchange = async (exchangeId) => {
+
+} */
+
+export const postExchangeDetail = async (req, res) => {
+    try {
+       const {idExchangeVehicle, idVehicleExchange, vehicleSubtotal, exchangeFinalPrice, vehicleStatusExchange} = req.body;
+
+       let vehicle = await Vehicle.findByPk(idVehicleExchange);
+
+       const exchangeId = await Exchange.findByPk(idExchangeVehicle);
+      
+       if (vehicle === null) {
+           const {licensePlate, vehicleType, brand, model, type, line, mileage, cylinderCapacity, fuel, traction, soat, technomechanics, timingBelt} = req.body;
+           // const res = await postVehicles(req, res); 
+           vehicle = await postVehicles(req, res);
+       }
+       // obtengo el carro
+       // const vehicle = await Vehicle.findByPk(idVehicleExchange);
+
+       const newExchangeDetail = await ExchangesDetails.create({
+           idExchangeVehicle, 
+           idVehicleExchange, 
+           vehicleSubtotal, 
+           exchangeFinalPrice, 
+           vehicleStatusExchange
+       });
+
+
+
+       if(vehicleStatusExchange === "Saliente"){
+           await vehicle.update({ vehicleStatus : false });
+       };
+
+
+       return res.status(200).json(newExchangeDetail);
+
+   } catch (error) {
+       return res.status(500).json({message : error.message});
+   }
+};
+
+
 
 
 export const statusExchange = async (req, res) => {
@@ -127,7 +162,6 @@ export const searchExchange = async (req, res) => {
                 },
                 {
                     model: Vehicle, 
-                    as: 'vehiclesExchange',
                 },
                 {
                     model : ExchangesDetails
@@ -277,3 +311,37 @@ export const reportExchange = async (req, res) => {
         return res.status(500).json({message : error.message});
     }
 };  */
+
+
+
+/* export const postExchange = async (req, res) => {
+    try {
+       const {exchangeDate, exchangeCashPrice, exchangeLimitations, exchangeDepartment, exchangeMunicipality, exchangePecuniaryPenalty, idClientExchange, idVehicleDetail} = req.body;
+
+       const newExchange = await Exchange.create({
+           exchangeDate,
+           exchangeCashPrice,
+           exchangeLimitations,
+           exchangeDepartment,
+           exchangeMunicipality,
+           exchangePecuniaryPenalty,
+           idClientExchange,
+           vehicle : [idVehicleDetail]
+       });
+
+   try {
+   const vehicle = await Vehicle.findByPk(idVehicleDetail);
+   if (vehicle) {
+       await newExchange.setVehicles([vehicle]);
+   } else {
+       console.error('No se pudo encontrar el vehículo.');
+   }
+   } catch (error) {
+   console.error('Error al buscar el vehículo:', error);
+   }
+
+   return res.status(200).json(newExchange);
+   } catch (error) {
+       return res.status(500).json({message : error.message});
+   }
+}; */
