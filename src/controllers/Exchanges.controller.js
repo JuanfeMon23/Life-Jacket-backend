@@ -57,16 +57,6 @@ export const getExchange = async (req,res) => {
     }
 };
 
-// async function vehicleExists(idVehicleExchange) {
-//     const vehicle = await Vehicle.findByPk(idVehicleExchange);
-//     // return vehicle !== null;
-//     if(vehicle !== null){
-//         return true
-//     }else {
-//         false
-//     }
-// }
-
 export const postExchange = async (req, res) => {
      try {
 
@@ -87,9 +77,28 @@ export const postExchange = async (req, res) => {
     }
 };
 
-/* export const updateExchange = async (exchangeId) => {
+export const updateExchange = async (req, res) => {
+    const {idExchange} = req.params;
+    try {
+        const {exchangeDate, exchangeCashPrice, exchangeLimitations, exchangeDepartment, exchangeMunicipality, exchangePecuniaryPenalty, idClientExchange} = req.body;
 
-} */
+        const exchange = await Exchange.findByPk(idExchange); 
+
+        exchange.exchangeDate = exchangeDate
+        exchange.exchangeCashPrice = exchangeCashPrice
+        exchange.exchangeLimitations = exchangeLimitations
+        exchange.exchangeDepartment = exchangeDepartment
+        exchange.exchangeMunicipality = exchangeMunicipality
+        exchange.exchangePecuniaryPenalty = exchangePecuniaryPenalty
+        exchange.idClientExchange = idClientExchange
+
+       return res.status(200).json(exchange);
+
+   } catch (error) {
+       return res.status(500).json({message : error.message});
+   }
+};
+
 
 export const postExchangeDetail = async (req, res) => {
     try {
@@ -97,15 +106,10 @@ export const postExchangeDetail = async (req, res) => {
 
        let vehicle = await Vehicle.findByPk(idVehicleExchange);
 
-       const exchangeId = await Exchange.findByPk(idExchangeVehicle);
-      
        if (vehicle === null) {
            const {licensePlate, vehicleType, brand, model, type, line, mileage, cylinderCapacity, fuel, traction, soat, technomechanics, timingBelt} = req.body;
-           // const res = await postVehicles(req, res); 
            vehicle = await postVehicles(req, res);
        }
-       // obtengo el carro
-       // const vehicle = await Vehicle.findByPk(idVehicleExchange);
 
        const newExchangeDetail = await ExchangesDetails.create({
            idExchangeVehicle, 
@@ -114,8 +118,6 @@ export const postExchangeDetail = async (req, res) => {
            exchangeFinalPrice, 
            vehicleStatusExchange
        });
-
-
 
        if(vehicleStatusExchange === "Saliente"){
            await vehicle.update({ vehicleStatus : false });
@@ -128,7 +130,6 @@ export const postExchangeDetail = async (req, res) => {
        return res.status(500).json({message : error.message});
    }
 };
-
 
 
 
