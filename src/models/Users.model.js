@@ -129,7 +129,7 @@ export const User = sequelize.define('Users', {
                 msg: 'Este campo es obligatorio',
             },
             len: {
-                args: [8, 40],
+                args: [1, 70],
                 msg: 'La contraseña debe tener entre 8 y 40 caracteres',
             }
         } 
