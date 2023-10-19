@@ -58,16 +58,17 @@ export const getExchange = async (req,res) => {
 };
 
 export const postExchange = async (req, res) => {
+    const {exchangeDate, exchangeCashPrice, exchangeLimitations, exchangeDepartment, exchangeMunicipality, exchangePecuniaryPenalty, idClientExchange} = req.body;
      try {
 
         const newExchange = await Exchange.create({
-            exchangeDate : "01/01/2021",
-            exchangeCashPrice : 0,
-            exchangeLimitations : "Ninguna",
-            exchangeDepartment : "",
-            exchangeMunicipality : "",
-            exchangePecuniaryPenalty : 0,
-            idClientExchange : 1,
+            exchangeDate,
+            exchangeCashPrice,
+            exchangeLimitations,
+            exchangeDepartment,
+            exchangeMunicipality,
+            exchangePecuniaryPenalty,
+            idClientExchange
         });
 
         return res.status(200).json(newExchange);
@@ -92,7 +93,8 @@ export const updateExchange = async (req, res) => {
         exchange.exchangePecuniaryPenalty = exchangePecuniaryPenalty
         exchange.idClientExchange = idClientExchange
 
-       return res.status(200).json(exchange);
+
+       await exchange.save()
 
    } catch (error) {
        return res.status(500).json({message : error.message});
