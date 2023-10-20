@@ -122,6 +122,25 @@ export const Vehicle = sequelize.define('vehicles', {
         }
     },
 
+    color : {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+        validate : {
+            noSpecialCharacters(value) {
+                const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+                if (specialCharacters.test(value)) {
+                  throw new Error('Este campo no puede contener caracteres especiales');
+                }
+            }, 
+
+            noNumbers(value) {
+                if (/[0-9]/.test(value)) {
+                    throw new Error('Este campo no puede contener números')
+                }
+            }
+        }
+    },
+
     mileage : {
         type : DataTypes.STRING(20),
         allowNull: true,
