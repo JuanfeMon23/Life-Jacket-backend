@@ -1,7 +1,7 @@
 import {Exchange} from '../models/Exchanges.model.js';
 import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
-import {postVehicles} from '../controllers/Vehicles.controller.js';
+import {Improvements} from '../models/Improvements.model.js';
 import {ExchangesDetails} from '../models/ExchangesDetails.model.js';
 import pdf from 'html-pdf';
 import { Op } from 'sequelize';
@@ -58,17 +58,15 @@ export const getExchange = async (req,res) => {
 };
 
 export const postExchange = async (req, res) => {
-    const {exchangeDate, exchangeCashPrice, exchangeLimitations, exchangeDepartment, exchangeMunicipality, exchangePecuniaryPenalty, idClientExchange} = req.body;
      try {
-
         const newExchange = await Exchange.create({
-            exchangeDate,
-            exchangeCashPrice,
-            exchangeLimitations,
-            exchangeDepartment,
-            exchangeMunicipality,
-            exchangePecuniaryPenalty,
-            idClientExchange
+            exchangeDate : "01/01/2023",
+            exchangeCashPrice : 0,
+            exchangeLimitations : "Ninguna",
+            exchangeDepartment : "",
+            exchangeMunicipality : "",
+            exchangePecuniaryPenalty : 0,
+            idClientExchange : 1
         });
 
         return res.status(200).json(newExchange);
@@ -93,7 +91,6 @@ export const updateExchange = async (req, res) => {
         exchange.exchangePecuniaryPenalty = exchangePecuniaryPenalty
         exchange.idClientExchange = idClientExchange
 
-
        await exchange.save()
 
    } catch (error) {
@@ -103,28 +100,27 @@ export const updateExchange = async (req, res) => {
 
 
 export const postExchangeDetail = async (req, res) => {
+    const {idExchange} = req.params;
     try {
-       const {idExchangeVehicle, idVehicleExchange, vehicleSubtotal, exchangeFinalPrice, vehicleStatusExchange} = req.body;
+        const {idVehicleExchange, vehicleSubtotal, exchangeFinalPrice, vehicleStatusExchange} = req.body;
 
-       let vehicle = await Vehicle.findByPk(idVehicleExchange);
+        const vehicle = await Vehicle.findByPk(idVehicleExchange);
 
-       if (vehicle === null) {
-           const {licensePlate, vehicleType, brand, model, type, line, mileage, cylinderCapacity, fuel, traction, soat, technomechanics, timingBelt} = req.body;
-           vehicle = await postVehicles(req, res);
-       }
+        // Find the sum of the improvements associated with the vehicle
+        const improvementsSum = await Improvements.sum('improvementPrice', {
+            where: { idVehicleImprovement: idVehicleExchange }
+        });
 
-       const newExchangeDetail = await ExchangesDetails.create({
-           idExchangeVehicle, 
-           idVehicleExchange, 
-           vehicleSubtotal, 
-           exchangeFinalPrice, 
-           vehicleStatusExchange
-       });
-
-       if(vehicleStatusExchange === "Saliente"){
-           await vehicle.update({ vehicleStatus : false });
-       };
-
+        // Add the purchase price and the sum of the improvements to get the vehicleSubtotal
+        const vehicleSubtotalPrice = vehicle.vehiclePrice + improvementsSum; 
+        
+        const newExchangeDetail = await ExchangesDetails.create({
+            idExchangeVehicle: idExchange, 
+            idVehicleExchange, 
+            vehicleSubtotal : vehicleSubtotalPrice, 
+            exchangeFinalPrice, 
+            vehicleStatusExchange
+        });
 
        return res.status(200).json(newExchangeDetail);
 
@@ -133,27 +129,85 @@ export const postExchangeDetail = async (req, res) => {
    }
 };
 
-
-
-export const statusExchange = async (req, res) => {
-    const { idExchange } = req.params;
+export const statusVehicleExchange = async (req, res) => {
+    const { idExchangeDetail } = req.params;
     try {
-        const exchange = await Exchange.findByPk(idExchange, {
-            include : [{
-                model : Vehicle
-            }]
-        });
+        const exchangeDetail = await ExchangesDetails.findByPk(idExchangeDetail)
 
+        vehicleChangeStatus = await Vehicle.findByPk(exchangeDetail.idVehicleExchange);
         
+        exchangeDetail.vehicleStatusExchange = !exchangeDetail.vehicleStatusExchange;
 
-        await exchange.save();
-        res.json(exchange);
+        //true es para los vehiculos ENTRANTES y false para los vehiculos SALIENTES
+        if(exchangeDetail.vehicleStatusExchange === false){
+            await vehicleChangeStatus.update({ vehicleStatus : false })
+        }
+
+        await exchangeDetail.save();
+        res.json(exchangeDetail);
 
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
 };
 
+export const statusExchange = async (req, res) => {
+    const { idExchange } = req.params;
+    try {
+        const exchange = await Exchange.findByPk(idExchange, {
+            include : [{
+                model : Client
+            }]
+        });
+
+        const exchangeDetail = await ExchangesDetails.findByPk(idExchange, {
+            include : [{
+                model : Vehicle
+            }]
+        });
+
+        await exchange.setClient(1);
+
+        if(exchangeDetail.vehicleStatusExchange === false){
+            await exchangeDetail.vehicle.update({
+                vehicleStatus : true
+            });
+        }else{
+            await exchangeDetail.vehicle.update({
+                vehicleStatus : false
+            });
+        }
+
+        await exchangeDetail.setVehicle(1);
+
+        await exchange.update({
+            exchangeStatus : false
+        });
+
+        return res.status(200).json({ message: 'Intercambio anulado con éxito' });
+
+    } catch (error) {
+        return res.status(500).json({message : error.message});
+    }
+};
+
+export const deleteExchange = async (req, res) => {
+    const { idExchange } = req.params;
+    try {
+        const exchange = await Sale.findByPk(idExchange);
+
+        if(exchange.exchangeStatus === false){
+            await sale.destroy();
+        }else {
+            return res.status(500).json({ message: 'El intercambio no se puede eliminar' });
+        };
+
+        return res.status(200).json({ message: 'Intercambio eliminado con éxito' });
+
+    } catch (error) {
+        return res.status(500).json({message : error.message});
+    }
+};
 
 export const searchExchange = async (req, res) => {
     const {search} = req.params;
