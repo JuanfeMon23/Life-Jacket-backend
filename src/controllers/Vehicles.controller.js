@@ -49,7 +49,7 @@ export const getVehicle = async (req, res) => {
 // Create
 export const postVehicles = async (req, res) => {
     try {
-      const { licensePlate, vehicleType, brand, model, type, line, mileage, cylinderCapacity, fuel,
+      const { licensePlate, vehicleType, brand, model, type, line, color, mileage, cylinderCapacity, fuel,
         traction, soat, technomechanics, timingBelt, vehicleStatus } = req.body;
   
       const newVehicle = await Vehicle.create({
@@ -59,6 +59,7 @@ export const postVehicles = async (req, res) => {
         model,
         type,
         line,
+        color,
         mileage,
         cylinderCapacity,
         fuel,
@@ -80,7 +81,7 @@ export const postVehicles = async (req, res) => {
 export const updateVehicle = async (req, res) => {
     const {idVehicle} = req.params;
     try {
-        const {vehicleType, brand, model, type, line, mileage, cylinderCapacity, fuel, traction, soat, technomechanics, timingBelt} = req.body
+        const {vehicleType, brand, model, type, line, color, mileage, cylinderCapacity, fuel, traction, soat, technomechanics, timingBelt} = req.body
         
         const vehicle = await Vehicle.findByPk(idVehicle)
 
@@ -93,6 +94,7 @@ export const updateVehicle = async (req, res) => {
         vehicle.model = model
         vehicle.type = type
         vehicle.line = line
+        vehicle.color = color
         vehicle.mileage = mileage
         vehicle.cylinderCapacity = cylinderCapacity
         vehicle.fuel = fuel
