@@ -126,6 +126,10 @@ export const Vehicle = sequelize.define('vehicles', {
         type: DataTypes.STRING(20),
         allowNull: false,
         validate : {
+            notNull: {
+                msg: 'Este campo es obligaotiro'
+            },
+
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
                 if (specialCharacters.test(value)) {
@@ -276,6 +280,7 @@ Improvements.belongsTo(Vehicle, {
                 model : "0000",
                 type : "Prueba",
                 line : "Prueba",
+                color : "Prueba",
                 mileage : "2222222",
                 cylinderCapacity : "3333333",
                 fuel : "Prueba",
