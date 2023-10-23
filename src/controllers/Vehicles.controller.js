@@ -50,7 +50,7 @@ export const getVehicle = async (req, res) => {
 export const postVehicles = async (req, res) => {
     try {
       const { licensePlate, vehicleType, brand, model, type, line, color, mileage, cylinderCapacity, fuel,
-        traction, soat, technomechanics, timingBelt, vehicleStatus } = req.body;
+        traction, soat, technomechanics, timingBelt, vehiclePrice, vehicleStatus } = req.body;
   
       const newVehicle = await Vehicle.create({
         licensePlate,
@@ -67,6 +67,7 @@ export const postVehicles = async (req, res) => {
         soat,
         technomechanics,
         timingBelt,
+        vehiclePrice,
         vehicleStatus
       });
   
@@ -81,7 +82,7 @@ export const postVehicles = async (req, res) => {
 export const updateVehicle = async (req, res) => {
     const {idVehicle} = req.params;
     try {
-        const {vehicleType, brand, model, type, line, color, mileage, cylinderCapacity, fuel, traction, soat, technomechanics, timingBelt} = req.body
+        const {vehicleType, brand, model, type, line, color, mileage, cylinderCapacity, fuel, traction, soat, technomechanics, timingBelt, vehiclePrice} = req.body
         
         const vehicle = await Vehicle.findByPk(idVehicle)
 
@@ -102,6 +103,7 @@ export const updateVehicle = async (req, res) => {
         vehicle.soat = soat
         vehicle.technomechanics = technomechanics
         vehicle.timingBelt = timingBelt
+        vehicle.vehiclePrice = vehiclePrice
         await vehicle.save()
         res.json(vehicle)
 

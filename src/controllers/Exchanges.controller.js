@@ -12,16 +12,15 @@ export const getExchanges = async (req, res) => {
         const exchanges = await Exchange.findAll({
             include: [
                 {
-                    model : Client
+                    model: Client
                 },
                 {
-                    model: Vehicle
-                },
-                {
-                    model : ExchangesDetails
+                    model: Vehicle,
+                    as: 'vehiclesExchange'
                 }
-            ],
+            ]
         });
+
         res.json(exchanges);
     } catch (error) {
         console.error(error);
@@ -32,22 +31,20 @@ export const getExchanges = async (req, res) => {
 export const getExchange = async (req,res) => {
     try {
         const {idExchange} = req.params;
-        
-        const exchange = await Exchange.findOne({
+
+        const exchange = await Exchange.findAll({
             where: {
                 idExchange
-            },
+              },
             include: [
                 {
-                    model : Client
+                    model: Client
                 },
                 {
-                    model: Vehicle
-                },
-                {
-                    model : ExchangesDetails
+                    model: Vehicle,
+                    as: 'vehiclesExchange'
                 }
-            ],
+            ]
         });
 
         res.json(exchange);
@@ -91,8 +88,8 @@ export const updateExchange = async (req, res) => {
         exchange.exchangePecuniaryPenalty = exchangePecuniaryPenalty
         exchange.idClientExchange = idClientExchange
 
-       await exchange.save()
-
+        await exchange.save()
+       return res.status(200).json(exchange);
    } catch (error) {
        return res.status(500).json({message : error.message});
    }
@@ -102,7 +99,7 @@ export const updateExchange = async (req, res) => {
 export const postExchangeDetail = async (req, res) => {
     const {idExchange} = req.params;
     try {
-        const {idVehicleExchange, vehicleSubtotal, exchangeFinalPrice, vehicleStatusExchange} = req.body;
+        const {idVehicleExchange, exchangeFinalPrice, vehicleStatusExchange} = req.body;
 
         const vehicle = await Vehicle.findByPk(idVehicleExchange);
 
@@ -134,13 +131,15 @@ export const statusVehicleExchange = async (req, res) => {
     try {
         const exchangeDetail = await ExchangesDetails.findByPk(idExchangeDetail)
 
-        vehicleChangeStatus = await Vehicle.findByPk(exchangeDetail.idVehicleExchange);
+        const vehicleChangeStatus = await Vehicle.findByPk(exchangeDetail.idVehicleExchange);
         
         exchangeDetail.vehicleStatusExchange = !exchangeDetail.vehicleStatusExchange;
 
         //true es para los vehiculos ENTRANTES y false para los vehiculos SALIENTES
         if(exchangeDetail.vehicleStatusExchange === false){
             await vehicleChangeStatus.update({ vehicleStatus : false })
+        }else{
+            await vehicleChangeStatus.update({ vehicleStatus : true })
         }
 
         await exchangeDetail.save();
@@ -154,31 +153,35 @@ export const statusVehicleExchange = async (req, res) => {
 export const statusExchange = async (req, res) => {
     const { idExchange } = req.params;
     try {
+
         const exchange = await Exchange.findByPk(idExchange, {
             include : [{
                 model : Client
             }]
         });
 
-        const exchangeDetail = await ExchangesDetails.findByPk(idExchange, {
-            include : [{
-                model : Vehicle
+        const exchangeDetails = await ExchangesDetails.findAll({
+            where: {
+              idExchangeVehicle: idExchange
+            },
+            include: [{
+              model: Vehicle
             }]
-        });
+          });
 
         await exchange.setClient(1);
 
-        if(exchangeDetail.vehicleStatusExchange === false){
-            await exchangeDetail.vehicle.update({
-                vehicleStatus : true
-            });
-        }else{
-            await exchangeDetail.vehicle.update({
-                vehicleStatus : false
+        for (const exchangeDetail of exchangeDetails) {
+            if (exchangeDetail.vehicleStatusExchange === false) {
+                await exchangeDetail.Vehicle.update({
+                    vehicleStatus: true
+                });
+            }
+    
+            await exchangeDetail.update({
+                idVehicleExchange: 1
             });
         }
-
-        await exchangeDetail.setVehicle(1);
 
         await exchange.update({
             exchangeStatus : false
@@ -194,10 +197,19 @@ export const statusExchange = async (req, res) => {
 export const deleteExchange = async (req, res) => {
     const { idExchange } = req.params;
     try {
-        const exchange = await Sale.findByPk(idExchange);
+        const exchange = await Exchange.findByPk(idExchange);
+
+        const exchangeDetails = await ExchangesDetails.findAll({
+            where: {
+              idExchangeVehicle: idExchange
+            }
+        });
 
         if(exchange.exchangeStatus === false){
-            await sale.destroy();
+            await exchange.destroy();
+            for (const exchangeDetail of exchangeDetails) {
+                await exchangeDetail.destroy();
+            }
         }else {
             return res.status(500).json({ message: 'El intercambio no se puede eliminar' });
         };
@@ -209,28 +221,39 @@ export const deleteExchange = async (req, res) => {
     }
 };
 
+export const cancelExchange = async (req, res) => {
+    const { idExchange } = req.params;
+    try {
+        const exchange = await Exchange.findByPk(idExchange);
+
+        await exchange.destroy();
+
+        return res.status(200).json({ message: 'Intercambio eliminado con éxito' });
+
+    } catch (error) {
+        return res.status(500).json({message : error.message});
+    }
+};
+
+
 export const searchExchange = async (req, res) => {
     const {search} = req.params;
     try {
         const exchange = await Exchange.findAll({
             include: [
                 {
-                    model: Client, 
+                    model: Client
                 },
                 {
-                    model: Vehicle, 
-                },
-                {
-                    model : ExchangesDetails
+                    model: Vehicle,
+                    as: 'vehiclesExchange'
                 }
             ],
             where: {
                 [Op.or]: [
-                    { exchangeDate: { [Op.like]: `%${search}%` } },
-                    { exchangeFinalPrice: { [Op.like]: `%${search}%` } },
-                    { exchangePaymentMethod: { [Op.like]: `%${search}%` } },
-                    { exchangeDepartment: { [Op.like]: `%${search}%` } },
-                    { exchangeMunicipality: { [Op.like]: `%${search}%` } },
+                    {exchangeDate: { [Op.like]: `%${search}%` } },
+                    {exchangeDepartment: { [Op.like]: `%${search}%` } },
+                    {exchangeMunicipality: { [Op.like]: `%${search}%` } },
                     {'$Client.clientDocument$': { [Op.like]: `%${search}%` } },
                     {'$Client.clientName$': { [Op.like]: `%${search}%` } },
                     {'$Client.clientLastName$': { [Op.like]: `%${search}%` } },
@@ -243,6 +266,7 @@ export const searchExchange = async (req, res) => {
                 ],
             },
         });
+
         res.json(exchange);
     } catch (error) {
         return res.status(500).json({message : error.message});
@@ -266,18 +290,35 @@ export const reportExchange = async (req, res) => {
                     model: Client
                 },
                 {
-                    model: Vehicle
-                },
-                {
-                    model : ExchangesDetails
+                    model: Vehicle,
+                    as: 'vehiclesExchange'
                 }
             ],
         });
 
+        /* const exchangeD = await ExchangesDetails.findAll({
+            include: [
+                {
+                    model: Exchange,
+                    where: {
+                        exchangeDate: {
+                            [Op.between]: [startDateExchange, finalDateExchange]
+                        }
+                    },
+                    include: [
+                        {
+                            model: Vehicle,
+                            as: 'vehiclesExchange'
+                        }
+                    ]
+                }
+            ]
+        }); */
+
         //para mostrarlo en forme de tabla
         let exchangesRows = '';
-        sale.forEach(e => {
-          exchangesRows += `<tr>
+        exchange.forEach(e => {
+            exchangesRows += `<tr>
             <td>${e.idExchange}</td>
             <td>${e.exchangeDate}</td>
             <td>${e.exchangeCashPrice}</td>
@@ -285,10 +326,22 @@ export const reportExchange = async (req, res) => {
             <td>${e.exchangeMunicipality}</td>
             <td>${e.client.clientName}</td>
             <td>${e.client.clientLastName}</td>
-            <td>${e.vehicle.licensePlate}</td>
-            <td>${e.exchangesdetails.exchangeFinalPrice}</td>
-          </tr>`;
+            <td>`;
+        
+        // Agregar placas de vehículos
+        e.vehiclesExchange.forEach(vehicle => {
+            exchangesRows += `${vehicle.licensePlate}, `;
         });
+
+        exchangesRows += '</td></tr>';
+        });
+
+        /* let exchangesDRows = '';
+        exchangeD.forEach(e => {
+          exchangesDRows += `<tr>
+            <td>${e.exchange.vehicle.licensePlate}</td>
+          </tr>`;
+        }); */
         
         //codigo html
         const html = `
@@ -310,8 +363,7 @@ export const reportExchange = async (req, res) => {
                   <th>Municipio</th>
                   <th>Nonbre del cliente</th>
                   <th>Apellido del cliente</th>
-                  <th>Placa de vehículo</th>
-                  <th>Precio intercambio</th>
+                  <th>Placa</th>
                 </tr>
                 ${exchangesRows}
               </table>
@@ -339,66 +391,4 @@ export const reportExchange = async (req, res) => {
 };
 
 
-/* export const reportExchange = async (req, res) => {
-    const startDateExchange = new Date(req.params.startDateExchange);
-    const finalDateExchange = new Date(req.params.finalDateExchange);
-    try {
-        const exchange = await Exchange.findAll({
-            where: {
-                exchangeDate: {
-                    [Op.between]: [startDateExchange, finalDateExchange]
-                }
-            },
-            include: [
-                {
-                    model: Client
-                },
-                {
-                    model: Vehicle, 
-                    as: 'vehiclesExchange' 
-                },
-                {
-                    model : ExchangesDetails
-                }
-            ],
-        });
-        res.json(exchange);
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({message : error.message});
-    }
-};  */
 
-
-
-/* export const postExchange = async (req, res) => {
-    try {
-       const {exchangeDate, exchangeCashPrice, exchangeLimitations, exchangeDepartment, exchangeMunicipality, exchangePecuniaryPenalty, idClientExchange, idVehicleDetail} = req.body;
-
-       const newExchange = await Exchange.create({
-           exchangeDate,
-           exchangeCashPrice,
-           exchangeLimitations,
-           exchangeDepartment,
-           exchangeMunicipality,
-           exchangePecuniaryPenalty,
-           idClientExchange,
-           vehicle : [idVehicleDetail]
-       });
-
-   try {
-   const vehicle = await Vehicle.findByPk(idVehicleDetail);
-   if (vehicle) {
-       await newExchange.setVehicles([vehicle]);
-   } else {
-       console.error('No se pudo encontrar el vehículo.');
-   }
-   } catch (error) {
-   console.error('Error al buscar el vehículo:', error);
-   }
-
-   return res.status(200).json(newExchange);
-   } catch (error) {
-       return res.status(500).json({message : error.message});
-   }
-}; */
