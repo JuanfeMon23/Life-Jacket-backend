@@ -31,7 +31,6 @@ export const Purchase = sequelize.define('purchases', {
               msg: 'Este campo debe contener solo números',
             },
             len: {
-              args: [6, 12],
               msg: 'Este campo debe tener entre 5 y 11 números',
             },
             customValidation(value) {

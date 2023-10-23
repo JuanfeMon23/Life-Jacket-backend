@@ -50,7 +50,9 @@ export const getPurchase = async (req, res) => {
 export const postPurchase = async (req, res) => {
     try {
         const {purchaseDate, purchaseFinalPrice, purchaseLimitations, purchaseDepartment, purchaseMunicipality, purchasePecuniaryPenalty, idClientPurchase, idVehiclePurchase} = req.body;
-        
+
+        const vehicle = await Vehicle.findByPk(idVehiclePurchase);
+
         const newPurchase = await Purchase.create({
             purchaseDate,
             purchaseFinalPrice,
@@ -61,6 +63,8 @@ export const postPurchase = async (req, res) => {
             idClientPurchase,
             idVehiclePurchase
         });
+
+        await vehicle.update({ vehiclePrice : purchaseFinalPrice });
 
         return res.status(200).json(newPurchase);   
     } catch (error) {

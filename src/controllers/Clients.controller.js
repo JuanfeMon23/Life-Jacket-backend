@@ -1,13 +1,21 @@
+/**
+ * Developer: Yenifer Salazar
+ * Email: yensalazarrestrepo@gmail.com
+ * Creation Date: oct 2023
+ * 
+ * Description: This script contains functions to manage operations related to application clients which are: create, view, edit, disable, delete and search. Uses Express.js and Sequelize to interact with the database
+ */
+
 import {Client} from '../models/Clients.model.js';
-import {Sale} from '../models/Sales.model.js';
-import {Purchase} from '../models/Purchases.model.js';
 import { Op , Sequelize  } from 'sequelize';
 import app from '../app.js';
 
+//Function to get the list of clients
 export const getClients = async (req, res) => {
     try {
-        const clientIdExcluded = 1;
+        const clientIdExcluded = 1; //The client with ID 1 is excluded because it is a test client that is created by default in the application
 
+        //Query the database to get the list of clients excluding the specified ID
         const clients = await Client.findAll({
             where: {
                 idClient: {
@@ -23,10 +31,12 @@ export const getClients = async (req, res) => {
     }
 };
 
+//Function to get a client by their ID
 export const getClient = async (req,res) => {
     try {
         const {idClient} = req.params;
         
+        //Query the database to obtain a client by its ID
         const client = await Client.findOne({
             where: {
                 idClient
@@ -39,10 +49,12 @@ export const getClient = async (req,res) => {
     }
 };
 
+//Function add a new client in the database
 export const postClient = async (req, res) => {
     try {
         const {clientTypeDocument, clientDocument, clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber, clientStatus} = req.body;
 
+        //Function to create a new client
         const newClient = await Client.create({
             clientTypeDocument,
             clientDocument,
@@ -62,11 +74,13 @@ export const postClient = async (req, res) => {
     }
 };
 
+//Feature to update an existing client's information
 export const updateClient = async (req, res) => {
     const { idClient } = req.params;
     try {
         const {clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber} = req.body;
 
+        // Search for the client by their ID
         const client = await Client.findByPk(idClient)
 
         if(client.clientStatus === false){
@@ -89,11 +103,13 @@ export const updateClient = async (req, res) => {
     }
 };
 
+//Function to change the status (enabled/disabled) of a client
 export const statusClient = async (req, res) => {
     const { idClient } = req.params;
     try {
         const client = await Client.findByPk(idClient)
 
+        //Change of client status and saving in the database
         client.clientStatus = !client.clientStatus;
 
         await client.save();
@@ -104,18 +120,20 @@ export const statusClient = async (req, res) => {
     }
 };
 
+//Function to delete a customer if they have no associated sales or purchases
 export const deleteClient = async (req, res) => {
     const { idClient } = req.params;
     try {
         const client = await Client.findByPk(idClient)
 
+        // Count the number of sales and purchases associated with the client
         const saleCount = await client.countSales();
         const purchaseCount = await client.countPurchases();
 
+        //Check if the client has associated sales or purchases and prevent deletion
         if (saleCount > 0){
             return res.status(400).json({ message :"No se puede eliminar un cliente con ventas asociadas"});
         }
-
         if (purchaseCount > 0){
             return res.status(400).json({ message :"No se puede eliminar un cliente con compras asociadas"});
         }
@@ -129,10 +147,11 @@ export const deleteClient = async (req, res) => {
     }
 };
 
-
+//Function to search for clients based on various attributes (document, name, department, etc.)
 export const searchClient  = async (req, res) => {
     const {search} = req.params;
     try {
+        //Perform a search in the database
         const client = await Client.findAll({
             where : {
                 [Op.or]: [
