@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getVehicles, getVehicle, postVehicles, updateVehicle, statusVehicle, getSearchVehicle, deleteVehicle} from '../controllers/Vehicles.controller.js'
+import { getVehicles, getVehicle, postVehiclesAndOthers, updateVehicleAndOther, statusVehicle, getSearchVehicle, deleteVehicle} from '../controllers/Vehicles.controller.js'
 
 export const VehiclesRoutes = Router();
 
@@ -10,10 +10,10 @@ VehiclesRoutes.get('/Vehicles', getVehicles);
 VehiclesRoutes.get('/Vehicles/:idVehicle', getVehicle);
 
 //Create
-VehiclesRoutes.post('/Vehicles', postVehicles);
+VehiclesRoutes.post('/Vehicles', postVehiclesAndOthers);
 
 //Update
-VehiclesRoutes.put('/Vehicles/:idVehicle', updateVehicle);
+VehiclesRoutes.put('/Vehicles/:idVehicle', updateVehicleAndOther);
 
 //Disable
 VehiclesRoutes.patch('/Vehicles/:idVehicle', statusVehicle);
