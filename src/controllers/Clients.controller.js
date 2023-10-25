@@ -3,7 +3,8 @@
  * Email: yensalazarrestrepo@gmail.com
  * Creation Date: oct 2023
  * 
- * Description: This script contains functions to manage operations related to application clients which are: create, view, edit, disable, delete and search. Uses Express.js and Sequelize to interact with the database
+ * Description: This script contains functions to manage operations related to application clients which are: 
+ * create, view, edit, disable, delete and search. Uses Express.js and Sequelize to interact with the database
  */
 
 import {Client} from '../models/Clients.model.js';
@@ -120,22 +121,26 @@ export const statusClient = async (req, res) => {
     }
 };
 
-//Function to delete a customer if they have no associated sales or purchases
+//Function to delete a client if they have no associated sales, purchases or exchanges
 export const deleteClient = async (req, res) => {
     const { idClient } = req.params;
     try {
         const client = await Client.findByPk(idClient)
 
-        // Count the number of sales and purchases associated with the client
+        // Count the number of sales, purchases and exchanges associated with the client
         const saleCount = await client.countSales();
         const purchaseCount = await client.countPurchases();
+        const exchangeCount = await client.countExchanges();
 
-        //Check if the client has associated sales or purchases and prevent deletion
+        //Check if the client has associated sales, purchases and exchanges and prevent deletion
         if (saleCount > 0){
             return res.status(400).json({ message :"No se puede eliminar un cliente con ventas asociadas"});
         }
         if (purchaseCount > 0){
             return res.status(400).json({ message :"No se puede eliminar un cliente con compras asociadas"});
+        }
+        if (exchangeCount > 0){
+            return res.status(400).json({ message :"No se puede eliminar un cliente con intercambios asociados"});
         }
         
         await client.destroy();

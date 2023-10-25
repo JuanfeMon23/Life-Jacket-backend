@@ -1,9 +1,21 @@
+/**
+ * Developer: Felipe Monsalve
+ * Email: elfuanfex@hotmail.com
+ * Creation Date: oct 2023
+ * 
+ * Description: This script contains functions to manage operations related to application roles which are: 
+ * create, view, disable and delete. Uses Express.js and Sequelize to interact with the database
+ */
+
 import { Roles } from "../models/Roles.model.js";
 import app from "../app.js";
 
+//Function add a new rol in the database
 export const createRol = async (req,res)  => {
     try {
         const {rolName} = req.body;
+
+        //Function to create a new rol
         const newRol = await Roles.create({
             rolName
         });
@@ -13,8 +25,10 @@ export const createRol = async (req,res)  => {
     }
 };
 
+//Function to get the list of roles
 export const getRoles = async (req, res) => {
     try {
+        //Query the database to get the list of roles
         const Rol = await Roles.findAll();
         return res.status(200).json(Rol);
         
@@ -26,10 +40,12 @@ export const getRoles = async (req, res) => {
     
 };
 
+//Function to get a rol by their ID
 export const getRol = async (req,res) => {
     try {
         const {idRol} = req.params;
         
+        //Query the database to obtain a rol by its ID
         const rol = await Roles.findOne({
             where : {
                 idRol
@@ -42,11 +58,13 @@ export const getRol = async (req,res) => {
     }
 };
 
+//Feature to update an existing rol's information
 export const updateRol = async (req,res) => {
     try {
         const {idRol} = req.params;
         const {rolName} = req.body;
 
+        // Search for the rol by their ID
         const rol = await Roles.findByPk(idRol);
 
         rol.rolName = rolName;
@@ -58,13 +76,16 @@ export const updateRol = async (req,res) => {
     }
 };
 
+//Function to delete a rol if they  have no associated users
 export const deleteRol = async (req,res) => {
     const { idRol } = req.params;
     try {
         const rol = await Roles.findByPk(idRol)
 
+        //Count the number of users associated with the user
         const userCount = await rol.countUsers();
 
+        //Check if the rol has associated users and prevent deletion
         if (userCount > 0){
             return res.status(400).json({ message :"No se puede eliminar un rol con usuarios asociados"});
         }

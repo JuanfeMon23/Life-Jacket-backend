@@ -3,7 +3,8 @@
  * Email: juandiegomillancano853@gmail.com
  * Creation Date: oct 2023
  * 
- * Description: This script contains functions to manage operations related to application vehicles which are: create, view, edit, disable, delete and search. Uses Express.js and Sequelize to interact with the database
+ * Description: This script contains functions to manage operations related to application vehicles which are: 
+ * create, view, edit, disable, delete and search. Uses Express.js and Sequelize to interact with the database
  */
 
 import { Vehicle } from "../models/Vehicles.model.js";
@@ -178,7 +179,7 @@ export const updateVehicleAndOther = async (req, res) => {
             } = req.body;
 
             // Find the other related information by its ID
-            const other = await othervehicleinformation.findByPk({ where: { idVehicleImprovement: idVehicle } });
+            const other = await othervehicleinformation.findByPk({ where: { idVehicleOtherVehicleInformation: idVehicle } });
 
             if (!other) {
                 return res.status(404).json({ message: 'Related information not found' });
@@ -241,7 +242,7 @@ export const statusVehicle = async (req, res) => {
 
 
 
-//Function to delete a customer if they have no associated sales or purchases
+//Function to delete a vehicle if they have no associated sales, purchases or exchanges
 export const deleteVehicle = async (req, res) => {
     const { idVehicle } = req.params;
     try {
@@ -249,17 +250,20 @@ export const deleteVehicle = async (req, res) => {
 
         const vehicleOther = await othervehicleinformation.findByPk({where: {idVehicleOtherVehicleInformation : idVehicle}});
 
-        // Count the number of sales and purchases associated with the vehicle
+        // Count the number of sales, purchases and exchanges associated with the vehicle
         const saleCount = await vehicle.countSales();
         const purchaseCount = await vehicle.countPurchases();
+        const exchangeCount = await vehicle.countExchanges();
 
-        //Check if the vehicle has associated sales or purchases and prevent deletion
+        //Check if the vehicle has associated sales, purchases and exchanges and prevent deletion
         if (saleCount > 0){
-            return res.status(400).json({ message :"No se puede eliminar un vehiculo con una venta asociada"});
+            return res.status(400).json({ message :"No se puede eliminar un vehiculo con ventas asociadas"});
         }
-
         if (purchaseCount > 0){
-            return res.status(400).json({ message :"No se puede eliminar un vehiculo con una compra asociada"});
+            return res.status(400).json({ message :"No se puede eliminar un vehiculo con compras asociadas"});
+        }
+        if (exchangeCount > 0){
+            return res.status(400).json({ message :"No se puede eliminar un vehiculo con intercambios asociados"});
         }
         
         await vehicle.destroy();

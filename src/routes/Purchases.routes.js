@@ -1,3 +1,11 @@
+/**
+ * Developer: Felipe Monsalve
+ * Email: elfuanfex@hotmail.com
+ * Creation Date: oct 2023
+ * 
+ * Description: This script contains routes of purchases and its different functions
+ */
+
 import {Router} from 'express';
 import {getPurchases, getPurchase, postPurchase, statusPurchase, deletePurchase, searchPurchase, reportPurchase } from '../controllers/Purchases.controller.js';
 

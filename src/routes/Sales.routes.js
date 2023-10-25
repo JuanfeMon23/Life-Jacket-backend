@@ -1,3 +1,11 @@
+/**
+ * Developer: Yenifer Salazar
+ * Email: yensalazarrestrepo@gmail.com
+ * Creation Date: oct 2023
+ * 
+ * Description: This script contains routes of sales and its different functions
+ */
+
 import {Router} from 'express';
 import {getSales, getSale, postSale, statusSale, deleteSale, searchSale , reportSale } from '../controllers/Sales.controller.js';
 

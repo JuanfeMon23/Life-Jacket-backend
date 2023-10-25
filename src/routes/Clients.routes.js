@@ -1,3 +1,11 @@
+/**
+ * Developer: Yenifer Salazar
+ * Email: yensalazarrestrepo@gmail.com
+ * Creation Date: oct 2023
+ * 
+ * Description: This script contains routes of client and its different functions
+ */
+
 import {Router} from 'express';
 import {getClients, getClient, postClient, updateClient, deleteClient, statusClient, searchClient} from '../controllers/Clients.controller.js';
 

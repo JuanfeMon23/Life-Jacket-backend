@@ -1,3 +1,12 @@
+/**
+ * Developer: Yenifer Salazar
+ * Email: yensalazarrestrepo@gmail.com
+ * Creation Date: oct 2023
+ * 
+ * Description: This script contains functions to manage operations related to application sales which are: 
+ * create, view, annular, delete, search and create report. Uses Express.js and Sequelize to interact with the database
+ */
+
 import {Sale} from '../models/Sales.model.js';
 import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
@@ -5,8 +14,10 @@ import pdf from 'html-pdf';
 import { Op } from 'sequelize';
 import app from '../app.js';
 
+//Function to get the list of sales
 export const getSales = async (req, res) => {
     try {
+        //Query the database to get the list of sales
         const sales = await Sale.findAll({
             include: [
                 {
@@ -25,14 +36,17 @@ export const getSales = async (req, res) => {
     }
 };
 
+//Function to get a sale by their ID
 export const getSale = async (req,res) => {
     try {
         const {idSale} = req.params;
         
+        //Query the database to obtain a sale by its ID
         const sale = await Sale.findOne({
             where: {
                 idSale
             },
+            //include sales related models
             include: [
                 {
                     model : Client
@@ -48,12 +62,14 @@ export const getSale = async (req,res) => {
     }
 };
 
+//Function add a new sale in the database
 export const postSale = async (req, res) => {
     try {
         const {saleDate, saleFinalPrice, saleLimitations, saleDepartment, saleMunicipality, salePecuniaryPenalty, idClientSale, idVehicleSale} = req.body;
 
         const vehicle = await Vehicle.findByPk(idVehicleSale);
         
+        //Function to create a new sale
         const newSale = await Sale.create({
             saleDate,
             saleFinalPrice,
@@ -73,7 +89,7 @@ export const postSale = async (req, res) => {
     }
 };
 
-
+//Function to annular a sale
 export const statusSale = async (req, res) => {
     const { idSale } = req.params;
     try {
@@ -83,14 +99,18 @@ export const statusSale = async (req, res) => {
             }]
         });
 
+        //Update the status of the vehicle associated with the sale
         await sale.vehicle.update({
             vehicleStatus : true
         });
 
+        //Update the relationship between the sale and the vehicle
         await sale.setVehicle(1);
 
+        //Updates the relationship between the sale and the client
         await sale.setClient(1);
 
+        //Update the sale status
         await sale.update({
             saleStatus : false
         });
@@ -102,11 +122,13 @@ export const statusSale = async (req, res) => {
     }
 };
 
+//Function to delete a sale if they have disabled
 export const deleteSale = async (req, res) => {
     const { idSale } = req.params;
     try {
         const sale = await Sale.findByPk(idSale);
 
+        //Check if the sale has disabled
         if(sale.saleStatus === false){
             await sale.destroy();
         }else {
@@ -120,11 +142,11 @@ export const deleteSale = async (req, res) => {
     }
 };
 
-
-
+//Function to search for sales based on various attributes (date, department, municipality, vehicles and client's information, etc.)
 export const searchSale = async (req, res) => {
     const {search} = req.params;
     try {
+        //Perform a search in the database
         const sale = await Sale.findAll({
             include: [
                 {
@@ -162,7 +184,7 @@ export const searchSale = async (req, res) => {
 
 
 export const reportSale = async (req, res) => {
-    //los parametros que se necesitan pa que se ejecute
+    //parameters
     const startDateSale = new Date(req.params.startDateSale);
     const finalDateSale = new Date(req.params.finalDateSale);
     
@@ -184,7 +206,7 @@ export const reportSale = async (req, res) => {
             ],
         });
 
-        //para mostrarlo en forme de tabla
+        //information is displayed in table form
         let salesRows = '';
         sale.forEach(s => {
           salesRows += `<tr>
@@ -199,7 +221,7 @@ export const reportSale = async (req, res) => {
           </tr>`;
         });
         
-        //codigo html
+        //code html
         const html = `
           <html>
             <head>
@@ -229,13 +251,13 @@ export const reportSale = async (req, res) => {
         
         const options = { format: 'Letter' };
         
-        //genera el pdf y lo guarda en el archivo
+        //generates the PDF and saves it to the file
         pdf.create(html, options).toStream(function(err, stream) {
             if (err) {
               console.error(err);
               return res.status(500).json({ message: err.message });
             }
-            // envia el stream al cliente
+            //send the stream to the client
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', 'attachment; filename=reporteVenta.pdf');
             stream.pipe(res);
@@ -245,59 +267,3 @@ export const reportSale = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* export const reportSale = async (req, res) => {
-    const startDateSale = new Date(req.params.startDateSale);
-    const finalDateSale = new Date(req.params.finalDateSale);
-    try {
-        const sale = await Sale.findAll({
-            where: {
-                saleDate: {
-                    [Op.between]: [startDateSale, finalDateSale]
-                }
-            },
-            include: [
-                {
-                    model: Client
-                },
-                {
-                    model: Vehicle
-                }
-            ],
-        });
-
-        const formattedSales = sale.map((sale) => ({
-            idSale: sale.idSale,
-            saleDate: sale.saleDate,
-            saleFinalPrice: sale.saleFinalPrice,
-            saleDepartment: sale.saleDepartment,
-            saleMunicipality: sale.saleMunicipality,
-            clientDocument: sale.client.clientDocument,
-            clientName: sale.client.clientName,
-            clientLastName: sale.client.clientLastName,
-            licensePlate: sale.vehicle.licensePlate,
-            vehicleType: sale.vehicle.vehicleType,
-            brand: sale.vehicle.brand,
-            model: sale.vehicle.model
-        }));
-
-        res.json(formattedSales);
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({message : error.message});
-    }
-}; */

@@ -1,3 +1,11 @@
+/**
+ * Developer: Yenifer Salazar
+ * Email: yensalazarrestrepo@gmail.com
+ * Creation Date: oct 2023
+ * 
+ * Description: This script contains model of exchange and its different fields with validations
+ */
+
 import { DataTypes } from "sequelize";
 import  { sequelize } from "../database/database.js";
 import { Client } from "./Clients.model.js";

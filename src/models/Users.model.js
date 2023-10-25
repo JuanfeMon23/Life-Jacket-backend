@@ -1,3 +1,11 @@
+/**
+ * Developer: Felipe Monsalve
+ * Email: elfuanfex@hotmail.com
+ * Creation Date: oct 2023
+ * 
+ * Description: This script contains model of user and its different fields with validations
+ */
+
 import { DataTypes} from 'sequelize';
 import { sequelize } from '../database/database.js';
 import { Roles } from './Roles.model.js';

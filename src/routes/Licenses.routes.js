@@ -1,3 +1,11 @@
+/**
+ * Developer: Felipe Monsalve
+ * Email: elfuanfex@hotmail.com
+ * Creation Date: oct 2023
+ * 
+ * Description: This script contains routes of licenses and its different functions
+ */
+
 import { Router } from "express";
 import { createLicense, getLicense, getLicenses, updateLicense, deleteLicense } from "../controllers/Licenses.controller.js";
 

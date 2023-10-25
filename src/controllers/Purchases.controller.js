@@ -1,3 +1,12 @@
+/**
+ * Developer: Felipe Monsalve
+ * Email: elfuanfex@hotmail.com
+ * Creation Date: oct 2023
+ * 
+ * Description: This script contains functions to manage operations related to application purchases which are: 
+ * create, view, annular, delete, search and create reports. Uses Express.js and Sequelize to interact with the database
+ */
+
 import {Purchase} from '../models/Purchases.model.js';
 import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
@@ -5,8 +14,10 @@ import pdf from 'html-pdf';
 import { Op } from 'sequelize';
 import app from '../app.js';
 
+//Function to get the list of purchases
 export const getPurchases = async (req, res) => {
     try {
+        //Query the database to get the list of purchases
         const purchases = await Purchase.findAll({
             include: [
                 {
@@ -25,14 +36,17 @@ export const getPurchases = async (req, res) => {
     }
 };
 
-
+//Function to get a purchase by their ID
 export const getPurchase = async (req, res) => {
     try {
         const {idPurchase} = req.params;
+
+        //Query the database to obtain a purchase by its ID
         const purchase = await Purchase.findOne({
             where: {
                 idPurchase
             },
+            //include purchases related models
             include : [
                 {
                     model : Client
@@ -47,12 +61,14 @@ export const getPurchase = async (req, res) => {
     }
 };
 
+//Function add a new purchase in the database
 export const postPurchase = async (req, res) => {
     try {
         const {purchaseDate, purchaseFinalPrice, purchaseLimitations, purchaseDepartment, purchaseMunicipality, purchasePecuniaryPenalty, idClientPurchase, idVehiclePurchase} = req.body;
 
         const vehicle = await Vehicle.findByPk(idVehiclePurchase);
 
+        //Function to create a new purchase
         const newPurchase = await Purchase.create({
             purchaseDate,
             purchaseFinalPrice,
@@ -72,15 +88,19 @@ export const postPurchase = async (req, res) => {
     }
 };
 
+//Function to annular a purchase
 export const statusPurchase = async (req, res) => {
     const {idPurchase} = req.params;
     try {
         const purchase = await Purchase.findByPk(idPurchase);
 
+        //Update the relationship between the purchase and the vehicle
         await purchase.setVehicle(1);
 
+        //Updates the relationship between the purchase and the client
         await purchase.setClient(1);
 
+        //Update the purchase status
         await purchase.update({
             purchaseStatus : false
         });
@@ -92,11 +112,13 @@ export const statusPurchase = async (req, res) => {
     }
 };
 
+//Function to delete a purchase if they have disabled
 export const deletePurchase = async (req, res) => {
     const {idPurchase} = req.params;
     try {
         const purchase = await Purchase.findByPk(idPurchase);
 
+        //Check if the purchase has disabled
         if(purchase.purchaseStatus === false){
             await purchase.destroy();
         }else {
@@ -110,11 +132,11 @@ export const deletePurchase = async (req, res) => {
     }
 }
 
-
-
+//Function to search for purchases based on various attributes (date, department, municipality, vehicles and client's information, etc.)
 export const searchPurchase = async (req, res) => {
     const {search} = req.params;
     try {
+        //Perform a search in the database
         const Purchase = await Purchase.findAll({
             include: [
                 {
@@ -153,7 +175,7 @@ export const searchPurchase = async (req, res) => {
 
 
 export const reportPurchase = async (req, res) => {
-    //los parametros que se necesitan pa que se ejecute
+    //parameters
     const startDatePurchase = new Date(req.params.startDatePurchase);
     const finalDatePurchase = new Date(req.params.finalDatePurchase);
     
@@ -175,7 +197,7 @@ export const reportPurchase = async (req, res) => {
             ],
         });
 
-        //para mostrarlo en forme de tabla
+        //information is displayed in table form
         let purchasesRows = '';
         purchase.forEach(p => {
           purchasesRows += `<tr>
@@ -190,7 +212,7 @@ export const reportPurchase = async (req, res) => {
           </tr>`;
         });
         
-        //codigo html
+        //code html
         const html = `
           <html>
             <head>
@@ -220,13 +242,13 @@ export const reportPurchase = async (req, res) => {
         
         const options = { format: 'Letter' };
         
-        //genera el pdf y lo guarda en el archivo
+        //generates the PDF and saves it to the file
         pdf.create(html, options).toStream(function(err, stream) {
             if (err) {
               console.error(err);
               return res.status(500).json({ message: err.message });
             }
-            // envia el stream al cliente
+            //send the stream to the client
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', 'attachment; filename=reporteCompra.pdf');
             stream.pipe(res);
