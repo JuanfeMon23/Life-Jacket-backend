@@ -3,6 +3,7 @@ import { sequelize } from "../database/database.js";
 import { Purchase } from "./Purchases.model.js";
 import { Sale } from "./Sales.model.js";
 import { Improvements } from "./Improvements.model.js";
+import { othervehicleinformation } from "./Othervehicleinformations.model.js";
 import { Op } from 'sequelize';
 
 
@@ -289,6 +290,17 @@ Improvements.belongsTo(Vehicle, {
     targetId : 'idVehicle',
 })
 
+//OtherInformationVehicle
+Vehicle.hasOne(othervehicleinformation, {
+    foreignKey : 'idVehicleOtherVehicleInformation',
+    sourceKey : 'idVehicle',
+    allowNull : false
+})
+
+othervehicleinformation.belongsTo(Vehicle, {
+    foreignKey : 'idVehicleOtherVehicleInformation',
+    targetId : 'idVehicle'
+})
 
 /* async function insertVehicle(){
 

@@ -168,7 +168,12 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
                 }
             }
         }
-    }
+    },
+
+    idVehicleOtherVehicleInformation: {
+        type: DataTypes.INTEGER,
+        allowNull : false
+      }
 }, 
     {
         timestamps : false

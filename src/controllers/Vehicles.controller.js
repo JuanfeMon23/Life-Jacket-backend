@@ -23,6 +23,9 @@ export const getVehicles = async (req, res) => {
                 {
                     model : Improvements
                 },
+                {
+                    model : othervehicleinformation
+                }
             ],
             where: {
                 idVehicle: {
@@ -45,12 +48,15 @@ export const getVehicle = async (req, res) => {
 
         //Query the database to obtain a vehicle by its ID
         const vehicle = await Vehicle.findOne({
-            where : { idVehicle }
+            where : { idVehicle },
+            include : [
+                {
+                    model : othervehicleinformation
+                }
+            ]
         })
-        const object = {
-            vehicle: vehicle
-        }
-        res.json(object);
+
+        res.json(vehicle);
     } catch (error) {
         return res.status(500).json({message : error.message})
     }
@@ -58,7 +64,7 @@ export const getVehicle = async (req, res) => {
 
 
 // Function to create a new vehicle and related information in the database
-export const postVehiclesAndOthers = async (req, res) => {
+export const postVehicle = async (req, res) => {
     try {
         // Extract data from the request body to create a vehicle
         const {
@@ -86,9 +92,19 @@ export const postVehiclesAndOthers = async (req, res) => {
             vehicleStatus
         });
 
+        // Return a response with a new vehicle
+        return res.status(200).json(newVehicle);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+export const postOtherInformation = async (req, res) => {
+    const { idVehicle } = req.params;
+    try {
         // Extract data from the request body to create other related information
         const {
-            business, series, motor, register, chassis, capacity, service, identificationCard, idVehicleOtherVehicleInformation
+            business, series, motor, register, chassis, capacity, service, identificationCard
         } = req.body;
 
         // Create the other related information
@@ -101,16 +117,15 @@ export const postVehiclesAndOthers = async (req, res) => {
             capacity,
             service,
             identificationCard,
-            idVehicleOtherVehicleInformation
+            idVehicleOtherVehicleInformation : idVehicle
         });
 
-        // Return a response with both created objects
-        return res.status(200).json({ newVehicle, newOther });
+        // Return a response with a new other information vehicle
+        return res.status(200).json(newOther);
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-};
-
+}
 
 
 
@@ -118,7 +133,7 @@ export const postVehiclesAndOthers = async (req, res) => {
 export const updateVehicleAndOther = async (req, res) => {
     try {
         // Extract the vehicle or other information ID from the request parameters
-        const { idVehicle, idOtherVehicleInformation } = req.params;
+        const { idVehicle } = req.params;
 
         // If a vehicle ID is provided, update the vehicle
         if (idVehicle) {
@@ -157,13 +172,13 @@ export const updateVehicleAndOther = async (req, res) => {
         }
         
         // If an ID for other related information is provided, update the other information
-        if (idOtherVehicleInformation) {
+        if (idVehicle) {
             const {
                 business, series, motor, register, chassis, capacity, service, identificationCard
             } = req.body;
 
             // Find the other related information by its ID
-            const other = await othervehicleinformation.findByPk(idOtherVehicleInformation);
+            const other = await othervehicleinformation.findByPk({ where: { idVehicleImprovement: idVehicle } });
 
             if (!other) {
                 return res.status(404).json({ message: 'Related information not found' });
@@ -232,6 +247,8 @@ export const deleteVehicle = async (req, res) => {
     try {
         const vehicle = await Vehicle.findByPk(idVehicle)
 
+        const vehicleOther = await othervehicleinformation.findByPk({where: {idVehicleOtherVehicleInformation : idVehicle}});
+
         // Count the number of sales and purchases associated with the vehicle
         const saleCount = await vehicle.countSales();
         const purchaseCount = await vehicle.countPurchases();
@@ -246,6 +263,7 @@ export const deleteVehicle = async (req, res) => {
         }
         
         await vehicle.destroy();
+        await vehicleOther.destroy();
         
         res.json(vehicle);
 
