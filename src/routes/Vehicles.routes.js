@@ -1,3 +1,11 @@
+/**
+ * Developer: Juan Diego Millan
+ * Email: juandiegomillancano853@gmail.com
+ * Creation Date: oct 2023
+ * 
+ *  Description: This script contains routes of Vehicles and its different functions
+ */
+
 import { Router } from "express";
 import { getVehicles, getVehicle, postVehicle, postOtherInformation, updateVehicleAndOther, statusVehicle, getSearchVehicle, deleteVehicle} from '../controllers/Vehicles.controller.js'
 

@@ -1,3 +1,11 @@
+/**
+ * Developer: Juan Diego Millan
+ * Email: juandiegomillancano853@gmail.com
+ * Creation Date: oct 2023
+ * 
+ *  Description: This script contains routes of Improvements and its different functions
+ */
+
 import { Router } from "express";
 import { getImprovements, postImprovements, updateImprovements, getSearchImprovements } from "../controllers/Improvements.controller.js";
 
