@@ -7,6 +7,7 @@
  */
 
 import { Router } from "express";
+
 import { createLicense, getLicense, getLicenses, deleteLicense } from "../controllers/Licenses.controller.js";
 
 export const LicenseRoutes = Router();

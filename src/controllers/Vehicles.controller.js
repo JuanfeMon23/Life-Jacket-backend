@@ -101,11 +101,10 @@ export const postVehicle = async (req, res) => {
 };
 
 export const postOtherInformation = async (req, res) => {
-    const { idVehicle } = req.params;
     try {
         // Extract data from the request body to create other related information
         const {
-            business, series, motor, register, chassis, capacity, service, identificationCard
+            business, series, motor, register, chassis, capacity, service, identificationCard , idVehicleOtherVehicleInformation
         } = req.body;
 
         // Create the other related information
@@ -118,7 +117,7 @@ export const postOtherInformation = async (req, res) => {
             capacity,
             service,
             identificationCard,
-            idVehicleOtherVehicleInformation : idVehicle
+            idVehicleOtherVehicleInformation 
         });
 
         // Return a response with a new other information vehicle
