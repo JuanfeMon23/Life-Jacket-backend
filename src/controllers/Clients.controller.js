@@ -10,6 +10,9 @@
 import {Client} from '../models/Clients.model.js';
 import { Op , Sequelize  } from 'sequelize';
 import app from '../app.js';
+import { Sale } from '../models/Sales.model.js';
+import { Purchase } from '../models/Purchases.model.js';
+import { Exchange } from '../models/Exchanges.model.js';
 
 //Function to get the list of clients
 export const getClients = async (req, res) => {
@@ -23,6 +26,17 @@ export const getClients = async (req, res) => {
                     [Sequelize.Op.not]: clientIdExcluded
                 },
             },
+            include: [
+                {
+                    model : Sale
+                },
+                {
+                    model : Purchase
+                },
+                {
+                    model : Exchange
+                }
+            ]
         }); 
         
         res.json(clients);
@@ -41,7 +55,18 @@ export const getClient = async (req,res) => {
         const client = await Client.findOne({
             where: {
                 idClient
-            }
+            },
+            include: [
+                {
+                    model : Sale
+                },
+                {
+                    model : Purchase
+                },
+                {
+                    model : Exchange
+                }
+            ]
         })
         res.json(client)
     } catch (error) {
