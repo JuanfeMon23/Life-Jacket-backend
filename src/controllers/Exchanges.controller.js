@@ -136,6 +136,12 @@ export const postExchangeDetail = async (req, res) => {
             vehicleStatusExchange
         });
 
+        if(newExchangeDetail.vehicleStatusExchange === false){
+            await vehicle.update({ vehicleStatus : false })
+        }else{
+            await vehicle.update({ vehicleStatus : true })
+        }
+
        return res.status(200).json(newExchangeDetail);
 
    } catch (error) {
@@ -143,7 +149,7 @@ export const postExchangeDetail = async (req, res) => {
    }
 };
 
-export const statusVehicleExchange = async (req, res) => {
+/* export const statusVehicleExchange = async (req, res) => {
     const { idExchangeDetail } = req.params;
     try {
         const exchangeDetail = await ExchangesDetails.findByPk(idExchangeDetail)
@@ -165,7 +171,7 @@ export const statusVehicleExchange = async (req, res) => {
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
-};
+}; */
 
 //Function to cancel the default exchange
 export const cancelExchange = async (req, res) => {
@@ -175,6 +181,16 @@ export const cancelExchange = async (req, res) => {
         const exchange = await Exchange.findByPk(idExchange);
 
         await exchange.destroy();
+
+        const exchangesD = await ExchangesDetails.findAll({
+            where: {
+              idExchangeVehicle: idExchange
+            }
+        });
+
+        for (const exchangeDetail of exchangesD) {
+            await exchangeDetail.destroy();
+        }
 
         return res.status(200).json({ message: 'Intercambio eliminado con éxito' });
 
@@ -228,10 +244,12 @@ export const statusExchange = async (req, res) => {
                     vehicleStatus: true
                 });
             }
-            //Update the relationship between exchange details and vehicles
-            await exchangeDetail.update({
-                idVehicleExchange: 1
-            });
+            if (exchangeDetail.vehicleStatusExchange === true) {
+                await exchangeDetail.Vehicle.update({
+                    vehicleStatus: false
+                });
+            }
+            await exchangeDetail.destroy();
         }
 
         //Update the exchange status
