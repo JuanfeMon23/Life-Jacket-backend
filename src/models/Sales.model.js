@@ -17,16 +17,16 @@ export const Sale = sequelize.define('sales', {
         autoIncrement: true
     },
     saleDate: {
-        type: DataTypes.DATE,
-        allowNull : false,
-        validate: {
-            notNull: {
-              msg: 'Este campo es obligatorio',
-            },
-            isDate: {
-              msg: 'La fecha debe tener un formato válido',
-            }
-        }   
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Este campo es obligatorio',
+        },
+        isDate: {
+          msg: 'La fecha debe tener un formato válido',
+        }
+      }
     },
     saleFinalPrice: {
         type: DataTypes.INTEGER(11),
