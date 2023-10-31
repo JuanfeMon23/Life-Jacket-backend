@@ -169,25 +169,24 @@ let currentMonth = new Date().getMonth() + 1; // El mes en JavaScript es 0-index
 // Función para obtener las ventas del mes actual.
 export const getSalesDataByAmountCard = async () => {
   try {
-    // Calcula el mes y el año actual.
+    // Calcula la fecha de inicio del mes actual.
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
 
-    // Si el mes ha cambiado, reinicia el estado y muestra un mensaje.
     if (month !== currentMonth) {
       currentMonth = month;
     }
-
+    
     // Define el rango de fechas para el mes actual.
-    const startDate = new Date(year, month - 1, 1); // El mes en JavaScript es 0-indexado (enero = 0).
+    const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0);
 
-    // Recupera las ventas del mes actual.
+    // Recupera las ventas del mes actual sin tener en cuenta la hora.
     const monthlySales = await Sale.findAll({
       attributes: [
-        [sequelize.fn('MONTH', sequelize.col('saleDate')), 'month'],
-        [sequelize.fn('YEAR', sequelize.col('saleDate')), 'year'],
+        [sequelize.fn('MONTH', sequelize.fn('DATE', sequelize.col('saleDate'))), 'month'],
+        [sequelize.fn('YEAR', sequelize.fn('DATE', sequelize.col('saleDate'))), 'year'],
         [sequelize.fn('SUM', sequelize.col('saleFinalPrice')), 'totalAmount']
       ],
       where: {
@@ -216,7 +215,7 @@ export const getSalesDataByAmountCard = async () => {
 };
 
 // Middleware para verificar el cambio de mes en cada solicitud.
-const checkMonthChangeMiddlewareSales = (req, res, next) => {
+export const checkMonthChangeMiddlewareSales = (req, res, next) => {
   const now = new Date();
   const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
 
@@ -227,137 +226,135 @@ const checkMonthChangeMiddlewareSales = (req, res, next) => {
   next();
 };
 
-// Aplica el middleware a todas las rutas relevantes.
-// app.use(checkMonthChangeMiddlewareSales);
 
 
 //Get monthly sales data by the amount of money.
 //Retrieves and formats data on total sales amounts for each month.
 
-export const getPurchasesDataByAmountCard = async () => {
-  try {
-    // Calcula el mes y el año actual.
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
+// export const getPurchasesDataByAmountCard = async () => {
+//   try {
+//     // Calcula el mes y el año actual.
+//     const now = new Date();
+//     const year = now.getFullYear();
+//     const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
 
-    // Si el mes ha cambiado, reinicia el estado.
-    if (month !== currentMonth) {
-      currentMonth = month;
-    }
+//     // Si el mes ha cambiado, reinicia el estado.
+//     if (month !== currentMonth) {
+//       currentMonth = month;
+//     }
 
-    // Define el rango de fechas para el mes actual.
-    const startDate = new Date(year, month - 1, 1); // El mes en JavaScript es 0-indexado (enero = 0).
-    const endDate = new Date(year, month, 0);
+//     // Define el rango de fechas para el mes actual.
+//     const startDate = new Date(year, month - 1, 1); // El mes en JavaScript es 0-indexado (enero = 0).
+//     const endDate = new Date(year, month, 0);
 
-    // Recupera las compras del mes actual.
-    const monthlyPurchases = await Purchase.findAll({
-      attributes: [
-        [sequelize.fn('MONTH', sequelize.col('purchaseDate')), 'month'],
-        [sequelize.fn('YEAR', sequelize.col('purchaseDate')), 'year'],
-        [sequelize.fn('SUM', sequelize.col('purchaseFinalPrice')), 'totalAmount']
-      ],
-      where: {
-        purchaseDate: {
-          [Op.between]: [startDate, endDate]
-        }
-      },
-      group: ['month', 'year'],
-    });
+//     // Recupera las compras del mes actual.
+//     const monthlyPurchases = await Purchase.findAll({
+//       attributes: [
+//         [sequelize.fn('MONTH', sequelize.col('purchaseDate')), 'month'],
+//         [sequelize.fn('YEAR', sequelize.col('purchaseDate')), 'year'],
+//         [sequelize.fn('SUM', sequelize.col('purchaseFinalPrice')), 'totalAmount']
+//       ],
+//       where: {
+//         purchaseDate: {
+//           [Op.between]: [startDate, endDate]
+//         }
+//       },
+//       group: ['month', 'year'],
+//     });
 
-    // Formatea los datos recuperados en un formato legible.
-    const formattedDataPurchases = monthlyPurchases.map((result) => {
-      return {
-        month: result.getDataValue('month'),
-        year: result.getDataValue('year'),
-        totalAmount: result.getDataValue('totalAmount')
-      };
-    });
+//     // Formatea los datos recuperados en un formato legible.
+//     const formattedDataPurchases = monthlyPurchases.map((result) => {
+//       return {
+//         month: result.getDataValue('month'),
+//         year: result.getDataValue('year'),
+//         totalAmount: result.getDataValue('totalAmount')
+//       };
+//     });
 
-    // Puedes devolver los datos o realizar otras acciones necesarias.
-    return formattedDataPurchases;
-  } catch (error) {
-    console.error('Error al obtener datos de compras por cantidad de dinero:', error);
-    throw error;
-  }
-};
+//     // Puedes devolver los datos o realizar otras acciones necesarias.
+//     return formattedDataPurchases;
+//   } catch (error) {
+//     console.error('Error al obtener datos de compras por cantidad de dinero:', error);
+//     throw error;
+//   }
+// };
 
-// Middleware para verificar el cambio de mes en cada solicitud.
-const checkMonthChangeMiddlewarePurchases = (req, res, next) => {
-  const now = new Date();
-  const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
+// // Middleware para verificar el cambio de mes en cada solicitud.
+// const checkMonthChangeMiddlewarePurchases = (req, res, next) => {
+//   const now = new Date();
+//   const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
 
-  if (month !== currentMonth) {
-    currentMonth = month;
-  }
+//   if (month !== currentMonth) {
+//     currentMonth = month;
+//   }
 
-  next();
-};
+//   next();
+// };
 
 // Aplica el middleware a todas las rutas relevantes.
 // app.use(checkMonthChangeMiddlewarePurchases);
 
 //Get monthly improvements data by the amount of money.
 //Retrieves and formats data on total improvements amounts for each month.
-export const getImprovementsDataByAmountCard = async () => {
-  try {
-    // Calcula el mes y el año actual.
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
+// export const getImprovementsDataByAmountCard = async () => {
+//   try {
+//     // Calcula el mes y el año actual.
+//     const now = new Date();
+//     const year = now.getFullYear();
+//     const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
 
-    // Si el mes ha cambiado, reinicia el estado.
-    if (month !== currentMonth) {
-      currentMonth = month;
-    }
+//     // Si el mes ha cambiado, reinicia el estado.
+//     if (month !== currentMonth) {
+//       currentMonth = month;
+//     }
 
-    // Define el rango de fechas para el mes actual.
-    const startDate = new Date(year, month - 1, 1); // El mes en JavaScript es 0-indexado (enero = 0).
-    const endDate = new Date(year, month, 0);
+//     // Define el rango de fechas para el mes actual.
+//     const startDate = new Date(year, month - 1, 1); // El mes en JavaScript es 0-indexado (enero = 0).
+//     const endDate = new Date(year, month, 0);
 
-    // Recupera las mejoras (improvements) del mes actual.
-    const monthlyImprovements = await Improvements.findAll({
-      attributes: [
-        [sequelize.fn('MONTH', sequelize.col('improvementDate')), 'month'],
-        [sequelize.fn('YEAR', sequelize.col('improvementDate')), 'year'],
-        [sequelize.fn('SUM', sequelize.col('improvementPrice')), 'totalAmount']
-      ],
-      where: {
-        improvementDate: {
-          [Op.between]: [startDate, endDate]
-        }
-      },
-      group: ['month', 'year'],
-    });
+//     // Recupera las mejoras (improvements) del mes actual.
+//     const monthlyImprovements = await Improvements.findAll({
+//       attributes: [
+//         [sequelize.fn('MONTH', sequelize.col('improvementDate')), 'month'],
+//         [sequelize.fn('YEAR', sequelize.col('improvementDate')), 'year'],
+//         [sequelize.fn('SUM', sequelize.col('improvementPrice')), 'totalAmount']
+//       ],
+//       where: {
+//         improvementDate: {
+//           [Op.between]: [startDate, endDate]
+//         }
+//       },
+//       group: ['month', 'year'],
+//     });
 
-    // Formatea los datos recuperados en un formato legible.
-    const formattedDataImprovements = monthlyImprovements.map((result) => {
-      return {
-        month: result.getDataValue('month'),
-        year: result.getDataValue('year'),
-        totalAmount: result.getDataValue('totalAmount')
-      };
-    });
+//     // Formatea los datos recuperados en un formato legible.
+//     const formattedDataImprovements = monthlyImprovements.map((result) => {
+//       return {
+//         month: result.getDataValue('month'),
+//         year: result.getDataValue('year'),
+//         totalAmount: result.getDataValue('totalAmount')
+//       };
+//     });
 
-    // Puedes devolver los datos o realizar otras acciones necesarias.
-    return formattedDataImprovements;
-  } catch (error) {
-    console.error('Error al obtener datos de mejoras por cantidad de dinero:', error);
-    throw error;
-  }
-};
+//     // Puedes devolver los datos o realizar otras acciones necesarias.
+//     return formattedDataImprovements;
+//   } catch (error) {
+//     console.error('Error al obtener datos de mejoras por cantidad de dinero:', error);
+//     throw error;
+//   }
+// };
 
-// Middleware para verificar el cambio de mes en cada solicitud.
-const checkMonthChangeMiddlewareImprovements = (req, res, next) => {
-  const now = new Date();
-  const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
+// // Middleware para verificar el cambio de mes en cada solicitud.
+// const checkMonthChangeMiddlewareImprovements = (req, res, next) => {
+//   const now = new Date();
+//   const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
 
-  if (month !== currentMonth) {
-    currentMonth = month;
-  }
+//   if (month !== currentMonth) {
+//     currentMonth = month;
+//   }
 
-  next();
-};
+//   next();
+// };
 
 // Aplica el middleware a todas las rutas relevantes.
 // app.use(checkMonthChangeMiddlewareImprovements);
