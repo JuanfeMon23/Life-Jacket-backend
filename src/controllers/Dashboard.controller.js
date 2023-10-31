@@ -15,6 +15,7 @@ import { Vehicle } from '../models/Vehicles.model.js';
 import { Improvements } from '../models/Improvements.model.js'
 import { Op } from 'sequelize';
 import app from '../app.js'; 
+import { Sequelize } from 'sequelize';
 
 //Get monthly sales data by the amount of money.
 //Retrieves and formats data on total sales amounts for each month and year.
@@ -108,11 +109,17 @@ export const getImprovementsDataByAmount = async (req, res) => {
 //Retrieves the total count of vehicles with the status set to true.
 export const getTotalVehicles = async (req, res) => {
   try {
+
+    const vehicleIdExcluded  = 1;
+
     // Retrieve the total count of active vehicles
     const totalVehicles = await Vehicle.count({
       where: {
         vehicleStatus: true,
-      },
+        idVehicle: {
+          [Sequelize.Op.not]: vehicleIdExcluded
+        }
+      }
     });
 
     res.json({ totalVehicles });
