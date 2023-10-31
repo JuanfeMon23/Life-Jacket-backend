@@ -40,11 +40,11 @@ export const User = sequelize.define('Users', {
                 args: [6, 12],
                 msg: 'Este campo debe tener entre 6 y 12 números',
             },
-            customValidation(value) {
+            /* customValidation(value) {
                 if (value.startsWith('0')) {
                   throw new Error('Este campo no puede empezar en 0');
                 }
-            },
+            }, */
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
                 if (specialCharacters.test(value)) {

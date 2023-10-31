@@ -228,18 +228,15 @@ export const statusExchange = async (req, res) => {
         const exchangeDetails = await ExchangesDetails.findAll({
             where: {
               idExchangeVehicle: idExchange
-            },
-            include: [{
-              model: Vehicle
-            }]
+            }
           });
 
-          //Updates the relationship between the exchange and the client
+        //Updates the relationship between the exchange and the client
         await exchange.setClient(1);
 
         //Update the status of the vehicle associated with the exchange detail
         for (const exchangeDetail of exchangeDetails) {
-            if (exchangeDetail.vehicleStatusExchange === false) {
+/*             if (exchangeDetail.vehicleStatusExchange === false) {
                 await exchangeDetail.Vehicle.update({
                     vehicleStatus: true
                 });
@@ -248,8 +245,13 @@ export const statusExchange = async (req, res) => {
                 await exchangeDetail.Vehicle.update({
                     vehicleStatus: false
                 });
-            }
-            await exchangeDetail.destroy();
+            } */
+            await exchangeDetail.update({
+                idVehicleExchange: 1,
+                vehicleSubtotal : 1000000,
+                exchangeFinalPrice : 1000000,
+                vehicleStatusExchange : 2
+            });
         }
 
         //Update the exchange status

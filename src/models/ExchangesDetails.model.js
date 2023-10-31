@@ -19,11 +19,20 @@ export const ExchangesDetails = sequelize.define('ExchangesDetails',{
     },
     idExchangeVehicle: {
         type: DataTypes.INTEGER(11),
-        allowNull : false
+        allowNull : false,
+        references: {
+          model: 'exchanges',
+          key: 'idExchange'
+        }
     },
     idVehicleExchange: {
         type: DataTypes.INTEGER(11),
-        allowNull : false
+        allowNull : false,
+        references: {
+          model: 'vehicles',
+          key: 'idVehicle',
+          as : "vehiclesExchange"
+        }
     },
     vehicleSubtotal: {
         type: DataTypes.INTEGER(11),
@@ -67,22 +76,25 @@ export const ExchangesDetails = sequelize.define('ExchangesDetails',{
 }
 );
 
-Vehicle.belongsToMany(Exchange, { 
-    through: 'ExchangesDetails', 
-    foreignKey: 'idVehicleExchange',
-    allowNull : false
-});
-Exchange.belongsToMany(Vehicle, { 
+/* Exchange.belongsToMany(Vehicle, { 
     through: 'ExchangesDetails', 
     foreignKey: 'idExchangeVehicle', 
     as: 'vehiclesExchange',
     allowNull : false
-});
+}); */
 
-ExchangesDetails.belongsTo(Exchange, {
+/* Vehicle.belongsToMany(Exchange, { 
+    through: 'ExchangesDetails', 
+    foreignKey: 'idVehicleExchange',
+    allowNull : false
+}); */
+
+
+
+/* ExchangesDetails.belongsTo(Exchange, {
   foreignKey: 'idExchangeVehicle'
 });
 
 ExchangesDetails.belongsTo(Vehicle, {
   foreignKey: 'idVehicleExchange'
-});
+}); */
