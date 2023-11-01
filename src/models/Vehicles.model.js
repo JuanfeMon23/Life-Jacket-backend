@@ -309,35 +309,3 @@ othervehicleinformation.belongsTo(Vehicle, {
     foreignKey : 'idVehicleOtherVehicleInformation',
     targetId : 'idVehicle'
 })
-
-// async function insertVehicle(){
-
-//     const existingVehicle = await Vehicle.findOne({ idVehicle: 1 });
-//     try {
-
-//         if(!existingVehicle){
-//             await Vehicle.create({
-//                 licensePlate : "AAA-000",
-//                 vehicleType : "Prueba",
-//                 brand : "Prueba",
-//                 model : "0000",
-//                 type : "Prueba",
-//                 line : "Prueba",
-//                 color : "Prueba",
-//                 mileage : "2222222",
-//                 cylinderCapacity : "3333333",
-//                 fuel : "Prueba",
-//                 traction : "Prueba00",
-//                 soat : "01/01/2001",
-//                 technomechanics : "01/01/2001",
-//                 timingBelt : "Prueba00",
-//                 vehiclePrice : 10000000
-//             });
-//         }
-        
-//     } catch (error) {
-//         //return res.status(500).json({message : error.message});
-//     }
-// };
-
-// insertVehicle(); 

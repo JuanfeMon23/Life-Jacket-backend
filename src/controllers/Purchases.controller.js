@@ -4,7 +4,7 @@
  * Creation Date: oct 2023
  * 
  * Description: This script contains functions to manage operations related to application purchases which are: 
- * create, view, annular, delete, search and create reports. Uses Express.js and Sequelize to interact with the database
+ * create, view, annular, search and create reports. Uses Express.js and Sequelize to interact with the database
  */
 
 import {Purchase} from '../models/Purchases.model.js';
@@ -92,13 +92,11 @@ export const postPurchase = async (req, res) => {
 export const statusPurchase = async (req, res) => {
     const {idPurchase} = req.params;
     try {
-        const purchase = await Purchase.findByPk(idPurchase);
-
-        //Update the relationship between the purchase and the vehicle
-        await purchase.setVehicle(1);
-
-        //Updates the relationship between the purchase and the client
-        await purchase.setClient(1);
+        const purchase = await Purchase.findByPk(idPurchase, {
+            include : [{
+                model: Vehicle
+            }]
+        });
 
         //Update the purchase status
         await purchase.update({
@@ -112,25 +110,6 @@ export const statusPurchase = async (req, res) => {
     }
 };
 
-//Function to delete a purchase if they have disabled
-export const deletePurchase = async (req, res) => {
-    const {idPurchase} = req.params;
-    try {
-        const purchase = await Purchase.findByPk(idPurchase);
-
-        //Check if the purchase has disabled
-        if(purchase.purchaseStatus === false){
-            await purchase.destroy();
-        }else {
-            return res.status(500).json({ message: 'La compra no se puede eliminar' });
-        };
-
-        return res.status(200).json({message : 'Compra eliminada con éxito'});
-
-    } catch (error) {
-        
-    }
-}
 
 //Function to search for purchases based on various attributes (date, department, municipality, vehicles and client's information, etc.)
 export const searchPurchase = async (req, res) => {
@@ -258,59 +237,3 @@ export const reportPurchase = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* export const reportPurchase = async (req, res) => {
-    const startDatePurchase = new Date(req.params.startDatePurchase);
-    const finalDatePurchase = new Date(req.params.finalDatePurchase);
-    try {
-        const purchase = await Purchase.findAll({
-            where: {
-                saleDate: {
-                    [Op.between]: [startDatePurchase, finalDatePurchase]
-                }
-            },
-            include: [
-                {
-                    model: Client
-                },
-                {
-                    model: Vehicle
-                }
-            ],
-        });
-
-        const formattedPurchases = purchase.map((purchase) => ({
-            idPurchase: purchase.idPurchase,
-            purchaseDate: purchase.purchaseDate,
-            purchaseFinalPrice: purchase.purchaseFinalPrice,
-            purchaseDepartment: purchase.purchaseDepartment,
-            purchaseMunicipality: purchase.purchaseMunicipality,
-            clientDocument: purchase.client.clientDocument,
-            clientName: purchase.client.clientName,
-            clientLastName: purchase.client.clientLastName,
-            licensePlate: purchase.vehicle.licensePlate,
-            vehicleType: purchase.vehicle.vehicleType,
-            brand: purchase.vehicle.brand,
-            model: purchase.vehicle.model
-        }));
-
-        res.json(formattedPurchases);
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({message : error.message});
-    }
-};  */

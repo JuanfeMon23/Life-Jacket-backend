@@ -4,7 +4,7 @@
  * Creation Date: oct 2023
  * 
  * Description: This script contains functions to manage operations related to application exchanges which are: 
- * create, view, annular, delete, search and create reports. Uses Express.js and Sequelize to interact with the database
+ * create, view, annular, search and create reports. Uses Express.js and Sequelize to interact with the database
  */
 
 import {Exchange} from '../models/Exchanges.model.js';
@@ -136,8 +136,7 @@ export const postExchangeDetail = async (req, res) => {
             vehicleStatusExchange
         });
 
-        const vehicleStatusExchangeValue = JSON.parse(newExchangeDetail.vehicleStatusExchange);
-
+        const vehicleStatusExchangeValue = newExchangeDetail.vehicleStatusExchange
 
         if(vehicleStatusExchangeValue === false){
             await vehicle.update({ vehicleStatus : false });
@@ -152,29 +151,6 @@ export const postExchangeDetail = async (req, res) => {
    }
 };
 
-/* export const statusVehicleExchange = async (req, res) => {
-    const { idExchangeDetail } = req.params;
-    try {
-        const exchangeDetail = await ExchangesDetails.findByPk(idExchangeDetail)
-
-        const vehicleChangeStatus = await Vehicle.findByPk(exchangeDetail.idVehicleExchange);
-        
-        exchangeDetail.vehicleStatusExchange = !exchangeDetail.vehicleStatusExchange;
-
-        //true es para los vehiculos ENTRANTES y false para los vehiculos SALIENTES
-        if(exchangeDetail.vehicleStatusExchange === false){
-            await vehicleChangeStatus.update({ vehicleStatus : false })
-        }else{
-            await vehicleChangeStatus.update({ vehicleStatus : true })
-        }
-
-        await exchangeDetail.save();
-        res.json(exchangeDetail);
-
-    } catch (error) {
-        return res.status(500).json({message : error.message});
-    }
-}; */
 
 //Function to cancel the default exchange
 export const cancelExchange = async (req, res) => {
@@ -195,7 +171,7 @@ export const cancelExchange = async (req, res) => {
             await exchangeDetail.destroy();
         }
 
-        return res.status(200).json({ message: 'Intercambio eliminado con éxito' });
+        return res.status(200).json({ message: 'Intercambio cancelado con éxito' });
 
     } catch (error) {
         return res.status(500).json({message : error.message});
@@ -234,22 +210,15 @@ export const statusExchange = async (req, res) => {
             }
           });
 
-        //Updates the relationship between the exchange and the client
-        await exchange.setClient(1);
-
         for (const exchangeDetail of exchangeDetails) {
             if (exchangeDetail.vehicleStatusExchange === false) {
                 await exchangeDetail.Vehicle.update({
                     vehicleStatus: true
                 });
             }
-            await exchangeDetail.destroy();
-            /* await exchangeDetail.update({
-                idVehicleExchange: 1,
-                vehicleSubtotal : 1000000,
-                exchangeFinalPrice : 1000000,
+            await exchangeDetail.update({
                 vehicleStatusExchange : 2
-            }); */
+            });
         }
 
         //Update the exchange status
@@ -258,34 +227,6 @@ export const statusExchange = async (req, res) => {
         });
 
         return res.status(200).json({ message: 'Intercambio anulado con éxito' });
-
-    } catch (error) {
-        return res.status(500).json({message : error.message});
-    }
-};
-
-//Function to delete a exchange if they have disabled
-export const deleteExchange = async (req, res) => {
-    const { idExchange } = req.params;
-    try {
-        const exchange = await Exchange.findByPk(idExchange);
-
-        const exchangeDetails = await ExchangesDetails.findAll({
-            where: {
-              idExchangeVehicle: idExchange
-            }
-        });
-        //Check if the exchange has disabled
-        if(exchange.exchangeStatus === false){
-            await exchange.destroy();
-            for (const exchangeDetail of exchangeDetails) {
-                await exchangeDetail.destroy();
-            }
-        }else {
-            return res.status(500).json({ message: 'El intercambio no se puede eliminar' });
-        };
-
-        return res.status(200).json({ message: 'Intercambio eliminado con éxito' });
 
     } catch (error) {
         return res.status(500).json({message : error.message});

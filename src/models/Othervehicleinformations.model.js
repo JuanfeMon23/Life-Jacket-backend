@@ -183,30 +183,3 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
         timestamps : false
 
 })
-
-
-// async function insertOtherInformationVehicle(){
-
-//     const existingOtherInformationVehicle = await othervehicleinformation.findOne({ idOtherVehicleInformation: 1 });
-//     try {
-
-//         if(!existingOtherInformationVehicle){
-//             await othervehicleinformation.create({
-//                 business : "",
-//                 series : "",
-//                 motor : "",
-//                 register : "",
-//                 chassis : "",
-//                 capacity : 0,
-//                 service : "",
-//                 identificationCard : "",
-//                 idVehicleOtherVehicleInformation : 1
-//             });
-//         }
-        
-//     } catch (error) {
-//         //return res.status(500).json({message : error.message});
-//     }
-// };
-
-// insertOtherInformationVehicle(); 

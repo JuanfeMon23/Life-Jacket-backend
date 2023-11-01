@@ -86,12 +86,3 @@ Vehicle.belongsToMany(Exchange, {
   index: true 
 });
 
-
-
-/* ExchangesDetails.belongsTo(Exchange, {
-  foreignKey: 'idExchangeVehicle'
-});
-
-ExchangesDetails.belongsTo(Vehicle, {
-  foreignKey: 'idVehicleExchange'
-}); */

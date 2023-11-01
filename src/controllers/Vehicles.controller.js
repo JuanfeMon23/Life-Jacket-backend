@@ -16,9 +16,8 @@ import { othervehicleinformation } from "../models/Othervehicleinformations.mode
 //Function to get vehicles the list of vehicles
 export const getVehicles = async (req, res) => {
     try {
-        const vehicleIdExcluded  = 1;  //The vehicle with ID 1 is excluded because it is a test vehicle that is created by default in the application
         
-        //Query the database to get the list of vehicles excluding the specified ID and get the list of improvements
+        //Query the database to get the list of vehicles
         const vehicles = await Vehicle.findAll({
             include : [
                 {
@@ -28,11 +27,6 @@ export const getVehicles = async (req, res) => {
                     model : othervehicleinformation
                 }
             ],
-            where: {
-                idVehicle: {
-                    [Sequelize.Op.not]: vehicleIdExcluded
-                },
-            },
         });
         
         res.json(vehicles);

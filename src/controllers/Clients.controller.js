@@ -17,15 +17,8 @@ import { Exchange } from '../models/Exchanges.model.js';
 //Function to get the list of clients
 export const getClients = async (req, res) => {
     try {
-        const clientIdExcluded = 1; //The client with ID 1 is excluded because it is a test client that is created by default in the application
-
-        //Query the database to get the list of clients excluding the specified ID
+        //Query the database to get the list of clients
         const clients = await Client.findAll({
-            where: {
-                idClient: {
-                    [Sequelize.Op.not]: clientIdExcluded
-                },
-            },
             include: [
                 {
                     model : Sale

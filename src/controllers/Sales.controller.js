@@ -4,7 +4,7 @@
  * Creation Date: oct 2023
  * 
  * Description: This script contains functions to manage operations related to application sales which are: 
- * create, view, annular, delete, search and create report. Uses Express.js and Sequelize to interact with the database
+ * create, view, annular, search and create report. Uses Express.js and Sequelize to interact with the database
  */
 
 import {Sale} from '../models/Sales.model.js';
@@ -104,12 +104,6 @@ export const statusSale = async (req, res) => {
             vehicleStatus : true
         });
 
-        //Update the relationship between the sale and the vehicle
-        await sale.setVehicle(1);
-
-        //Updates the relationship between the sale and the client
-        await sale.setClient(1);
-
         //Update the sale status
         await sale.update({
             saleStatus : false
@@ -122,25 +116,6 @@ export const statusSale = async (req, res) => {
     }
 };
 
-//Function to delete a sale if they have disabled
-export const deleteSale = async (req, res) => {
-    const { idSale } = req.params;
-    try {
-        const sale = await Sale.findByPk(idSale);
-
-        //Check if the sale has disabled
-        if(sale.saleStatus === false){
-            await sale.destroy();
-        }else {
-            return res.status(500).json({ message: 'La venta no se puede eliminar' });
-        };
-
-        return res.status(200).json({ message: 'Venta eliminada con éxito' });
-
-    } catch (error) {
-        return res.status(500).json({message : error.message});
-    }
-};
 
 //Function to search for sales based on various attributes (date, department, municipality, vehicles and client's information, etc.)
 export const searchSale = async (req, res) => {

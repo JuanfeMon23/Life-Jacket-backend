@@ -193,30 +193,3 @@ export const Client = sequelize.define('clients', {
       timestamps : false
   }
 ); 
-
-//  async function insertClient(){
-
-//   const existingClient = await Client.findOne({ idClient: 1 });
-//   try {
-
-//     if(!existingClient){
-//       await Client.create({
-//         clientTypeDocument : "Prueba",
-//         clientDocument : "1111111111",
-//         clientName : "Prueba",
-//         clientLastName : "Prueba",
-//         clientDepartment : "Prueba",
-//         clientMunicipality : "Prueba",
-//         clientAddress : "Prueba",
-//         clientPhoneNumber : "3333333333",
-//         clientOtherContact : "Prueba",
-//         clientOtherPhoneNumber : "4444444444"
-//       });
-//     }
-    
-//   } catch (error) {
-//     //return res.status(500).json({message : error.message});
-//   }
-// };
-
-// insertClient();  
