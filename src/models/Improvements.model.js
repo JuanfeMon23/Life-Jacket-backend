@@ -29,7 +29,7 @@ export const Improvements = sequelize.define('improvements', {
     },
 
     improvementDate : {
-        type : DataTypes.DATE,
+        type : DataTypes.DATEONLY,
         allowNull : false
     },
 

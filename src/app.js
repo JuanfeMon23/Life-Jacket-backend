@@ -14,6 +14,8 @@ import { PurchaseRoutes } from './routes/Purchases.routes.js';
 //import { BrandRoutes } from './routes/Brand.routes.js';
 import { DashboardRoutes } from './routes/Dashboard.routes.js';
 import { checkMonthChangeMiddlewareSales } from './controllers/Dashboard.controller.js';
+import { checkMonthChangeMiddlewarePurchases } from './controllers/Dashboard.controller.js';
+import { checkMonthChangeMiddlewareImprovements } from './controllers/Dashboard.controller.js';
 import cors from 'cors';
 
 const app = express();
@@ -26,6 +28,8 @@ app.use(cors({
 }));
 
 app.use(checkMonthChangeMiddlewareSales);
+app.use(checkMonthChangeMiddlewarePurchases);
+app.use(checkMonthChangeMiddlewareImprovements);
 
 app.use('/api', UserRoutes);
 app.use('/api', LoginRouter);
