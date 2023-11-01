@@ -69,12 +69,14 @@ export const postVehicle = async (req, res) => {
     try {
         // Extract data from the request body to create a vehicle
         const {
-            licensePlate, vehicleType, brand, model, type, line, color, mileage, cylinderCapacity, fuel,
-            traction, soat, technomechanics, timingBelt, vehiclePrice, vehicleStatus
+            idVehicle, licensePlate, vehicleType, brand, model, type, line, color, mileage, cylinderCapacity,
+            fuel, traction, soat, technomechanics, timingBelt, vehiclePrice, business, series,
+            motor, register, chassis, capacity, service, identificationCard
         } = req.body;
 
-        // Create a new vehicle
+        // Create a new vehicle and store its ID in a variable
         const newVehicle = await Vehicle.create({
+            idVehicle,
             licensePlate,
             vehicleType,
             brand,
@@ -89,43 +91,31 @@ export const postVehicle = async (req, res) => {
             soat,
             technomechanics,
             timingBelt,
-            vehiclePrice,
-            vehicleStatus
+            vehiclePrice
         });
 
-        // Return a response with a new vehicle
-        return res.status(200).json(newVehicle);
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-};
+        // Get the generated idVehicle
+        const generatedIdVehicle = newVehicle.idVehicle;
 
-export const postOtherInformation = async (req, res) => {
-    try {
-        // Extract data from the request body to create other related information
-        const {
-            business, series, motor, register, chassis, capacity, service, identificationCard , idVehicleOtherVehicleInformation
-        } = req.body;
-
-        // Create the other related information
+        // Create the other related information using the generated idVehicle
         const newOther = await othervehicleinformation.create({
             business,
             series,
-            motor,
+            motor,      
             register,
             chassis,
             capacity,
             service,
             identificationCard,
-            idVehicleOtherVehicleInformation 
+            idVehicleOtherVehicleInformation: generatedIdVehicle
         });
 
-        // Return a response with a new other information vehicle
-        return res.status(200).json(newOther);
+        // Return a response with the new vehicle and other related information
+        return res.status(200).json({ newVehicle, newOther });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-}
+};
 
 
 

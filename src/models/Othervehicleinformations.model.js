@@ -40,7 +40,6 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
         type: DataTypes.STRING(17),
         allowNull: true,
         validate : {
-            isAlphanumeric: true,
 
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -60,7 +59,6 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
         type: DataTypes.STRING(12),
         allowNull: true,
         validate : {
-            // isAlphanumeric: true,
 
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -80,7 +78,6 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
         type: DataTypes.STRING(20),
         allowNull: true,
         validate : {
-            // isAlphanumeric: true,
 
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -95,7 +92,6 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
         type: DataTypes.STRING(18),
         allowNull: true,
         validate : {
-            // isAlphanumeric: true,
 
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -115,7 +111,6 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
         type: DataTypes.INTEGER(2),
         allowNull: true,
         validate : {
-            // isNumeric: true,
 
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -164,10 +159,11 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
             },
 
             customValidation(value) {
-                if (value.startsWith('0')) {
-                  throw new Error('Este campo no puede empezar en 0');
-                }
-            },
+              const integerValue = parseInt(value, 10); // Convierte el valor en un entero
+              if (isNaN(integerValue) || integerValue.toString() !== value.toString() || integerValue.toString().startsWith('0')) {
+                  throw new Error('Este campo debe ser un número entero que no comience en 0');
+              }
+            },            
 
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -187,3 +183,30 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
         timestamps : false
 
 })
+
+
+// async function insertOtherInformationVehicle(){
+
+//     const existingOtherInformationVehicle = await othervehicleinformation.findOne({ idOtherVehicleInformation: 1 });
+//     try {
+
+//         if(!existingOtherInformationVehicle){
+//             await othervehicleinformation.create({
+//                 business : "",
+//                 series : "",
+//                 motor : "",
+//                 register : "",
+//                 chassis : "",
+//                 capacity : 0,
+//                 service : "",
+//                 identificationCard : "",
+//                 idVehicleOtherVehicleInformation : 1
+//             });
+//         }
+        
+//     } catch (error) {
+//         //return res.status(500).json({message : error.message});
+//     }
+// };
+
+// insertOtherInformationVehicle(); 

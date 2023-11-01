@@ -42,10 +42,11 @@ export const Purchase = sequelize.define('purchases', {
               msg: 'Este campo debe tener entre 5 y 11 números',
             },
             customValidation(value) {
-              if (value.startsWith('0')) {
-                throw new Error('Este campo no puede empezar en 0');
+              const integerValue = parseInt(value, 10); // Convierte el valor en un entero
+              if (isNaN(integerValue) || integerValue.toString() !== value.toString() || integerValue.toString().startsWith('0')) {
+                  throw new Error('Este campo debe ser un número entero que no comience en 0');
               }
-            },
+          }, 
             noSpecialCharacters(value) {
               const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
               if (specialCharacters.test(value)) {

@@ -20,19 +20,12 @@ export const ExchangesDetails = sequelize.define('ExchangesDetails',{
     idExchangeVehicle: {
         type: DataTypes.INTEGER(11),
         allowNull : false,
-        references: {
-          model: 'exchanges',
-          key: 'idExchange'
-        }
+        unique : false
     },
     idVehicleExchange: {
         type: DataTypes.INTEGER(11),
         allowNull : false,
-        references: {
-          model: 'vehicles',
-          key: 'idVehicle',
-          as : "vehiclesExchange"
-        }
+        unique : false
     },
     vehicleSubtotal: {
         type: DataTypes.INTEGER(11),
@@ -56,7 +49,7 @@ export const ExchangesDetails = sequelize.define('ExchangesDetails',{
               if (isNaN(integerValue) || integerValue.toString() !== value.toString() || integerValue.toString().startsWith('0')) {
                   throw new Error('Este campo debe ser un número entero que no comience en 0');
               }
-            },
+          }, 
             noSpecialCharacters(value) {
               const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
               if (specialCharacters.test(value)) {
@@ -76,18 +69,22 @@ export const ExchangesDetails = sequelize.define('ExchangesDetails',{
 }
 );
 
-/* Exchange.belongsToMany(Vehicle, { 
-    through: 'ExchangesDetails', 
-    foreignKey: 'idExchangeVehicle', 
-    as: 'vehiclesExchange',
-    allowNull : false
-}); */
+Exchange.belongsToMany(Vehicle, { 
+  through: 'ExchangesDetails', 
+  foreignKey: 'idExchangeVehicle', 
+  as: 'vehiclesExchange',
+  allowNull: false,
+  unique: false,
+  index: true
+});
 
-/* Vehicle.belongsToMany(Exchange, { 
-    through: 'ExchangesDetails', 
-    foreignKey: 'idVehicleExchange',
-    allowNull : false
-}); */
+Vehicle.belongsToMany(Exchange, { 
+  through: 'ExchangesDetails', 
+  foreignKey: 'idVehicleExchange',
+  allowNull: false,
+  unique: false, 
+  index: true 
+});
 
 
 
