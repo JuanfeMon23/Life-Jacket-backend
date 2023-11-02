@@ -72,6 +72,11 @@ export const getClient = async (req,res) => {
 export const postClient = async (req, res) => {
     try {
         const {clientTypeDocument, clientDocument, clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber, clientStatus} = req.body;
+        
+        const foundDocument = await Client.findOne({where : {clientDocument}});
+        if(foundDocument) return res.status(400).json({message : 'Documento ya registrado.'});
+
+
 
         //Function to create a new client
         const newClient = await Client.create({
@@ -100,8 +105,8 @@ export const updateClient = async (req, res) => {
         const {clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber} = req.body;
 
         // Search for the client by their ID
-        const client = await Client.findByPk(idClient)
-
+        const client = await Client.findByPk(idClient);
+        
         if(client.clientStatus === false){
             return res.status(400).json({ message : "No puedes editar un cliente deshabilitado"});
         }

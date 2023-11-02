@@ -16,6 +16,10 @@ export const createRol = async (req,res)  => {
         const {rolName} = req.body;
 
         //Function to create a new rol
+
+        const foundName = await Roles.findOne({where : {rolName}});
+        if(foundName) return res.status(400).json({message : 'Nombre ya registrado.'})
+
         const newRol = await Roles.create({
             rolName
         });
@@ -63,6 +67,9 @@ export const updateRol = async (req,res) => {
     try {
         const {idRol} = req.params;
         const {rolName} = req.body;
+
+        const foundName = await Roles.findOne({where : {rolName}});
+        if(foundName) return res.status(400).json({message : 'Nombre ya registrado.'})
 
         // Search for the rol by their ID
         const rol = await Roles.findByPk(idRol);

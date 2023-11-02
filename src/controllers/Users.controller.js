@@ -54,6 +54,13 @@ export const postUser = async  (req,res) => {
     try {
         const userPasswordHash = await bcrypts.hash(userPassword, 10);
 
+        const foundDocument = await User.findOne({where : {userDocument}});
+        if(foundDocument) return res.status(400).json({message : 'Documento ya registrado.'});
+
+        const foundEmail = await User.findOne({where : {userEmail}});
+        if (foundEmail) return res.status(400).json({message : 'Email ya registrado.'});
+
+
         //Function to create a new user
         const newUser = await User.create({
             userTypeDocument,   
@@ -88,6 +95,12 @@ export const updateUser = async (req,res) => {
         if(user.userStatus === false){
             return res.status(400).json({ message : 'No puedes editar un usuario deshabilitado'});
         }
+
+        const foundDocument = await User.findOne({where : {userDocument}});
+        if(foundDocument) return res.status(400).json({message : 'Documento ya registrado.'});
+
+        const foundEmail = await User.findOne({where : {userEmail}});
+        if (foundEmail) return res.status(400).json({message : 'Email ya registrado.'});
 
         user.userTypeDocument = userTypeDocument;
         user.userDocument = userDocument;

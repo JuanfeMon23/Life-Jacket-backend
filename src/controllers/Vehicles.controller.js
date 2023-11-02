@@ -12,6 +12,9 @@ import { Op , Sequelize  } from 'sequelize';
 import app from '../app.js'
 import { Improvements } from "../models/Improvements.model.js";
 import { othervehicleinformation } from "../models/Othervehicleinformations.model.js";
+import { Purchase } from "../models/Purchases.model.js";
+import { Sale } from "../models/Sales.model.js";
+import { Exchange } from "../models/Exchanges.model.js";
 
 //Function to get vehicles the list of vehicles
 export const getVehicles = async (req, res) => {
@@ -25,6 +28,15 @@ export const getVehicles = async (req, res) => {
                 },
                 {
                     model : othervehicleinformation
+                },
+                {
+                    model : Purchase
+                },
+                {
+                    model : Sale
+                },
+                {
+                    model : Exchange
                 }
             ],
         });
@@ -46,7 +58,19 @@ export const getVehicle = async (req, res) => {
             where : { idVehicle },
             include : [
                 {
+                    model : Improvements
+                },
+                {
                     model : othervehicleinformation
+                },
+                {
+                    model : Purchase
+                },
+                {
+                    model : Sale
+                },
+                {
+                    model : Exchange
                 }
             ]
         })
