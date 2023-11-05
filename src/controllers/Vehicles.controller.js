@@ -88,7 +88,7 @@ export const postVehicle = async (req, res) => {
         // Extract data from the request body to create a vehicle
         const {
             idVehicle, licensePlate, vehicleType, brand, model, type, line, color, mileage, cylinderCapacity,
-            fuel, traction, soat, technomechanics, timingBelt, vehiclePrice, business, series,
+            fuel, traction, soat, technomechanics, timingBelt, business, series,
             motor, register, chassis, capacity, service, identificationCard
         } = req.body;
 
@@ -108,8 +108,7 @@ export const postVehicle = async (req, res) => {
             traction,
             soat,
             technomechanics,
-            timingBelt,
-            vehiclePrice
+            timingBelt 
         });
 
         // Get the generated idVehicle
@@ -147,7 +146,7 @@ export const updateVehicleAndOther = async (req, res) => {
         if (idVehicle) {
             const {
                 vehicleType, brand, model, type, line, color, mileage, cylinderCapacity, fuel,
-                traction, soat, technomechanics, timingBelt, vehiclePrice
+                traction, soat, technomechanics, timingBelt
             } = req.body;
 
             // Find the vehicle by its ID
@@ -174,7 +173,7 @@ export const updateVehicleAndOther = async (req, res) => {
             vehicle.soat = soat;
             vehicle.technomechanics = technomechanics;
             vehicle.timingBelt = timingBelt;
-            vehicle.vehiclePrice = vehiclePrice;
+            
             await vehicle.save();
             return res.json(vehicle);
         }

@@ -31,7 +31,6 @@ export const getSales = async (req, res) => {
         });
         res.json(sales);
     } catch (error) {
-        console.error(error);
         res.status(500).json({message : error.message});
     }
 };
@@ -56,6 +55,7 @@ export const getSale = async (req,res) => {
                 }
             ],
         });
+        res.json(sale);
     } catch (error) {
         return res.status(500).json({message : error.message});
 
@@ -229,7 +229,6 @@ export const reportSale = async (req, res) => {
         //generates the PDF and saves it to the file
         pdf.create(html, options).toStream(function(err, stream) {
             if (err) {
-              console.error(err);
               return res.status(500).json({ message: err.message });
             }
             //send the stream to the client

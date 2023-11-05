@@ -31,7 +31,6 @@ export const getPurchases = async (req, res) => {
         });
         res.json(purchases);
     } catch (error) {
-        console.error(error);
         res.status(500).json({message : error.message});
     }
 };
@@ -66,8 +65,6 @@ export const postPurchase = async (req, res) => {
     try {
         const {purchaseDate, purchaseFinalPrice, purchaseLimitations, purchaseDepartment, purchaseMunicipality, purchasePecuniaryPenalty, idClientPurchase, idVehiclePurchase} = req.body;
 
-        const vehicle = await Vehicle.findByPk(idVehiclePurchase);
-
         //Function to create a new purchase
         const newPurchase = await Purchase.create({
             purchaseDate,
@@ -79,8 +76,6 @@ export const postPurchase = async (req, res) => {
             idClientPurchase,
             idVehiclePurchase
         });
-
-        await vehicle.update({ vehiclePrice : purchaseFinalPrice });
 
         return res.status(200).json(newPurchase);   
     } catch (error) {
