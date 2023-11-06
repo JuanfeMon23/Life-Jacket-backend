@@ -123,7 +123,7 @@ export const getTotalVehicles = async (req, res) => {
 
 //Get monthly exchanges data by the amount of money.
 //Retrieves and formats data on total exchanges amounts for each month and year.
-/* export const getExchangesDataByAmount = async (req, res) => {
+export const getExchangesDataByAmount = async (req, res) => {
   try {
     // Retrieve monthly sales data including month, year, and total amount.
     const monthlyExchanges = await Exchange.findAll({
@@ -150,7 +150,7 @@ export const getTotalVehicles = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener datos de intercambios por cantidad de dinero' });
   }
-}; */
+}; 
 
 
 //Cards
@@ -345,26 +345,8 @@ export const checkMonthChangeMiddlewareImprovements = (req, res, next) => {
   next();
 };
 
-//Get the total count of active exchanges.
-//Retrieves the total count of exchanges with the status set to true.
-export const getTotalExchanges = async (req, res) => {
-  try {
-
-    // Retrieve the total count of active exchanges
-    const totalExchanges = await Exchange.count({
-      where: {
-        exchangeStatus: true
-      }
-    });
-
-    res.json({ totalExchanges });
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el total de intercambios' });
-  }
-};
-
-//Get monthly improvements data by the amount of money.
-//Retrieves and formats data on total improvements amounts for each month.
+//Get monthly exchanges data by the amount of money.
+//Retrieves and formats data on total exchanges amounts for each month.
 export const getExchangesDataByAmountCard = async () => {
   try {
     // Calcula el mes y el año actual.
@@ -382,7 +364,7 @@ export const getExchangesDataByAmountCard = async () => {
     const endDate = new Date(year, month, 0);
 
     // Recupera las mejoras (improvements) del mes actual.
-    const monthlyExchanges = await Improvements.findAll({
+    const monthlyExchanges = await Exchange.findAll({
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('exchangeDate')), 'year'],

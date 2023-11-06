@@ -7,7 +7,7 @@
  */
 
 import {Router} from 'express';
-import {getSalesDataByAmount, getPurchasesDataByAmount, getExchangesDataByAmountCard, getImprovementsDataByAmount,getTotalVehicles, getSalesDataByAmountCard, getPurchasesDataByAmountCard, getImprovementsDataByAmountCard, getTotalExchanges} from '../controllers/Dashboard.controller.js';
+import {getSalesDataByAmount, getPurchasesDataByAmount, getExchangesDataByAmountCard, getImprovementsDataByAmount,getTotalVehicles, getSalesDataByAmountCard, getPurchasesDataByAmountCard, getImprovementsDataByAmountCard, getExchangesDataByAmount} from '../controllers/Dashboard.controller.js';
 
 export const DashboardRoutes = Router();
 
@@ -19,7 +19,7 @@ DashboardRoutes.get('/Dashboard/Improvements/withMonth', getImprovementsDataByAm
 
 DashboardRoutes.get('/Dashboard/Vehicles/totalVehicles', getTotalVehicles);
 
-DashboardRoutes.get('/Dashboard/Exchanges/totalExchanges', getTotalExchanges);
+DashboardRoutes.get('/Dashboard/Exchanges/withMonth', getExchangesDataByAmount);
 
 // Ruta para obtener las ventas del mes actual.
 DashboardRoutes.get('/Dashboard/Sales/withMonth/Card', async (req, res) => {
