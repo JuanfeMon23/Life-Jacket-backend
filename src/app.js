@@ -13,10 +13,10 @@ import { SaleRoutes } from './routes/Sales.routes.js';
 import { PurchaseRoutes } from './routes/Purchases.routes.js';
 //import { BrandRoutes } from './routes/Brand.routes.js';
 import { DashboardRoutes } from './routes/Dashboard.routes.js';
-import { checkMonthChangeMiddlewareSales } from './controllers/Dashboard.controller.js';
-import { checkMonthChangeMiddlewarePurchases } from './controllers/Dashboard.controller.js';
-import { checkMonthChangeMiddlewareImprovements } from './controllers/Dashboard.controller.js';
-import { checkMonthChangeMiddlewareExchanges } from './controllers/Dashboard.controller.js';
+import { checkMonthChangeMiddlewareSales } from './middlewares/monthChangeMiddleware.js';
+import { checkMonthChangeMiddlewarePurchases } from './middlewares/monthChangeMiddleware.js';
+import { checkMonthChangeMiddlewareImprovements } from './middlewares/monthChangeMiddleware.js';
+import { checkMonthChangeMiddlewareExchanges } from './middlewares/monthChangeMiddleware.js';
 import cors from 'cors';
 
 const app = express();

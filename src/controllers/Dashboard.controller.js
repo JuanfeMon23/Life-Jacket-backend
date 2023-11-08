@@ -158,26 +158,25 @@ export const getExchangesDataByAmount = async (req, res) => {
 //Get monthly sales data by the amount of money.
 //Retrieves and formats data on total sales amounts for each month.
 
-// Define una variable global para mantener el estado del mes actual.
-let currentMonth = new Date().getMonth() + 1; // El mes en JavaScript es 0-indexado.
+// Defines a global variable to hold the state of the current month.
+let currentMonth = new Date().getMonth() + 1; // The month in JavaScript is 0-indexed.
 
-// Función para obtener las ventas del mes actual.
 export const getSalesDataByAmountCard = async () => {
   try {
-    // Calcula la fecha de inicio del mes actual.
+   // Calculates the start date of the current month.
     const now = new Date();
     const year = now.getFullYear();
-    const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
+    const month = now.getMonth() + 1; 
 
     if (month !== currentMonth) {
       currentMonth = month;
     }
     
-    // Define el rango de fechas para el mes actual.
+    // Defines the date range for the current month.
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0);
 
-    // Recupera las ventas del mes actual sin tener en cuenta la hora.
+    // Retrieves the sales of the current month without taking into account the time.
     const monthlySales = await Sale.findAll({
       attributes: [
         [sequelize.fn('MONTH', sequelize.fn('DATE', sequelize.col('saleDate'))), 'month'],
@@ -192,7 +191,7 @@ export const getSalesDataByAmountCard = async () => {
       group: ['month', 'year'],
     });
 
-    // Formatea los datos recuperados en un formato legible.
+    // Formats the retrieved data into a readable format.
     const formattedDataSales = monthlySales.map((result) => {
       return {
         month: result.getDataValue('month'),
@@ -201,46 +200,32 @@ export const getSalesDataByAmountCard = async () => {
       };
     });
 
-    // Puedes devolver los datos o realizar otras acciones necesarias.
+    // You can return the data or perform other necessary actions.
     return formattedDataSales;
   } catch (error) {
     res.status(500).json({ error: 'Error' });
   }
 };
 
-// Middleware para verificar el cambio de mes en cada solicitud.
-export const checkMonthChangeMiddlewareSales = (req, res, next) => {
-  const now = new Date();
-  const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
-
-  if (month !== currentMonth) {
-    currentMonth = month;
-  }
-
-  next();
-};
-
-
 
 //Get monthly sales data by the amount of money.
 //Retrieves and formats data on total sales amounts for each month.
 export const getPurchasesDataByAmountCard = async () => {
   try {
-    // Calcula el mes y el año actual.
+    // Calculates the start date of the current month.
     const now = new Date();
     const year = now.getFullYear();
-    const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
+    const month = now.getMonth() + 1; 
 
-    // Si el mes ha cambiado, reinicia el estado.
     if (month !== currentMonth) {
       currentMonth = month;
     }
 
-    // Define el rango de fechas para el mes actual.
-    const startDate = new Date(year, month - 1, 1); // El mes en JavaScript es 0-indexado (enero = 0).
+    // Defines the date range for the current month.
+    const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0);
 
-    // Recupera las compras del mes actual.
+    // Retrieves the purchases of the current month without taking into account the time.
     const monthlyPurchases = await Purchase.findAll({
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('purchaseDate')), 'month'],
@@ -255,7 +240,7 @@ export const getPurchasesDataByAmountCard = async () => {
       group: ['month', 'year'],
     });
 
-    // Formatea los datos recuperados en un formato legible.
+    // Formats the retrieved data into a readable format.
     const formattedDataPurchases = monthlyPurchases.map((result) => {
       return {
         month: result.getDataValue('month'),
@@ -264,23 +249,11 @@ export const getPurchasesDataByAmountCard = async () => {
       };
     });
 
-    // Puedes devolver los datos o realizar otras acciones necesarias.
+    // You can return the data or perform other necessary actions.
     return formattedDataPurchases;
   } catch (error) {
     res.status(500).json({ error: 'Error' });
   }
-};
-
-// Middleware para verificar el cambio de mes en cada solicitud.
-export const checkMonthChangeMiddlewarePurchases = (req, res, next) => {
-  const now = new Date();
-  const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
-
-  if (month !== currentMonth) {
-    currentMonth = month;
-  }
-
-  next();
 };
 
 
@@ -288,21 +261,20 @@ export const checkMonthChangeMiddlewarePurchases = (req, res, next) => {
 //Retrieves and formats data on total improvements amounts for each month.
 export const getImprovementsDataByAmountCard = async () => {
   try {
-    // Calcula el mes y el año actual.
+    // Calculates the start date of the current month.
     const now = new Date();
     const year = now.getFullYear();
-    const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
+    const month = now.getMonth() + 1; 
 
-    // Si el mes ha cambiado, reinicia el estado.
     if (month !== currentMonth) {
       currentMonth = month;
     }
 
-    // Define el rango de fechas para el mes actual.
-    const startDate = new Date(year, month - 1, 1); // El mes en JavaScript es 0-indexado (enero = 0).
+    // Defines the date range for the current month.
+    const startDate = new Date(year, month - 1, 1); 
     const endDate = new Date(year, month, 0);
 
-    // Recupera las mejoras (improvements) del mes actual.
+    // Retrieves the improvements of the current month without taking into account the time.
     const monthlyImprovements = await Improvements.findAll({
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('improvementDate')), 'month'],
@@ -317,7 +289,7 @@ export const getImprovementsDataByAmountCard = async () => {
       group: ['month', 'year'],
     });
 
-    // Formatea los datos recuperados en un formato legible.
+    // Formats the retrieved data into a readable format.
     const formattedDataImprovements = monthlyImprovements.map((result) => {
       return {
         month: result.getDataValue('month'),
@@ -326,44 +298,32 @@ export const getImprovementsDataByAmountCard = async () => {
       };
     });
 
-    // Puedes devolver los datos o realizar otras acciones necesarias.
+    // You can return the data or perform other necessary actions.
     return formattedDataImprovements;
   } catch (error) {
     res.status(500).json({ error: 'Error' });
   }
 };
 
-// Middleware para verificar el cambio de mes en cada solicitud.
-export const checkMonthChangeMiddlewareImprovements = (req, res, next) => {
-  const now = new Date();
-  const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
-
-  if (month !== currentMonth) {
-    currentMonth = month;
-  }
-
-  next();
-};
 
 //Get monthly exchanges data by the amount of money.
 //Retrieves and formats data on total exchanges amounts for each month.
 export const getExchangesDataByAmountCard = async () => {
   try {
-    // Calcula el mes y el año actual.
+    // Calculates the start date of the current month.
     const now = new Date();
     const year = now.getFullYear();
-    const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
+    const month = now.getMonth() + 1; 
 
-    // Si el mes ha cambiado, reinicia el estado.
     if (month !== currentMonth) {
       currentMonth = month;
     }
 
-    // Define el rango de fechas para el mes actual.
-    const startDate = new Date(year, month - 1, 1); // El mes en JavaScript es 0-indexado (enero = 0).
+    // Defines the date range for the current month.
+    const startDate = new Date(year, month - 1, 1); 
     const endDate = new Date(year, month, 0);
 
-    // Recupera las mejoras (improvements) del mes actual.
+    // Retrieves the exchanges of the current month without taking into account the time.
     const monthlyExchanges = await Exchange.findAll({
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
@@ -378,7 +338,7 @@ export const getExchangesDataByAmountCard = async () => {
       group: ['month', 'year'],
     });
 
-    // Formatea los datos recuperados en un formato legible.
+    // Formats the retrieved data into a readable format.
     const formattedDataExchanges = monthlyExchanges.map((result) => {
       return {
         month: result.getDataValue('month'),
@@ -387,21 +347,9 @@ export const getExchangesDataByAmountCard = async () => {
       };
     });
 
-    // Puedes devolver los datos o realizar otras acciones necesarias.
+    // You can return the data or perform other necessary actions.
     return formattedDataExchanges;
   } catch (error) {
     res.status(500).json({ error: 'Error' });
   }
-};
-
-// Middleware para verificar el cambio de mes en cada solicitud.
-export const checkMonthChangeMiddlewareExchanges = (req, res, next) => {
-  const now = new Date();
-  const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
-
-  if (month !== currentMonth) {
-    currentMonth = month;
-  }
-
-  next();
 };
