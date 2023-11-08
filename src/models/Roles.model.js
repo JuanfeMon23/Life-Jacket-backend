@@ -35,7 +35,13 @@ export const Roles = sequelize.define('Roles', {
                 }
             }
         }
-    }
+    },
+        rolStatus : {
+            type: DataTypes.STRING(),
+            allowNull : false,
+            defaultValue : "true"
+        }
+    
 },
 {
     timestamps : false

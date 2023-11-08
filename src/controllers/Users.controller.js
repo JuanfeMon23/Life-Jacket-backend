@@ -136,6 +136,8 @@ export const statusUser = async (req, res) => {
         //Change of user status and saving in the database
         if(user.userStatus === 'true'){
             user.userStatus = 'false'
+        } else if(user.userStatus === 'false'){
+            user.userStatus = 'true'
         }
 
         await user.save();
