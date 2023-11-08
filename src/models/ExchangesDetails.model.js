@@ -28,9 +28,9 @@ export const ExchangesDetails = sequelize.define('ExchangesDetails',{
         unique : false
     },
     vehicleStatusExchange: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.STRING(10),
         allowNull : false,
-        defaultValue : true
+        defaultValue: "true"
     }
 }, 
 {

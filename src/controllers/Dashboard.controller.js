@@ -24,6 +24,9 @@ export const getSalesDataByAmount = async (req, res) => {
   try {
     // Retrieve monthly sales data including month, year, and total amount.
     const monthlySales = await Sale.findAll({
+      where: {
+        saleStatus : "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('saleDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('saleDate')), 'year'],
@@ -52,6 +55,9 @@ export const getPurchasesDataByAmount = async (req, res) => {
   try {
     // Retrieve monthly purchases data including month, year, and total amount.
     const monthlyPurchases = await Purchase.findAll({
+      where: {
+        purchaseStatus : "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('purchaseDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('purchaseDate')), 'year'],
@@ -80,6 +86,9 @@ export const getImprovementsDataByAmount = async (req, res) => {
   try {
     // Retrieve monthly improvements data including month, year, and total amount.
     const monthlyImprovements = await Improvements.findAll({
+      where: {
+        improvementStatus : "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('improvementDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('improvementDate')), 'year'],
@@ -111,7 +120,7 @@ export const getTotalVehicles = async (req, res) => {
     // Retrieve the total count of active vehicles
     const totalVehicles = await Vehicle.count({
       where: {
-        vehicleStatus: true
+        vehicleStatus: "true"
       }
     });
 
@@ -127,6 +136,9 @@ export const getExchangesDataByAmount = async (req, res) => {
   try {
     // Retrieve monthly sales data including month, year, and total amount.
     const monthlyExchanges = await Exchange.findAll({
+      where: {
+        exchangeStatus: "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('exchangeDate')), 'year'],
@@ -178,6 +190,9 @@ export const getSalesDataByAmountCard = async () => {
 
     // Retrieves the sales of the current month without taking into account the time.
     const monthlySales = await Sale.findAll({
+      where: {
+        saleStatus: "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.fn('DATE', sequelize.col('saleDate'))), 'month'],
         [sequelize.fn('YEAR', sequelize.fn('DATE', sequelize.col('saleDate'))), 'year'],
@@ -227,6 +242,9 @@ export const getPurchasesDataByAmountCard = async () => {
 
     // Retrieves the purchases of the current month without taking into account the time.
     const monthlyPurchases = await Purchase.findAll({
+      where: {
+        purchaseStatus: "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('purchaseDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('purchaseDate')), 'year'],
@@ -276,6 +294,9 @@ export const getImprovementsDataByAmountCard = async () => {
 
     // Retrieves the improvements of the current month without taking into account the time.
     const monthlyImprovements = await Improvements.findAll({
+      where: {
+        improvementStatus : "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('improvementDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('improvementDate')), 'year'],
@@ -325,6 +346,9 @@ export const getExchangesDataByAmountCard = async () => {
 
     // Retrieves the exchanges of the current month without taking into account the time.
     const monthlyExchanges = await Exchange.findAll({
+      where: {
+        exchangeStatus : "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('exchangeDate')), 'year'],

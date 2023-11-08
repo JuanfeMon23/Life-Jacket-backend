@@ -156,8 +156,8 @@ export const updateVehicleAndOther = async (req, res) => {
                 return res.status(404).json({ message: 'Vehículo no encontrado' });
             }
 
-            if (vehicle.vehicleStatus === false) {
-                return res.status(400).json({ message: 'No puedes editar este vehículo; está deshabilitado.' });
+            if (vehicle.vehicleStatus === "false") {
+                return res.status(400).json({ message: 'No puedes editar este vehículo, está deshabilitado.' });
             }
 
             vehicle.vehicleType = vehicleType;
@@ -219,22 +219,27 @@ export const statusVehicle = async (req, res) => {
     try {
         const vehicle = await Vehicle.findByPk(idVehicle)
 
-        //Change of vehicle status and saving in the database
-        vehicle.vehicleStatus = !vehicle.vehicleStatus;        
+        //Change of vehicle status and saving in the database       
+        if (vehicle.vehicleStatus === "true") {
+            vehicle.vehicleStatus = "false";
+        } else if (vehicle.vehicleStatus === "false") {
+            vehicle.vehicleStatus = "true";
+        }
+
         await vehicle.save();
 
         // If the vehicle is disabled, we disable the associated improvements
-        if (!vehicle.vehicleStatus) {
+        if (vehicle.vehicleStatus === "false") {
             const improvements = await Improvements.findAll({ where: { idVehicleImprovement: idVehicle } });
             for (let Improvements of improvements) {
-                Improvements.improvementStatus = false;
+                Improvements.improvementStatus = "false";
                 await Improvements.save();
             }
         }
         else { // If the vehicle is enabled, we enable the associated improvements
             const improvements = await Improvements.findAll({ where: { idVehicleImprovement: idVehicle } });
             for (let Improvements of improvements) {
-                Improvements.improvementStatus = true;
+                Improvements.improvementStatus = "true";
                 await Improvements.save();
             }
         }

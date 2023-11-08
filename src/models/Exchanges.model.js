@@ -102,9 +102,9 @@ export const Exchange = sequelize.define('exchanges', {
         }  
     },
     exchangeStatus: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.STRING(10),
         allowNull : false,
-        defaultValue: true
+        defaultValue: "true"
     },
     idClientExchange: {
       type: DataTypes.INTEGER,

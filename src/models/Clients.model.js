@@ -184,9 +184,9 @@ export const Client = sequelize.define('clients', {
         }
     },
     clientStatus: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.STRING(10),
         allowNull : false,
-        defaultValue: true
+        defaultValue: "true"
     }
   },
   {

@@ -228,9 +228,9 @@ export const Vehicle = sequelize.define('vehicles', {
         allowNull: true
     },
     vehicleStatus : {
-        type : DataTypes.BOOLEAN(4),
-        allowNull: false,
-        defaultValue : true
+        type: DataTypes.STRING(10),
+        allowNull : false,
+        defaultValue: "true"
     }  
 },
     {

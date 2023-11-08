@@ -55,6 +55,7 @@ export const getPurchase = async (req, res) => {
                 }
             ]
         });
+        return res.status(200).json(purchase);  
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
@@ -95,7 +96,7 @@ export const statusPurchase = async (req, res) => {
 
         //Update the purchase status
         await purchase.update({
-            purchaseStatus : false
+            purchaseStatus : "false"
         });
 
         return res.status(200).json({message : 'Compra anulada con éxito'});
