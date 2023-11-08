@@ -17,6 +17,12 @@ import { checkMonthChangeMiddlewareSales } from './controllers/Dashboard.control
 import { checkMonthChangeMiddlewarePurchases } from './controllers/Dashboard.controller.js';
 import { checkMonthChangeMiddlewareImprovements } from './controllers/Dashboard.controller.js';
 import cors from 'cors';
+import dotenv from 'dotenv'
+
+
+dotenv.config();
+const FRONTEND = process.env.FRONTEND;
+export const JWT_SECRET = process.env.JWT_SECRET
 
 const app = express();
 
@@ -24,7 +30,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
     credentials : true,
-    origin : 'http://localhost:5173'
+    origin : FRONTEND
 }));
 
 app.use(checkMonthChangeMiddlewareSales);

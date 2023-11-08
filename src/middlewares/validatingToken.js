@@ -1,20 +1,23 @@
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from "../config.js";
+import { JWT_SECRET } from '../app.js';
+
 
 export const requiredToken = (req, res, next) => {
-    try {
-        const {token} = req.cookies
-        if (!token) {
-            return res.status(401).json({message: 'Autorizacion denegada.'})
-        }
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (token == null) return res.status(403).json({message : error.message});
     
-        jwt.verify(token, JWT_SECRET, (error, user) => {
-            if (error)  return res.status(401).json({message: 'Token invalido'})  
-            req.user = user;
-            next();
-        })
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-  
-};
+    jwt.verify(token, JWT_SECRET , (err, user) => {
+      console.log(err)
+      if (err) return res.sendStatus(403)
+      req.user = user
+      next()
+    })
+  } catch (error) {
+    return res.status(400).json({message : error.message});
+  }
+
+ };
+

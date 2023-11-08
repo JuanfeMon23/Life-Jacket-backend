@@ -12,6 +12,10 @@ import { Roles } from "../models/Roles.model.js";
 import app from "../app.js";
 import bcrypts from 'bcryptjs';
 import { Op } from "sequelize";
+import  jwt  from "jsonwebtoken";
+import { createAuthToken } from "../libs/jwt.js";
+import { JWT_SECRET } from "../app.js";
+
 
 //Function to get the list of users
 export const getUsers = async  (req,res) => {
@@ -130,7 +134,9 @@ export const statusUser = async (req, res) => {
         const user = await User.findByPk(idUser)
 
         //Change of user status and saving in the database
-        user.userStatus = !user.userStatus;
+        if(user.userStatus === 'true'){
+            user.userStatus = 'false'
+        }
 
         await user.save();
         res.json(user);
@@ -172,4 +178,63 @@ export const userSearch = async (req,res) => {
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
+};
+
+export const verifyToken = async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) return res.send(false);
+      
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token,JWT_SECRET);
+        console.log(token , decoded);
+      
+        if (!decoded || !decoded.idUser) return res.sendStatus(401);
+ 
+        const userFound = await User.findOne({ where: { idUser: decoded.idUser } });
+        if (!userFound) return res.sendStatus(401);
+      
+        return res.json({
+          idUser: userFound.idUser,
+          userName: userFound.userName,
+          userEmail: userFound.userEmail,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+ };
+
+  export const Login =  async (req,res) => {
+    const { userEmail, userPassword } = req.body;
+
+    try {
+        const foundUser = await User.findOne({where : {userEmail}});
+        if (!foundUser ) return res.status(400).json({ message : 'Email invalido' });
+
+        const Match = await bcrypts.compare(userPassword,foundUser.userPassword);
+        if (!Match) return res.status(400).json({ message : 'Contraseña incorrecta' });
+
+        const token = await createAuthToken({
+            idUser : foundUser.idUser,
+            userEmail : foundUser.userEmail,
+            userName : foundUser.userName
+        });
+
+        res.setHeader('Authorization', `key ${token}`);
+
+        res.status(200).json({foundUser});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message : error.message})
+    }
+};
+
+export const Logout = async (req,res) => {
+    res.cookie("token", "", {
+        httpOnly: true,
+        secure: true,
+        expires: new Date(0),
+      });
+      return res.sendStatus(200);
+
 };

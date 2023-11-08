@@ -12,12 +12,17 @@ import './models/Vehicles.model.js'
 import './models/Improvements.model.js'
 import './models/ExchangesDetails.model.js'
 import './models/Brands.js'
+import dotenv from 'dotenv'
+
+
+dotenv.config();
+const PORT = process.env.PORT;
 
 const connection = async (req, res) => {
     try {
         await sequelize.sync({force : false});
-        app.listen(3000);
-        console.log('Server is running on port',3000);
+        app.listen(PORT);
+        console.log('Server is running on port',PORT);
     } catch (error) {
         console.error('Unable to connect to the database:', error)
     }
