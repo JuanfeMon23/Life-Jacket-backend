@@ -130,10 +130,10 @@ export const postExchangeDetail = async (req, res) => {
 
         const vehicleStatusExchangeValue = newExchangeDetail.vehicleStatusExchange
 
-        if(vehicleStatusExchangeValue === false){
-            await vehicle.update({ vehicleStatus : false });
+        if(vehicleStatusExchangeValue === "false"){
+            await vehicle.update({ vehicleStatus : "false" });
         }else{
-            await vehicle.update({ vehicleStatus : true })
+            await vehicle.update({ vehicleStatus : "true" })
         }
 
        return res.status(200).json(newExchangeDetail);
@@ -203,19 +203,19 @@ export const statusExchange = async (req, res) => {
           });
 
         for (const exchangeDetail of exchangeDetails) {
-            if (exchangeDetail.vehicleStatusExchange === false) {
+            if (exchangeDetail.vehicleStatusExchange === "false") {
                 await exchangeDetail.Vehicle.update({
-                    vehicleStatus: true
+                    vehicleStatus: "true"
                 });
             }
             await exchangeDetail.update({
-                vehicleStatusExchange : 2
+                vehicleStatusExchange : "anulado"
             });
         }
 
         //Update the exchange status
         await exchange.update({
-            exchangeStatus : false
+            exchangeStatus : "false"
         });
 
         return res.status(200).json({ message: 'Intercambio anulado con éxito' });

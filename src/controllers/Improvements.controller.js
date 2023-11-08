@@ -27,13 +27,12 @@ export const getImprovements = async (req, res) => {
 export const postImprovements = async (req, res) => {
     try {
         // Extract data from the request body to create a improvement
-        const {improvementDescription, improvementDate, improvementPrice, improvementStatus, idVehicleImprovement} = req.body
+        const {improvementDescription, improvementDate, improvementPrice, idVehicleImprovement} = req.body
 
         const newImprovement = await Improvements.create({
             improvementDescription,
             improvementDate,
             improvementPrice,
-            improvementStatus,
             idVehicleImprovement
         });
         return res.status(200).json(newImprovement);
@@ -53,8 +52,8 @@ export const updateImprovements = async (req, res) => {
         const improvement = await Improvements.findByPk(idImprovements)
 
         // If the improvement is disable it cannot be edited 
-        if(improvement.improvementStatus === false) {
-            return res.status(400).json({ message: 'No puedes editar esta mejora esta deshabilitada.' });
+        if(improvement.improvementStatus === "false") {
+            return res.status(400).json({ message: 'No puedes editar esta mejora porque se encuentra deshabilitada.' });
         }
 
         improvement.improvementDescription = improvementDescription

@@ -81,7 +81,7 @@ export const postSale = async (req, res) => {
             idVehicleSale
         });
 
-        await vehicle.update({ vehicleStatus : false });
+        await vehicle.update({ vehicleStatus : "false" });
 
         return res.status(200).json(newSale);
     } catch (error) {
@@ -101,12 +101,12 @@ export const statusSale = async (req, res) => {
 
         //Update the status of the vehicle associated with the sale
         await sale.vehicle.update({
-            vehicleStatus : true
+            vehicleStatus : "true"
         });
 
         //Update the sale status
         await sale.update({
-            saleStatus : false
+            saleStatus : "false"
         });
 
         return res.status(200).json({ message: 'Venta anulada con éxito' });
