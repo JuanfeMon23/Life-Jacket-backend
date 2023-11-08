@@ -377,3 +377,41 @@ export const getExchangesDataByAmountCard = async () => {
     res.status(500).json({ error: 'Error' });
   }
 };
+
+
+export const getSaleAmountCard = async (req, res) => {
+  try {
+    const salesData = await getSalesDataByAmountCard();
+    res.json(salesData);
+  } catch (error) {
+    res.status(500).json({ error: 'Error when obtaining sales data by amount of money' });
+  }
+};
+
+export const getPurchaseAmountCard = async (req, res) => {
+  try {
+    const purchasesData = await getPurchasesDataByAmountCard();
+    res.json(purchasesData);
+  } catch (error) {
+    res.status(500).json({ error: 'Error when obtaining purchases data by amount of money' });
+  }
+};
+
+export const getImprovementAmountCard = async (req, res) => {
+  try {
+    const ImprovementsData = await getImprovementsDataByAmountCard();
+    res.json(ImprovementsData);
+  } catch (error) {
+    res.status(500).json({ error: 'Error when obtaining improvements data by amount of money' });
+  }
+};
+
+
+export const getExchangeAmountCard = async (req, res) => {
+  try {
+    const ExchangesData = await getExchangesDataByAmountCard();
+    res.json(ExchangesData);
+  } catch (error) {
+    res.status(500).json({ error: 'Error when obtaining exchanges data by amount of money' });
+  }
+};
