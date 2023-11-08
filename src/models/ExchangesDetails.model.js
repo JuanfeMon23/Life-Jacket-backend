@@ -27,41 +27,10 @@ export const ExchangesDetails = sequelize.define('ExchangesDetails',{
         allowNull : false,
         unique : false
     },
-    vehicleSubtotal: {
-        type: DataTypes.INTEGER(11),
-        allowNull : false
-    },
-    exchangeFinalPrice: {
-        type: DataTypes.INTEGER(11),
-        allowNull : false,
-        validate: {
-            notNull: {
-              msg: 'Este campo es obligatorio',
-            },
-            isNumeric: {
-              msg: 'Este campo debe contener solo números',
-            },
-            len: {
-              msg: 'Este campo debe tener entre 5 y 11 números',
-            },
-            customValidation(value) {
-              const integerValue = parseInt(value, 10); // Convierte el valor en un entero
-              if (isNaN(integerValue) || integerValue.toString() !== value.toString() || integerValue.toString().startsWith('0')) {
-                  throw new Error('Este campo debe ser un número entero que no comience en 0');
-              }
-          }, 
-            noSpecialCharacters(value) {
-              const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-              if (specialCharacters.test(value)) {
-                throw new Error('Este campo no puede contener caracteres especiales');
-              }
-            }
-        }
-    },
     vehicleStatusExchange: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.STRING(10),
         allowNull : false,
-        defaultValue : true
+        defaultValue: "true"
     }
 }, 
 {

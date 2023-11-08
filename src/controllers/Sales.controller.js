@@ -31,7 +31,6 @@ export const getSales = async (req, res) => {
         });
         res.json(sales);
     } catch (error) {
-        console.error(error);
         res.status(500).json({message : error.message});
     }
 };
@@ -56,6 +55,7 @@ export const getSale = async (req,res) => {
                 }
             ],
         });
+        res.json(sale);
     } catch (error) {
         return res.status(500).json({message : error.message});
 
@@ -81,7 +81,7 @@ export const postSale = async (req, res) => {
             idVehicleSale
         });
 
-        await vehicle.update({ vehicleStatus : false });
+        await vehicle.update({ vehicleStatus : "false" });
 
         return res.status(200).json(newSale);
     } catch (error) {
@@ -101,12 +101,12 @@ export const statusSale = async (req, res) => {
 
         //Update the status of the vehicle associated with the sale
         await sale.vehicle.update({
-            vehicleStatus : true
+            vehicleStatus : "true"
         });
 
         //Update the sale status
         await sale.update({
-            saleStatus : false
+            saleStatus : "false"
         });
 
         return res.status(200).json({ message: 'Venta anulada con éxito' });
@@ -229,7 +229,6 @@ export const reportSale = async (req, res) => {
         //generates the PDF and saves it to the file
         pdf.create(html, options).toStream(function(err, stream) {
             if (err) {
-              console.error(err);
               return res.status(500).json({ message: err.message });
             }
             //send the stream to the client
@@ -238,7 +237,6 @@ export const reportSale = async (req, res) => {
             stream.pipe(res);
         });
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ message: error.message });
     }
 };

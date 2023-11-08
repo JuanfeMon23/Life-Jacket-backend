@@ -13,6 +13,7 @@ import { Sale } from '../models/Sales.model.js';
 import { Purchase } from '../models/Purchases.model.js';
 import { Vehicle } from '../models/Vehicles.model.js';
 import { Improvements } from '../models/Improvements.model.js'
+import { Exchange } from "../models/Exchanges.model.js";
 import { Op } from 'sequelize';
 import app from '../app.js'; 
 import { Sequelize } from 'sequelize';
@@ -23,6 +24,9 @@ export const getSalesDataByAmount = async (req, res) => {
   try {
     // Retrieve monthly sales data including month, year, and total amount.
     const monthlySales = await Sale.findAll({
+      where: {
+        saleStatus : "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('saleDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('saleDate')), 'year'],
@@ -41,7 +45,6 @@ export const getSalesDataByAmount = async (req, res) => {
 
     res.json(formattedDataSales);
   } catch (error) {
-    console.error('Error al obtener datos de ventas por cantidad de dinero:', error);
     res.status(500).json({ error: 'Error al obtener datos de ventas por cantidad de dinero' });
   }
 };
@@ -52,6 +55,9 @@ export const getPurchasesDataByAmount = async (req, res) => {
   try {
     // Retrieve monthly purchases data including month, year, and total amount.
     const monthlyPurchases = await Purchase.findAll({
+      where: {
+        purchaseStatus : "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('purchaseDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('purchaseDate')), 'year'],
@@ -70,7 +76,6 @@ export const getPurchasesDataByAmount = async (req, res) => {
 
     res.json(formattedDataPurchases);
   } catch (error) {
-    console.error('Error al obtener datos de compras por cantidad de dinero:', error);
     res.status(500).json({ error: 'Error al obtener datos de compras por cantidad de dinero' });
   }
 };
@@ -81,6 +86,9 @@ export const getImprovementsDataByAmount = async (req, res) => {
   try {
     // Retrieve monthly improvements data including month, year, and total amount.
     const monthlyImprovements = await Improvements.findAll({
+      where: {
+        improvementStatus : "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('improvementDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('improvementDate')), 'year'],
@@ -99,7 +107,6 @@ export const getImprovementsDataByAmount = async (req, res) => {
 
     res.json(formattedDataImprovements);
   } catch (error) {
-    console.error('Error al obtener datos de compras por cantidad de dinero:', error);
     res.status(500).json({ error: 'Error al obtener datos de compras por cantidad de dinero' });
   }
 };
@@ -110,52 +117,52 @@ export const getImprovementsDataByAmount = async (req, res) => {
 export const getTotalVehicles = async (req, res) => {
   try {
 
-    const vehicleIdExcluded  = 1;
-
     // Retrieve the total count of active vehicles
     const totalVehicles = await Vehicle.count({
       where: {
-        vehicleStatus: true,
-        idVehicle: {
-          [Sequelize.Op.not]: vehicleIdExcluded
-        }
+        vehicleStatus: "true"
       }
     });
 
     res.json({ totalVehicles });
   } catch (error) {
-    console.error('Error al obtener el total de vehículos :', error);
     res.status(500).json({ error: 'Error al obtener el total de vehículos' });
   }
 };
 
+//Get monthly exchanges data by the amount of money.
+//Retrieves and formats data on total exchanges amounts for each month and year.
+export const getExchangesDataByAmount = async (req, res) => {
+  try {
+    // Retrieve monthly sales data including month, year, and total amount.
+    const monthlyExchanges = await Exchange.findAll({
+      where: {
+        exchangeStatus: "true"
+      },
+      attributes: [
+        [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
+        [sequelize.fn('YEAR', sequelize.col('exchangeDate')), 'year'],
+        [sequelize.fn('SUM', sequelize.col('exchangeCashPrice')), 'totalAmount'],
+        'exchangeCashPriceStatus'
+      ],
+      group: ['month', 'year'],
+    });
+    
+    // Format the retrieved data into a more readable format.
+    const formattedDataExchanges = monthlyExchanges.map((result) => {
+      return {
+        month: result.getDataValue('month'),
+        year: result.getDataValue('year'),
+        totalAmount: result.getDataValue('totalAmount'),
+        exchangeCashPriceStatus: result.getDataValue('exchangeCashPriceStatus')
+      };
+    });
 
-
-
-// export const getExchangesData = async (req, res) => {
-//   try {
-//     const monthlyExchanges = await Purchase.findAll({
-//       attributes: [
-//         [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
-//         [sequelize.fn('YEAR', sequelize.col('exchangeDate')), 'year'],
-//         [sequelize.fn('COUNT', '*'), 'totalExchanges']
-//       ],
-//       group: ['month', 'year'],
-//     });
-//     const formattedData = monthlyExchanges.map((result) => {
-//       return {
-//         month: result.getDataValue('month'),
-//         year: result.getDataValue('year'),
-//         totalExchanges: result.getDataValue('totalExchanges')
-//       };
-//     });
-
-//     res.json(formattedData);
-//   } catch (error) {
-//     console.error('Error al obtener datos de compras', error);
-//     res.status(500).json({ error: 'Error al obtener datos de compras' });
-//   }
-// };
+    res.json(formattedDataExchanges);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener datos de intercambios por cantidad de dinero' });
+  }
+}; 
 
 
 //Cards
@@ -163,27 +170,29 @@ export const getTotalVehicles = async (req, res) => {
 //Get monthly sales data by the amount of money.
 //Retrieves and formats data on total sales amounts for each month.
 
-// Define una variable global para mantener el estado del mes actual.
-let currentMonth = new Date().getMonth() + 1; // El mes en JavaScript es 0-indexado.
+// Defines a global variable to hold the state of the current month.
+let currentMonth = new Date().getMonth() + 1; // The month in JavaScript is 0-indexed.
 
-// Función para obtener las ventas del mes actual.
 export const getSalesDataByAmountCard = async () => {
   try {
-    // Calcula la fecha de inicio del mes actual.
+   // Calculates the start date of the current month.
     const now = new Date();
     const year = now.getFullYear();
-    const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
+    const month = now.getMonth() + 1; 
 
     if (month !== currentMonth) {
       currentMonth = month;
     }
     
-    // Define el rango de fechas para el mes actual.
+    // Defines the date range for the current month.
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0);
 
-    // Recupera las ventas del mes actual sin tener en cuenta la hora.
+    // Retrieves the sales of the current month without taking into account the time.
     const monthlySales = await Sale.findAll({
+      where: {
+        saleStatus: "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.fn('DATE', sequelize.col('saleDate'))), 'month'],
         [sequelize.fn('YEAR', sequelize.fn('DATE', sequelize.col('saleDate'))), 'year'],
@@ -197,7 +206,7 @@ export const getSalesDataByAmountCard = async () => {
       group: ['month', 'year'],
     });
 
-    // Formatea los datos recuperados en un formato legible.
+    // Formats the retrieved data into a readable format.
     const formattedDataSales = monthlySales.map((result) => {
       return {
         month: result.getDataValue('month'),
@@ -206,48 +215,36 @@ export const getSalesDataByAmountCard = async () => {
       };
     });
 
-    // Puedes devolver los datos o realizar otras acciones necesarias.
+    // You can return the data or perform other necessary actions.
     return formattedDataSales;
   } catch (error) {
-    console.error('Error al obtener datos de ventas por cantidad de dinero:', error);
-    throw error;
+    res.status(500).json({ error: 'Error' });
   }
 };
-
-// Middleware para verificar el cambio de mes en cada solicitud.
-export const checkMonthChangeMiddlewareSales = (req, res, next) => {
-  const now = new Date();
-  const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
-
-  if (month !== currentMonth) {
-    currentMonth = month;
-  }
-
-  next();
-};
-
 
 
 //Get monthly sales data by the amount of money.
 //Retrieves and formats data on total sales amounts for each month.
 export const getPurchasesDataByAmountCard = async () => {
   try {
-    // Calcula el mes y el año actual.
+    // Calculates the start date of the current month.
     const now = new Date();
     const year = now.getFullYear();
-    const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
+    const month = now.getMonth() + 1; 
 
-    // Si el mes ha cambiado, reinicia el estado.
     if (month !== currentMonth) {
       currentMonth = month;
     }
 
-    // Define el rango de fechas para el mes actual.
-    const startDate = new Date(year, month - 1, 1); // El mes en JavaScript es 0-indexado (enero = 0).
+    // Defines the date range for the current month.
+    const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0);
 
-    // Recupera las compras del mes actual.
+    // Retrieves the purchases of the current month without taking into account the time.
     const monthlyPurchases = await Purchase.findAll({
+      where: {
+        purchaseStatus: "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('purchaseDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('purchaseDate')), 'year'],
@@ -261,7 +258,7 @@ export const getPurchasesDataByAmountCard = async () => {
       group: ['month', 'year'],
     });
 
-    // Formatea los datos recuperados en un formato legible.
+    // Formats the retrieved data into a readable format.
     const formattedDataPurchases = monthlyPurchases.map((result) => {
       return {
         month: result.getDataValue('month'),
@@ -270,24 +267,11 @@ export const getPurchasesDataByAmountCard = async () => {
       };
     });
 
-    // Puedes devolver los datos o realizar otras acciones necesarias.
+    // You can return the data or perform other necessary actions.
     return formattedDataPurchases;
   } catch (error) {
-    console.error('Error al obtener datos de compras por cantidad de dinero:', error);
-    throw error;
+    res.status(500).json({ error: 'Error' });
   }
-};
-
-// Middleware para verificar el cambio de mes en cada solicitud.
-export const checkMonthChangeMiddlewarePurchases = (req, res, next) => {
-  const now = new Date();
-  const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
-
-  if (month !== currentMonth) {
-    currentMonth = month;
-  }
-
-  next();
 };
 
 
@@ -295,22 +279,24 @@ export const checkMonthChangeMiddlewarePurchases = (req, res, next) => {
 //Retrieves and formats data on total improvements amounts for each month.
 export const getImprovementsDataByAmountCard = async () => {
   try {
-    // Calcula el mes y el año actual.
+    // Calculates the start date of the current month.
     const now = new Date();
     const year = now.getFullYear();
-    const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
+    const month = now.getMonth() + 1; 
 
-    // Si el mes ha cambiado, reinicia el estado.
     if (month !== currentMonth) {
       currentMonth = month;
     }
 
-    // Define el rango de fechas para el mes actual.
-    const startDate = new Date(year, month - 1, 1); // El mes en JavaScript es 0-indexado (enero = 0).
+    // Defines the date range for the current month.
+    const startDate = new Date(year, month - 1, 1); 
     const endDate = new Date(year, month, 0);
 
-    // Recupera las mejoras (improvements) del mes actual.
+    // Retrieves the improvements of the current month without taking into account the time.
     const monthlyImprovements = await Improvements.findAll({
+      where: {
+        improvementStatus : "true"
+      },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('improvementDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('improvementDate')), 'year'],
@@ -324,7 +310,7 @@ export const getImprovementsDataByAmountCard = async () => {
       group: ['month', 'year'],
     });
 
-    // Formatea los datos recuperados en un formato legible.
+    // Formats the retrieved data into a readable format.
     const formattedDataImprovements = monthlyImprovements.map((result) => {
       return {
         month: result.getDataValue('month'),
@@ -333,24 +319,61 @@ export const getImprovementsDataByAmountCard = async () => {
       };
     });
 
-    // Puedes devolver los datos o realizar otras acciones necesarias.
+    // You can return the data or perform other necessary actions.
     return formattedDataImprovements;
   } catch (error) {
-    console.error('Error al obtener datos de mejoras por cantidad de dinero:', error);
-    throw error;
+    res.status(500).json({ error: 'Error' });
   }
 };
 
-// Middleware para verificar el cambio de mes en cada solicitud.
-export const checkMonthChangeMiddlewareImprovements = (req, res, next) => {
-  const now = new Date();
-  const month = now.getMonth() + 1; // Suma 1 para obtener un valor 1-indexado.
 
-  if (month !== currentMonth) {
-    console.log('Cambio de mes exitoso')
-    currentMonth = month;
+//Get monthly exchanges data by the amount of money.
+//Retrieves and formats data on total exchanges amounts for each month.
+export const getExchangesDataByAmountCard = async () => {
+  try {
+    // Calculates the start date of the current month.
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1; 
+
+    if (month !== currentMonth) {
+      currentMonth = month;
+    }
+
+    // Defines the date range for the current month.
+    const startDate = new Date(year, month - 1, 1); 
+    const endDate = new Date(year, month, 0);
+
+    // Retrieves the exchanges of the current month without taking into account the time.
+    const monthlyExchanges = await Exchange.findAll({
+      where: {
+        exchangeStatus : "true"
+      },
+      attributes: [
+        [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
+        [sequelize.fn('YEAR', sequelize.col('exchangeDate')), 'year'],
+        [sequelize.fn('COUNT', sequelize.col('idExchange')), 'totalExchanges']
+      ],
+      where: {
+        exchangeDate: {
+          [Op.between]: [startDate, endDate]
+        }
+      },
+      group: ['month', 'year'],
+    });
+
+    // Formats the retrieved data into a readable format.
+    const formattedDataExchanges = monthlyExchanges.map((result) => {
+      return {
+        month: result.getDataValue('month'),
+        year: result.getDataValue('year'),
+        totalExchanges: result.getDataValue('totalExchanges')
+      };
+    });
+
+    // You can return the data or perform other necessary actions.
+    return formattedDataExchanges;
+  } catch (error) {
+    res.status(500).json({ error: 'Error' });
   }
-
-  next();
 };
-

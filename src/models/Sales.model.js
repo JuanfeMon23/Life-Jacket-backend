@@ -102,9 +102,9 @@ export const Sale = sequelize.define('sales', {
         }  
     },
     saleStatus: {
-        type: DataTypes.BOOLEAN,
-        allowNull : false,
-        defaultValue: true
+      type: DataTypes.STRING(10),
+      allowNull : false,
+      defaultValue: "true"
     },
     idClientSale: {
       type: DataTypes.INTEGER,

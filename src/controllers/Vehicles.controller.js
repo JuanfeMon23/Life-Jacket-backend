@@ -88,7 +88,7 @@ export const postVehicle = async (req, res) => {
         // Extract data from the request body to create a vehicle
         const {
             idVehicle, licensePlate, vehicleType, brand, model, type, line, color, mileage, cylinderCapacity,
-            fuel, traction, soat, technomechanics, timingBelt, vehiclePrice, business, series,
+            fuel, traction, soat, technomechanics, timingBelt, business, series,
             motor, register, chassis, capacity, service, identificationCard
         } = req.body;
 
@@ -108,8 +108,7 @@ export const postVehicle = async (req, res) => {
             traction,
             soat,
             technomechanics,
-            timingBelt,
-            vehiclePrice
+            timingBelt 
         });
 
         // Get the generated idVehicle
@@ -147,7 +146,7 @@ export const updateVehicleAndOther = async (req, res) => {
         if (idVehicle) {
             const {
                 vehicleType, brand, model, type, line, color, mileage, cylinderCapacity, fuel,
-                traction, soat, technomechanics, timingBelt, vehiclePrice
+                traction, soat, technomechanics, timingBelt
             } = req.body;
 
             // Find the vehicle by its ID
@@ -157,8 +156,8 @@ export const updateVehicleAndOther = async (req, res) => {
                 return res.status(404).json({ message: 'Vehículo no encontrado' });
             }
 
-            if (vehicle.vehicleStatus === false) {
-                return res.status(400).json({ message: 'No puedes editar este vehículo; está deshabilitado.' });
+            if (vehicle.vehicleStatus === "false") {
+                return res.status(400).json({ message: 'No puedes editar este vehículo, está deshabilitado.' });
             }
 
             vehicle.vehicleType = vehicleType;
@@ -174,7 +173,7 @@ export const updateVehicleAndOther = async (req, res) => {
             vehicle.soat = soat;
             vehicle.technomechanics = technomechanics;
             vehicle.timingBelt = timingBelt;
-            vehicle.vehiclePrice = vehiclePrice;
+            
             await vehicle.save();
             return res.json(vehicle);
         }
@@ -220,22 +219,27 @@ export const statusVehicle = async (req, res) => {
     try {
         const vehicle = await Vehicle.findByPk(idVehicle)
 
-        //Change of vehicle status and saving in the database
-        vehicle.vehicleStatus = !vehicle.vehicleStatus;        
+        //Change of vehicle status and saving in the database       
+        if (vehicle.vehicleStatus === "true") {
+            vehicle.vehicleStatus = "false";
+        } else if (vehicle.vehicleStatus === "false") {
+            vehicle.vehicleStatus = "true";
+        }
+
         await vehicle.save();
 
         // If the vehicle is disabled, we disable the associated improvements
-        if (!vehicle.vehicleStatus) {
+        if (vehicle.vehicleStatus === "false") {
             const improvements = await Improvements.findAll({ where: { idVehicleImprovement: idVehicle } });
             for (let Improvements of improvements) {
-                Improvements.improvementStatus = false;
+                Improvements.improvementStatus = "false";
                 await Improvements.save();
             }
         }
         else { // If the vehicle is enabled, we enable the associated improvements
             const improvements = await Improvements.findAll({ where: { idVehicleImprovement: idVehicle } });
             for (let Improvements of improvements) {
-                Improvements.improvementStatus = true;
+                Improvements.improvementStatus = "true";
                 await Improvements.save();
             }
         }

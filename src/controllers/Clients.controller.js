@@ -34,7 +34,6 @@ export const getClients = async (req, res) => {
         
         res.json(clients);
     } catch (error) {
-        console.error(error);
         res.status(500).json({message : error.message});
     }
 };
@@ -71,7 +70,7 @@ export const getClient = async (req,res) => {
 //Function add a new client in the database
 export const postClient = async (req, res) => {
     try {
-        const {clientTypeDocument, clientDocument, clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber, clientStatus} = req.body;
+        const {clientTypeDocument, clientDocument, clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber} = req.body;
         
         const foundDocument = await Client.findOne({where : {clientDocument}});
         if(foundDocument) return res.status(400).json({message : 'Documento ya registrado.'});
@@ -89,8 +88,7 @@ export const postClient = async (req, res) => {
             clientAddress,
             clientPhoneNumber,
             clientOtherContact,
-            clientOtherPhoneNumber,
-            clientStatus
+            clientOtherPhoneNumber
         });
         return res.status(200).json(newClient);
     } catch (error) {
@@ -107,7 +105,7 @@ export const updateClient = async (req, res) => {
         // Search for the client by their ID
         const client = await Client.findByPk(idClient);
         
-        if(client.clientStatus === false){
+        if(client.clientStatus === "false"){
             return res.status(400).json({ message : "No puedes editar un cliente deshabilitado"});
         }
 
@@ -134,7 +132,11 @@ export const statusClient = async (req, res) => {
         const client = await Client.findByPk(idClient)
 
         //Change of client status and saving in the database
-        client.clientStatus = !client.clientStatus;
+        if (client.clientStatus === "true") {
+            client.clientStatus = "false";
+        } else if (client.clientStatus === "false") {
+            client.clientStatus = "true";
+        }
 
         await client.save();
         res.json(client);

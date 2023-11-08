@@ -31,7 +31,6 @@ export const getPurchases = async (req, res) => {
         });
         res.json(purchases);
     } catch (error) {
-        console.error(error);
         res.status(500).json({message : error.message});
     }
 };
@@ -56,6 +55,7 @@ export const getPurchase = async (req, res) => {
                 }
             ]
         });
+        return res.status(200).json(purchase);  
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
@@ -65,8 +65,6 @@ export const getPurchase = async (req, res) => {
 export const postPurchase = async (req, res) => {
     try {
         const {purchaseDate, purchaseFinalPrice, purchaseLimitations, purchaseDepartment, purchaseMunicipality, purchasePecuniaryPenalty, idClientPurchase, idVehiclePurchase} = req.body;
-
-        const vehicle = await Vehicle.findByPk(idVehiclePurchase);
 
         //Function to create a new purchase
         const newPurchase = await Purchase.create({
@@ -79,8 +77,6 @@ export const postPurchase = async (req, res) => {
             idClientPurchase,
             idVehiclePurchase
         });
-
-        await vehicle.update({ vehiclePrice : purchaseFinalPrice });
 
         return res.status(200).json(newPurchase);   
     } catch (error) {
@@ -100,7 +96,7 @@ export const statusPurchase = async (req, res) => {
 
         //Update the purchase status
         await purchase.update({
-            purchaseStatus : false
+            purchaseStatus : "false"
         });
 
         return res.status(200).json({message : 'Compra anulada con éxito'});
@@ -233,7 +229,6 @@ export const reportPurchase = async (req, res) => {
             stream.pipe(res);
         });
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ message: error.message });
     }
 };

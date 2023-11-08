@@ -50,6 +50,11 @@ export const Exchange = sequelize.define('exchanges', {
             }
         } 
     },
+    exchangeCashPriceStatus: {
+      type: DataTypes.BOOLEAN,
+      allowNull : false,
+      defaultValue : true
+    },
     exchangeLimitations: {
         type: DataTypes.STRING(200),
         allowNull : false,
@@ -97,9 +102,9 @@ export const Exchange = sequelize.define('exchanges', {
         }  
     },
     exchangeStatus: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.STRING(10),
         allowNull : false,
-        defaultValue: true
+        defaultValue: "true"
     },
     idClientExchange: {
       type: DataTypes.INTEGER,
