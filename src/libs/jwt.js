@@ -2,15 +2,16 @@ import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '../app.js';
 
 
-export async function createAuthToken(payload){
+export function createAccesToken(payload){
     return new Promise((resolve, reject) => {
-        jwt.sign(payload, JWT_SECRET,  { expiresIn: '1d' , algorithm : "HS256"}, (error, token) => {
-            if (error) {
-                console.error(error);
-                reject(error);
-            } else {
-                resolve(token);
-            }
-        });
-    });
+        jwt.sign(
+            payload,
+            JWT_SECRET ,
+        {
+            expiresIn : 3600,
+        }, (err, token)  => {
+            if (err) reject(err);
+            resolve(token);
+        })
+    })
 };

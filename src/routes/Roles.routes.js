@@ -7,11 +7,13 @@
  */
 
 import { Router } from "express";
-import { createRol, getRol, getRoles , updateRol, deleteRol } from "../controllers/Roles.controller.js";
+import { createRol, getRol, getRoles , updateRol, deleteRol, addLicenses } from "../controllers/Roles.controller.js";
+import { requiredToken } from '../middlewares/validatingToken.js';
 export const RolRoutes =  Router();
 
-RolRoutes.get('/Roles', getRoles );
-RolRoutes.get('/Roles/:idRol', getRol)
-RolRoutes.post('/Roles', createRol);
-RolRoutes.put('/Roles/:idRol' , updateRol);
-RolRoutes.delete('/Roles/:idRol', deleteRol);
+RolRoutes.get('/Roles', requiredToken, getRoles );
+RolRoutes.get('/Roles/:idRol', requiredToken, getRol)
+RolRoutes.post('/Roles', requiredToken, createRol);
+RolRoutes.put('/Roles/:idRol' , requiredToken, updateRol);
+RolRoutes.delete('/Roles/:idRol', requiredToken, deleteRol);
+RolRoutes.post('/Roles/:idRol/Licenses/:idLicense', requiredToken, addLicenses);

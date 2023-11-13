@@ -7,20 +7,19 @@
  */
 
 import {Router} from 'express';
-import {getClients, getClient, postClient, updateClient, deleteClient, statusClient, searchClient} from '../controllers/Clients.controller.js';
+import {getClients, postClient, updateClient, deleteClient, statusClient, searchClient} from '../controllers/Clients.controller.js';
+import { requiredToken } from '../middlewares/validatingToken.js';
 
 export const ClientRoutes = Router();
 
-ClientRoutes.get('/Clients', getClients);
+ClientRoutes.get('/Clients', requiredToken , getClients);
 
-ClientRoutes.get('/Clients/:idClient', getClient);
+ClientRoutes.post('/Clients', requiredToken , postClient);
 
-ClientRoutes.post('/Clients', postClient);
+ClientRoutes.put('/Clients/:idClient', requiredToken , updateClient);
 
-ClientRoutes.put('/Clients/:idClient', updateClient);
+ClientRoutes.delete('/Clients/:idClient',requiredToken , deleteClient);
 
-ClientRoutes.delete('/Clients/:idClient', deleteClient);
+ClientRoutes.patch('/Clients/:idClient',requiredToken , statusClient);
 
-ClientRoutes.patch('/Clients/:idClient', statusClient);
-
-ClientRoutes.get('/Clients/SearchE/:search', searchClient);
+ClientRoutes.get('/Clients/SearchE/:search',requiredToken , searchClient);

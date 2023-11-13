@@ -13,22 +13,24 @@ import {checkMonthChangeMiddlewareSales, checkMonthChangeMiddlewarePurchases, ch
 import {getSalesDataByAmount, getPurchasesDataByAmount, getExchangesDataByAmount, getImprovementsDataByAmount,getTotalVehicles,
   getSaleAmountCard, getPurchaseAmountCard, getImprovementAmountCard, getExchangeAmountCard} from '../controllers/Dashboard.controller.js';
 
+import { requiredToken } from '../middlewares/validatingToken.js';
+
 export const DashboardRoutes = Router();
 
-DashboardRoutes.get('/Dashboard/Sales/withMonth', getSalesDataByAmount);
+DashboardRoutes.get('/Dashboard/Sales/withMonth', requiredToken , getSalesDataByAmount);
 
-DashboardRoutes.get('/Dashboard/Purchases/withMonth', getPurchasesDataByAmount);
+DashboardRoutes.get('/Dashboard/Purchases/withMonth', requiredToken , getPurchasesDataByAmount);
 
-DashboardRoutes.get('/Dashboard/Improvements/withMonth', getImprovementsDataByAmount);
+DashboardRoutes.get('/Dashboard/Improvements/withMonth', requiredToken , getImprovementsDataByAmount);
 
-DashboardRoutes.get('/Dashboard/Vehicles/totalVehicles', getTotalVehicles);
+DashboardRoutes.get('/Dashboard/Vehicles/totalVehicles', requiredToken , getTotalVehicles);
 
-DashboardRoutes.get('/Dashboard/Exchanges/withMonth', getExchangesDataByAmount);
+DashboardRoutes.get('/Dashboard/Exchanges/withMonth',requiredToken , getExchangesDataByAmount);
 
-DashboardRoutes.get('/Dashboard/Sales/withMonth/Card', checkMonthChangeMiddlewareSales, getSaleAmountCard);
+DashboardRoutes.get('/Dashboard/Sales/withMonth/Card', requiredToken , checkMonthChangeMiddlewareSales, getSaleAmountCard);
 
-DashboardRoutes.get('/Dashboard/Purchases/withMonth/Card', checkMonthChangeMiddlewarePurchases, getPurchaseAmountCard);
+DashboardRoutes.get('/Dashboard/Purchases/withMonth/Card', requiredToken , checkMonthChangeMiddlewarePurchases, getPurchaseAmountCard);
 
-DashboardRoutes.get('/Dashboard/Improvements/withMonth/Card', checkMonthChangeMiddlewareImprovements, getImprovementAmountCard);
+DashboardRoutes.get('/Dashboard/Improvements/withMonth/Card', requiredToken , checkMonthChangeMiddlewareImprovements, getImprovementAmountCard);
 
-DashboardRoutes.get('/Dashboard/Exchanges/withMonth/Card', checkMonthChangeMiddlewareExchanges, getExchangeAmountCard);
+DashboardRoutes.get('/Dashboard/Exchanges/withMonth/Card', requiredToken , checkMonthChangeMiddlewareExchanges, getExchangeAmountCard);

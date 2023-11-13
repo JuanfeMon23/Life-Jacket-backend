@@ -13,14 +13,23 @@ import app from "../app.js";
 import bcrypts from 'bcryptjs';
 import { Op } from "sequelize";
 import  jwt  from "jsonwebtoken";
-import { createAuthToken } from "../libs/jwt.js";
+import { createAccesToken } from "../libs/jwt.js";
 import { JWT_SECRET } from "../app.js";
+import { License } from "../models/Licenses.model.js";
 
 
 //Function to get the list of users
 export const getUsers = async  (req,res) => {
     try {
-        const users = await User.findAll({ include: Roles });
+        const users = await User.findAll(
+            {
+                include : [
+                    { model : Roles , include: [
+                        { model : License}
+                    ]} 
+                ]
+            }
+        );
         return res.status(200).json(users);
     } catch (error) {
         return res.status(500).json({message : error.message});
@@ -182,31 +191,7 @@ export const userSearch = async (req,res) => {
     }
 };
 
-export const verifyToken = async (req, res) => {
-    try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader) return res.send(false);
-      
-        const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token,JWT_SECRET);
-        console.log(token , decoded);
-      
-        if (!decoded || !decoded.idUser) return res.sendStatus(401);
- 
-        const userFound = await User.findOne({ where: { idUser: decoded.idUser } });
-        if (!userFound) return res.sendStatus(401);
-      
-        return res.json({
-          idUser: userFound.idUser,
-          userName: userFound.userName,
-          userEmail: userFound.userEmail,
-        });
-    } catch (error) {
-        console.log(error);
-    }
- };
-
-  export const Login =  async (req,res) => {
+export const Login =  async (req,res) => {
     const { userEmail, userPassword } = req.body;
 
     try {
@@ -216,20 +201,44 @@ export const verifyToken = async (req, res) => {
         const Match = await bcrypts.compare(userPassword,foundUser.userPassword);
         if (!Match) return res.status(400).json({ message : 'Contraseña incorrecta' });
 
-        const token = await createAuthToken({
+        const token = await createAccesToken({
             idUser : foundUser.idUser,
             userEmail : foundUser.userEmail,
             userName : foundUser.userName
         });
 
-        res.setHeader('Authorization', `key ${token}`);
+        res.cookie("token", token, {
+            sameSite: 'none',
+            secure : true,
+            httpOnly : false
+        });
 
-        res.status(200).json({foundUser});
+        res.json(token);
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({message : error.message})
     }
 };
+
+export const verifyToken = async (req, res) => {
+    const {token} = req.cookies;
+    if(!token) return res.status(401).json({message : 'Unautorized'});
+
+    jwt.verify(token, JWT_SECRET, async (err, user) => {
+        if(err) return res.status(401).json({message : 'Unautorized'});
+
+        const userFound = await User.findByPk(user.idUser);
+        if(!userFound) return res.status(401).json({message : 'Unautorized'});
+
+        return res.json({
+            idUser : userFound.idUser,
+            email : userFound.email
+        });
+    });
+};
+
+
 
 export const Logout = async (req,res) => {
     res.cookie("token", "", {

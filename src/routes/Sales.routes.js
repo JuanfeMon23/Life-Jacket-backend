@@ -8,17 +8,19 @@
 
 import {Router} from 'express';
 import {getSales, getSale, postSale, statusSale, searchSale , reportSale } from '../controllers/Sales.controller.js';
+import { requiredToken } from '../middlewares/validatingToken.js';
+
 
 export const SaleRoutes = Router();
 
-SaleRoutes.get('/Sales', getSales);
+SaleRoutes.get('/Sales', requiredToken, getSales);
 
-SaleRoutes.get('/Sales/:idSale', getSale);
+SaleRoutes.get('/Sales/:idSale', requiredToken, getSale);
 
-SaleRoutes.post('/Sales', postSale);
+SaleRoutes.post('/Sales', requiredToken, postSale);
 
-SaleRoutes.patch('/Sales/:idSale', statusSale);
+SaleRoutes.patch('/Sales/:idSale', requiredToken, statusSale);
 
-SaleRoutes.get('/Sales/SearchE/:search', searchSale);
+SaleRoutes.get('/Sales/SearchE/:search', requiredToken, searchSale);
 
-SaleRoutes.get('/Sales/Report/:startDateSale/:finalDateSale', reportSale); 
+SaleRoutes.get('/Sales/Report/:startDateSale/:finalDateSale', requiredToken, reportSale); 

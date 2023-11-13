@@ -8,17 +8,18 @@
 
 import {Router} from 'express';
 import {getPurchases, getPurchase, postPurchase, statusPurchase, searchPurchase, reportPurchase } from '../controllers/Purchases.controller.js';
+import { requiredToken } from '../middlewares/validatingToken.js';
 
 export const PurchaseRoutes = Router();
 
-PurchaseRoutes.get('/Purchases', getPurchases);
+PurchaseRoutes.get('/Purchases', requiredToken , getPurchases);
 
-PurchaseRoutes.get('/Purchases/:idPurchase', getPurchase);
+PurchaseRoutes.get('/Purchases/:idPurchase', requiredToken , getPurchase);
 
-PurchaseRoutes.post('/Purchases', postPurchase);
+PurchaseRoutes.post('/Purchases', requiredToken , postPurchase);
 
-PurchaseRoutes.patch('/Purchases/:idPurchase', statusPurchase);
+PurchaseRoutes.patch('/Purchases/:idPurchase', requiredToken , statusPurchase);
 
-PurchaseRoutes.get('/Purchases/SearchE/:search', searchPurchase);
+PurchaseRoutes.get('/Purchases/SearchE/:search', requiredToken , searchPurchase);
 
-PurchaseRoutes.get('/Purchases/Report/:startDatePurchase/:finalDatePurchase', reportPurchase); 
+PurchaseRoutes.get('/Purchases/Report/:startDatePurchase/:finalDatePurchase', requiredToken , reportPurchase); 

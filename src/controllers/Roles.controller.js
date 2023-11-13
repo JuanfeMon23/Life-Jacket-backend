@@ -8,6 +8,8 @@
  */
 
 import { Roles } from "../models/Roles.model.js";
+import { License } from "../models/Licenses.model.js";
+import { LicensesRols } from "../models/LicensesRoles.model.js";
 import app from "../app.js";
 
 //Function add a new rol in the database
@@ -33,7 +35,7 @@ export const createRol = async (req,res)  => {
 export const getRoles = async (req, res) => {
     try {
         //Query the database to get the list of roles
-        const Rol = await Roles.findAll();
+        const Rol = await Roles.findAll({include: { model : License}});
         return res.status(200).json(Rol);
         
     } catch (error) {
@@ -102,5 +104,20 @@ export const deleteRol = async (req,res) => {
         return res.sendStatus(200).json({ message: 'Rol eliminado con éxito' });
     } catch (error) {
         return res.status(500).json({message : error.message});
+    }
+};
+
+export const addLicenses = async (req, res) => {
+    const {idRol, idLicense} = req.params;
+    try {
+        const licenseRole = await LicensesRols.create({
+            idLicenseDetail : idLicense,
+            idRolDetail : idRol
+        });
+
+        return res.status(200).json(licenseRole);
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({message: error.message})
     }
 };
