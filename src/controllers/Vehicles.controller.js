@@ -138,74 +138,55 @@ export const postVehicle = async (req, res) => {
 
 // Function to update a vehicle or other related information
 export const updateVehicleAndOther = async (req, res) => {
+    const { idVehicle } = req.params;
     try {
-        // Extract the vehicle or other information ID from the request parameters
-        const { idVehicle } = req.params;
+        // Extract data from the request body to update a vehicle
+        const {
+            vehicleType, brand, model, type, line, color, mileage, cylinderCapacity,
+            fuel, traction, soat, technomechanics, timingBelt, business, series,
+            motor, register, chassis, capacity, service, identificationCard
+        } = req.body;
 
-        // If a vehicle ID is provided, update the vehicle
-        if (idVehicle) {
-            const {
-                vehicleType, brand, model, type, line, color, mileage, cylinderCapacity, fuel,
-                traction, soat, technomechanics, timingBelt
-            } = req.body;
 
-            // Find the vehicle by its ID
-            const vehicle = await Vehicle.findByPk(idVehicle);
+        // Find the vehicle by its ID
+        const vehicle = await Vehicle.findByPk(idVehicle);
 
-            if (!vehicle) {
-                return res.status(404).json({ message: 'Vehículo no encontrado' });
-            }
+        // Find the other vehicle information by its FK
+        const other = await othervehicleinformation.findOne({ where: { idVehicleOtherVehicleInformation: idVehicle } });
 
-            if (vehicle.vehicleStatus === "false") {
-                return res.status(400).json({ message: 'No puedes editar este vehículo, está deshabilitado.' });
-            }
+        if(vehicle.vehicleStatus === "false"){
+            return res.status(400).json({ message : "No puedes editar un vehiculo deshabilitado"});
+        }
 
-            vehicle.vehicleType = vehicleType;
-            vehicle.brand = brand;
-            vehicle.model = model;
-            vehicle.type = type;
-            vehicle.line = line;
-            vehicle.color = color;
-            vehicle.mileage = mileage;
-            vehicle.cylinderCapacity = cylinderCapacity;
-            vehicle.fuel = fuel;
-            vehicle.traction = traction;
-            vehicle.soat = soat;
-            vehicle.technomechanics = technomechanics;
-            vehicle.timingBelt = timingBelt;
+        vehicle.vehicleType = vehicleType;
+        vehicle.brand = brand;
+        vehicle.model = model;
+        vehicle.type = type;
+        vehicle.line = line;
+        vehicle.color = color;
+        vehicle.mileage = mileage;
+        vehicle.cylinderCapacity = cylinderCapacity;
+        vehicle.fuel = fuel;
+        vehicle.traction = traction;
+        vehicle.soat = soat;
+        vehicle.technomechanics = technomechanics;
+        vehicle.timingBelt = timingBelt;
             
-            await vehicle.save();
-            return res.json(vehicle);
-        }
-        
-        // If an ID for other related information is provided, update the other information
-        if (idVehicle) {
-            const {
-                business, series, motor, register, chassis, capacity, service, identificationCard
-            } = req.body;
 
-            // Find the other related information by its ID
-            const other = await othervehicleinformation.findByPk({ where: { idVehicleOtherVehicleInformation: idVehicle } });
+        other.business = business;
+        other.series = series;
+        other.motor = motor;
+        other.register = register;
+        other.chassis = chassis;
+        other.capacity = capacity;
+        other.service = service;
+        other.identificationCard = identificationCard;
 
-            if (!other) {
-                return res.status(404).json({ message: 'Related information not found' });
-            }
+        await other.save();
+        await vehicle.save();    
 
-            other.business = business;
-            other.series = series;
-            other.motor = motor;
-            other.register = register;
-            other.chassis = chassis;
-            other.capacity = capacity;
-            other.service = service;
-            other.identificationCard = identificationCard;
-            await other.save();
-            return res.json(other);
-        }
-
-        // If neither a vehicle ID nor an ID for other related information is provided, return an error
-        return res.status(400).json({ message: 'A vehicle ID or other related information ID must be provided' });
-
+        // Return a response with the new vehicle and other related information
+        return res.status(200).json({ vehicle, other });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -259,7 +240,7 @@ export const deleteVehicle = async (req, res) => {
     try {
         const vehicle = await Vehicle.findByPk(idVehicle)
 
-        const vehicleOther = await othervehicleinformation.findByPk({where: {idVehicleOtherVehicleInformation : idVehicle}});
+        const vehicleOther = await othervehicleinformation.findOne({where: {idVehicleOtherVehicleInformation : idVehicle}});
 
         // Count the number of sales, purchases and exchanges associated with the vehicle
         const saleCount = await vehicle.countSales();
