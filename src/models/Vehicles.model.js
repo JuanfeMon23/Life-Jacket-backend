@@ -182,7 +182,7 @@ export const Vehicle = sequelize.define('vehicles', {
 
     fuel : {
         type : DataTypes.STRING(20),
-        allowNull: false,
+        allowNull: true,
         validate : {
             notEmpty : true,
             noSpecialCharacters(value) {
@@ -215,12 +215,12 @@ export const Vehicle = sequelize.define('vehicles', {
     },
     soat : {
         type : DataTypes.DATE,
-        allowNull: false
+        allowNull: true
     },
 
     technomechanics : {
         type : DataTypes.DATE,
-        allowNull: false
+        allowNull: true
     },
 
     timingBelt : {

@@ -11,7 +11,7 @@ import { getUsers , postUser, updateUser, deleteUser,getUser, userSearch, status
 import { requiredToken } from '../middlewares/validatingToken.js';
 export const UserRoutes = Router();
 
-UserRoutes.get('/Users', requiredToken,  getUsers);
+UserRoutes.get('/Users',   getUsers);
 UserRoutes.post('/Users', requiredToken,  postUser),
 UserRoutes.put('/Users/:idUser', requiredToken,  updateUser);
 UserRoutes.delete('/Users/:idUser', requiredToken, deleteUser);
