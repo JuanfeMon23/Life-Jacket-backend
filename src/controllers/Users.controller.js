@@ -67,7 +67,7 @@ export const postUser = async  (req,res) => {
     const {userTypeDocument, userDocument, userDepartment,  userMunicipality, userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idRolUser} = req.body
     
     try {
-        // const userPasswordHash = await bcrypts.hash(userPassword, 10);
+        const userPasswordHash = await bcrypts.hash(userPassword, 10);
 
         const foundDocument = await User.findOne({where : {userDocument}});
         if(foundDocument) return res.status(400).json({message : 'Documento ya registrado.'});
@@ -85,7 +85,7 @@ export const postUser = async  (req,res) => {
             userName,
             userLastName,
             userEmail,
-            userPassword,
+            userPassword : userPasswordHash,
             userAddress,
             userPhoneNumber,
             userOtherPhoneNumber, 

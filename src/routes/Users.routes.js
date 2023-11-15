@@ -12,7 +12,7 @@ import { requiredToken } from '../middlewares/validatingToken.js';
 export const UserRoutes = Router();
 
 UserRoutes.get('/Users',   getUsers);
-UserRoutes.post('/Users', requiredToken,  postUser),
+UserRoutes.post('/Users',  postUser),
 UserRoutes.put('/Users/:idUser', requiredToken,  updateUser);
 UserRoutes.delete('/Users/:idUser', requiredToken, deleteUser);
 UserRoutes.get('/Users/:idUser', requiredToken, getUser);

@@ -11,9 +11,9 @@ import { createRol, getRol, getRoles , updateRol, deleteRol, addLicenses } from 
 import { requiredToken } from '../middlewares/validatingToken.js';
 export const RolRoutes =  Router();
 
-RolRoutes.get('/Roles', requiredToken, getRoles );
+RolRoutes.get('/Roles', getRoles );
 RolRoutes.get('/Roles/:idRol', requiredToken, getRol)
-RolRoutes.post('/Roles', requiredToken, createRol);
+RolRoutes.post('/Roles', createRol);
 RolRoutes.put('/Roles/:idRol' , requiredToken, updateRol);
 RolRoutes.delete('/Roles/:idRol', requiredToken, deleteRol);
-RolRoutes.post('/Roles/:idRol/Licenses/:idLicense', requiredToken, addLicenses);
+RolRoutes.post('/Roles/:idRol/Licenses/:idLicense', addLicenses);
