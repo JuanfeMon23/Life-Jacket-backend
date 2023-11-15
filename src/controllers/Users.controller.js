@@ -102,7 +102,7 @@ export const postUser = async  (req,res) => {
 export const updateUser = async (req,res) => {
     const {idUser} = req.params;
     try {
-        const {userDepartment,  userMunicipality,  userName, userLastName, userEmail, userAddress, userPhoneNumber, userOtherPhoneNumber, idRolUser } = req.body
+        const {userDepartment,  userMunicipality,  userName, userLastName, userEmail, userAddress, userPhoneNumber, userOtherPhoneNumber} = req.body
 
         // Search for the user by their ID
         const user = await User.findByPk(idUser)
@@ -119,7 +119,6 @@ export const updateUser = async (req,res) => {
         user.userAddress = userAddress;
         user.userPhoneNumber = userPhoneNumber;
         user.userOtherPhoneNumber = userOtherPhoneNumber;
-        user.idRolUser = idRolUser;
 
         await user.save();
         res.json(user);
@@ -133,7 +132,15 @@ export const updateUser = async (req,res) => {
 export const statusUser = async (req, res) => {
     const { idUser } = req.params;
     try {
-        const user = await User.findByPk(idUser)
+        const user = await User.findByPk(idUser,{
+            include : {
+                model : Roles
+            }
+        })
+
+        if (user.Role.rolName === "Administrador" || "administrador" ){
+            return res.status(400).json({ message :"No se puede eliminar el usuario con rol de administrador"});
+        }
 
         //Change of user status and saving in the database
         if(user.userStatus === 'true'){
