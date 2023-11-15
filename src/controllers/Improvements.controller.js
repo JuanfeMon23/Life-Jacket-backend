@@ -46,7 +46,7 @@ export const updateImprovements = async (req, res) => {
     const {idImprovements} = req.params;
     try {
         // Extract the improvement ID from the request parameters
-        const {improvementDescription, improvementDate, improvementPrice, idVehicleImprovement} = req.body
+        const {improvementDescription, improvementDate, improvementPrice} = req.body
         
         // Find the vehicle by its ID
         const improvement = await Improvements.findByPk(idImprovements)
@@ -59,7 +59,6 @@ export const updateImprovements = async (req, res) => {
         improvement.improvementDescription = improvementDescription
         improvement.improvementDate =  improvementDate
         improvement.improvementPrice = improvementPrice
-        improvement.idVehicleImprovement = idVehicleImprovement
         await improvement.save()
         res.json(improvement)
 
@@ -89,6 +88,20 @@ export const getSearchImprovements = async (req, res) => {
         });
         res.json(improvements)
     } catch (error) {
+        return res.status(500).json({message : error.message});
+    }
+};
+
+export const deleteImprovements = async (req, res) => {
+    const {idImprovements} = req.params;
+    try {
+        const improvement = await Improvements.findByPk(idImprovements);
+        console.log(improvement)
+        await improvement.destroy();
+
+        return res.sendStatus(204);
+    } catch (error) {
+        console.log(error)
         return res.status(500).json({message : error.message});
     }
 };

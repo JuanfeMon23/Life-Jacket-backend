@@ -23,7 +23,7 @@ VehiclesRoutes.get('/Vehicles/:idVehicle', requiredToken, getVehicle);
 VehiclesRoutes.post('/Vehicles', requiredToken, postVehicle);
 
 //Update
-VehiclesRoutes.put('/Vehicles/:idVehicle', requiredToken, updateVehicleAndOther);
+VehiclesRoutes.put('/Vehicles/:idVehicle', requiredToken, updateVehicleAndOther); 
 
 //Disable
 VehiclesRoutes.patch('/Vehicles/:idVehicle', requiredToken, statusVehicle);

@@ -16,6 +16,8 @@ import  jwt  from "jsonwebtoken";
 import { createAccesToken } from "../libs/jwt.js";
 import { JWT_SECRET } from "../app.js";
 import { License } from "../models/Licenses.model.js";
+import nodemailer from 'nodemailer';
+import { PORT } from "../index.js";
 
 
 //Function to get the list of users
@@ -65,7 +67,7 @@ export const postUser = async  (req,res) => {
     const {userTypeDocument, userDocument, userDepartment,  userMunicipality, userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber,idRolUser} = req.body
     
     try {
-        const userPasswordHash = await bcrypts.hash(userPassword, 10);
+        // const userPasswordHash = await bcrypts.hash(userPassword, 10);
 
         const foundDocument = await User.findOne({where : {userDocument}});
         if(foundDocument) return res.status(400).json({message : 'Documento ya registrado.'});
@@ -83,7 +85,7 @@ export const postUser = async  (req,res) => {
             userName,
             userLastName,
             userEmail,
-            userPassword : userPasswordHash,
+            userPassword,
             userAddress,
             userPhoneNumber,
             userOtherPhoneNumber, 
@@ -100,7 +102,7 @@ export const postUser = async  (req,res) => {
 export const updateUser = async (req,res) => {
     const {idUser} = req.params;
     try {
-        const {userTypeDocument, userDocument, userDepartment,  userMunicipality,  userName, userLastName, userEmail, userPassword, userAddress, userPhoneNumber, userOtherPhoneNumber, idRolUser } = req.body
+        const {userDepartment,  userMunicipality,  userName, userLastName, userEmail, userAddress, userPhoneNumber, userOtherPhoneNumber, idRolUser } = req.body
 
         // Search for the user by their ID
         const user = await User.findByPk(idUser)
@@ -109,20 +111,11 @@ export const updateUser = async (req,res) => {
             return res.status(400).json({ message : 'No puedes editar un usuario deshabilitado'});
         }
 
-        const foundDocument = await User.findOne({where : {userDocument}});
-        if(foundDocument) return res.status(400).json({message : 'Documento ya registrado.'});
-
-        const foundEmail = await User.findOne({where : {userEmail}});
-        if (foundEmail) return res.status(400).json({message : 'Email ya registrado.'});
-
-        user.userTypeDocument = userTypeDocument;
-        user.userDocument = userDocument;
         user.userDepartment = userDepartment;
         user.userMunicipality = userMunicipality;
         user.userName = userName;
         user.userLastName = userLastName;
         user.userEmail = userEmail;
-        user.userPassword = userPassword;
         user.userAddress = userAddress;
         user.userPhoneNumber = userPhoneNumber;
         user.userOtherPhoneNumber = userOtherPhoneNumber;
@@ -164,6 +157,7 @@ export const deleteUser = async (req,res) => {
         const user = await User.findByPk(idUser)
 
         await user.destroy();
+        console.log(user)
 
         return res.sendStatus(204);
     } catch (error) {
@@ -249,3 +243,68 @@ export const Logout = async (req,res) => {
       return res.sendStatus(200);
 
 };
+
+
+export const PasswordRecovery = async (req, res) => {
+    const { userEmail } = req.body;
+
+    try {
+        const foundUser = await User.findOne({where : {userEmail}});
+        if (!foundUser ) return res.status(400).json({ message : 'Email invalido' });
+
+        const transporter = nodemailer.createTransport({
+            service : 'gmail',
+            auth : {
+                user: 'curpion123@gmail.com',
+                pass: 'orjf totw pftj inmi'
+            }
+        });
+
+        const port = 'http://localhost:5173/ResetPassword';
+
+        const mailOptions = {
+            from : 'curpion123@gmail.com',
+            to : `${foundUser.userEmail}`,
+            subject : 'Enlace para la recuperacion de la contraseña en el aplicativo lifejacket.',
+            text : `${port}/${foundUser.idUser}`
+        };
+
+        transporter.sendMail(mailOptions, (err, response) => {
+            if(err){
+                return res.status(400).json({message : err.message})
+            } else {
+                return res.status(299).json({message : 'Recuperacion enviada con exito.'})
+            }
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({message : error.message})
+    }
+};
+
+
+export const resetPassword = async (req, res) => {
+    const { idUser } = req.params;
+    const { newUserPassword } = req.body;
+
+    try {
+
+        const user = await User.findByPk(idUser);
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+
+        const foundPassword = await bcrypts.hash(newUserPassword, 10);
+        user.userPassword = foundPassword;
+
+
+        await user.save();
+
+        res.status(201).json({ message: 'Contraseña actualizada con éxito.' });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ message: error.message });
+    }
+};
+

@@ -136,7 +136,7 @@ export const Vehicle = sequelize.define('vehicles', {
         allowNull: false,
         validate : {
             notNull: {
-                msg: 'Este campo es obligaotiro'
+                msg: 'Este campo es obligatorio'
             },
 
             noSpecialCharacters(value) {
