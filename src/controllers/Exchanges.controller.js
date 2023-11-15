@@ -196,6 +196,17 @@ export const statusExchange = async (req, res) => {
             }]
         });
 
+        // Check if more than 20 days have passed since the exchange date
+        const currentDate = new Date();
+        const exchangeDate = new Date(exchange.exchangeDate);
+
+        const timeDifference = currentDate - exchangeDate;
+        const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+        if (daysDifference > 20) {
+            return res.status(400).json({ message: 'No puedes cambiar el estado del intercambio después de 20 días' });
+        }
+
         const exchangeDetails = await ExchangesDetails.findAll({
             where: {
               idExchangeVehicle: idExchange
@@ -291,7 +302,6 @@ export const reportExchange = async (req, res) => {
         let exchangesRows = '';
         exchange.forEach(e => {
             exchangesRows += `<tr>
-            <td>${e.idExchange}</td>
             <td>${e.exchangeDate}</td>
             <td>${e.exchangeCashPrice}</td>
             <td>${e.exchangeDepartment}</td>
@@ -310,30 +320,88 @@ export const reportExchange = async (req, res) => {
         
         //code html
         const html = `
-          <html>
+            <html>
             <head>
-              <style>
-                /* css */
-              </style>
+            <style>
+                body {
+                font-family: 'Arial', sans-serif;
+                background-color: white;
+                color: black;
+                margin: 0;
+                padding: 0;
+                }
+
+                header {
+                    text-align: center;
+                    margin-top: 20px;
+                }
+        
+                h1 {
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #000000;
+                }
+            
+                h2 {
+                    margin-top: 10px;
+                    font-size: 1.5rem;
+                    color: #0D0628;
+                    text-align: center;
+                }
+        
+                p {
+                color: #808080;
+                text-align: center;
+                }
+        
+                table {
+                border-collapse: collapse;
+                width: 100%;
+                margin-top: 20px;
+                }
+        
+                th, td {
+                border: 1px solid #27336F;
+                padding: 10px;
+                text-align: left;
+                }
+        
+                th {
+                background-color: #27336F;
+                color: white;
+                }
+        
+                tr:nth-child(even) {
+                background-color: white;
+                }
+        
+                tr:hover {
+                background-color: #f2f2f2;
+                }
+            </style>
             </head>
             <body>
-              <h1>Informe de intercambios</h1>
-              <p>Fecha del reporte: ${new Date().toLocaleDateString()}</p>
-              <table>
+            <header>
+                <h2>LifeJacket</h2>
+                <h1>Informe de intercambios</h1>
+                <p>Fecha del reporte: ${new Date().toLocaleDateString()}</p>
+            </header>
+            <table>
                 <tr>
-                  <th>ID</th>
-                  <th>Fecha</th>
-                  <th>Efectivo involucrado</th>
-                  <th>Departamento</th>
-                  <th>Municipio</th>
-                  <th>Nonbre del cliente</th>
-                  <th>Apellido del cliente</th>
-                  <th>Placa</th>
+                <th>Fecha</th>
+                <th>Efectivo involucrado</th>
+                <th>Departamento</th>
+                <th>Municipio</th>
+                <th>Nombre del cliente</th>
+                <th>Apellido del cliente</th>
+                <th>Placa</th>
                 </tr>
                 ${exchangesRows}
-              </table>
+            </table>
             </body>
-          </html>
+        </html>
+      
+      
         `;
         
         const options = { format: 'Letter' };

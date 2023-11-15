@@ -73,7 +73,7 @@ export const postClient = async (req, res) => {
         const {clientTypeDocument, clientDocument, clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber} = req.body;
         
         const foundDocument = await Client.findOne({where : {clientDocument}});
-        if(foundDocument) return res.status(400).json({message : 'Documento ya registrado.'});
+        if(foundDocument) return res.status(400).json({message : 'Documento ya registrado'});
 
 
 
@@ -157,15 +157,9 @@ export const deleteClient = async (req, res) => {
         const purchaseCount = await client.countPurchases();
         const exchangeCount = await client.countExchanges();
 
-        //Check if the client has associated sales, purchases and exchanges and prevent deletion
-        if (saleCount > 0){
-            return res.status(400).json({ message :"No se puede eliminar un cliente con ventas asociadas"});
-        }
-        if (purchaseCount > 0){
-            return res.status(400).json({ message :"No se puede eliminar un cliente con compras asociadas"});
-        }
-        if (exchangeCount > 0){
-            return res.status(400).json({ message :"No se puede eliminar un cliente con intercambios asociados"});
+        // Check if the clients has associated sales, purchases, or exchanges and prevent deletion
+        if (saleCount || purchaseCount || exchangeCount > 0) {
+            return res.status(400).json({ message: "No se puede eliminar un cliente con ventas, compras o intercambios asociados" });
         }
         
         await client.destroy();

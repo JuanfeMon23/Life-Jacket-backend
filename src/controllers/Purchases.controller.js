@@ -86,23 +86,35 @@ export const postPurchase = async (req, res) => {
 
 //Function to annular a purchase
 export const statusPurchase = async (req, res) => {
-    const {idPurchase} = req.params;
+    const { idPurchase } = req.params;
+
     try {
         const purchase = await Purchase.findByPk(idPurchase, {
-            include : [{
+            include: [{
                 model: Vehicle
             }]
         });
 
-        //Update the purchase status
+        // Check if more than 20 days have passed since the purchase date
+        const currentDate = new Date();
+        const purchaseDate = new Date(purchase.purchaseDate);
+
+        const timeDifference = currentDate - purchaseDate;
+        const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+        if (daysDifference > 20) {
+            return res.status(400).json({ message: 'No puedes cambiar el estado de la compra después de 20 días' });
+        }
+
+        // Update status purchase
         await purchase.update({
-            purchaseStatus : "false"
+            purchaseStatus: "false"
         });
 
-        return res.status(200).json({message : 'Compra anulada con éxito'});
+        return res.status(200).json({ message: 'Compra anulada con éxito' });
 
     } catch (error) {
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -176,7 +188,6 @@ export const reportPurchase = async (req, res) => {
         let purchasesRows = '';
         purchase.forEach(p => {
           purchasesRows += `<tr>
-            <td>${p.idPurchase}</td>
             <td>${p.purchaseDate}</td>
             <td>${p.purchaseFinalPrice}</td>
             <td>${p.purchaseDepartment}</td>
@@ -188,24 +199,80 @@ export const reportPurchase = async (req, res) => {
         });
         
         //code html
-        const html = `
-          <html>
+            const html = `
+            <html>
             <head>
               <style>
-                /* css */
+                body {
+                  font-family: 'Arial', sans-serif;
+                  background-color: white;
+                  color: black;
+                  margin: 0;
+                  padding: 0;
+                }
+          
+                header {
+                  text-align: center;
+                  margin-top: 20px;
+                }
+          
+                h1 {
+                  font-size: 2rem;
+                  font-weight: bold;
+                  color: #000000;
+                }
+          
+                h2 {
+                  margin-top: 10px;
+                  font-size: 1.5rem;
+                  color: #0D0628;
+                  text-align: center;
+                }
+          
+                p {
+                  color: #808080;
+                  text-align: center;
+                }
+          
+                table {
+                  border-collapse: collapse;
+                  width: 100%;
+                  margin-top: 20px;
+                }
+          
+                th, td {
+                  border: 1px solid #27336F;
+                  padding: 10px;
+                  text-align: left;
+                }
+          
+                th {
+                  background-color: #27336F;
+                  color: white;
+                }
+          
+                tr:nth-child(even) {
+                  background-color: white;
+                }
+          
+                tr:hover {
+                  background-color: #f2f2f2;
+                }
               </style>
             </head>
             <body>
-              <h1>Informe de compras</h1>
-              <p>Fecha del reporte: ${new Date().toLocaleDateString()}</p>
+              <header>
+                <h2>LifeJacket</h2>
+                <h1>Informe de compras</h1>
+                <p>Fecha del reporte: ${new Date().toLocaleDateString()}</p>
+              </header>
               <table>
                 <tr>
-                  <th>ID</th>
                   <th>Fecha</th>
                   <th>Precio de compra</th>
                   <th>Departamento</th>
                   <th>Municipio</th>
-                  <th>Nonbre del cliente</th>
+                  <th>Nombre del cliente</th>
                   <th>Apellido del cliente</th>
                   <th>Placa de vehículo</th>
                 </tr>

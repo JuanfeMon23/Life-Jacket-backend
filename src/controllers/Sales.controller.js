@@ -92,29 +92,42 @@ export const postSale = async (req, res) => {
 //Function to annular a sale
 export const statusSale = async (req, res) => {
     const { idSale } = req.params;
+
     try {
         const sale = await Sale.findByPk(idSale, {
-            include : [{
+            include: [{
                 model: Vehicle
             }]
         });
+
+        // Check if more than 20 days have passed since the sale date
+        const currentDate = new Date();
+        const saleDate = new Date(sale.saleDate);
+
+        const timeDifference = currentDate - saleDate;
+        const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+        if (daysDifference > 20) {
+            return res.status(400).json({ message: 'No puedes cambiar el estado de la venta después de 20 días' });
+        }
 
         //Update the status of the vehicle associated with the sale
         await sale.vehicle.update({
             vehicleStatus : "true"
         });
 
-        //Update the sale status
+        // Update status sale
         await sale.update({
-            saleStatus : "false"
+            saleStatus: "false"
         });
 
         return res.status(200).json({ message: 'Venta anulada con éxito' });
 
     } catch (error) {
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 };
+
 
 
 //Function to search for sales based on various attributes (date, department, municipality, vehicles and client's information, etc.)
@@ -155,9 +168,6 @@ export const searchSale = async (req, res) => {
     }
 };
 
-
-
-
 export const reportSale = async (req, res) => {
     //parameters
     const startDateSale = new Date(req.params.startDateSale);
@@ -185,7 +195,6 @@ export const reportSale = async (req, res) => {
         let salesRows = '';
         sale.forEach(s => {
           salesRows += `<tr>
-            <td>${s.idSale}</td>
             <td>${s.saleDate}</td>
             <td>${s.saleFinalPrice}</td>
             <td>${s.saleDepartment}</td>
@@ -198,30 +207,86 @@ export const reportSale = async (req, res) => {
         
         //code html
         const html = `
-          <html>
-            <head>
-              <style>
-                /* css */
-              </style>
-            </head>
-            <body>
-              <h1>Informe de ventas</h1>
-              <p>Fecha del reporte: ${new Date().toLocaleDateString()}</p>
-              <table>
-                <tr>
-                  <th>ID</th>
-                  <th>Fecha</th>
-                  <th>Precio de venta</th>
-                  <th>Departamento</th>
-                  <th>Municipio</th>
-                  <th>Nonbre del cliente</th>
-                  <th>Apellido del cliente</th>
-                  <th>Placa de vehículo</th>
-                </tr>
-                ${salesRows}
-              </table>
-            </body>
-          </html>
+        <html>
+        <head>
+          <style>
+            body {
+              font-family: 'Arial', sans-serif;
+              background-color: white;
+              color: black;
+              margin: 0;
+              padding: 0;
+            }
+      
+            header {
+              text-align: center;
+              margin-top: 20px;
+            }
+      
+            h1 {
+              font-size: 2rem;
+              font-weight: bold;
+              color: #000000;
+            }
+      
+            h2 {
+              margin-top: 10px;
+              font-size: 1.5rem;
+              color: #0D0628;
+              text-align: center;
+            }
+      
+            p {
+              color: #808080;
+              text-align: center;
+            }
+      
+            table {
+              border-collapse: collapse;
+              width: 100%;
+              margin-top: 20px;
+            }
+      
+            th, td {
+              border: 1px solid #27336F;
+              padding: 10px;
+              text-align: left;
+            }
+      
+            th {
+              background-color: #27336F;
+              color: white;
+            }
+      
+            tr:nth-child(even) {
+              background-color: white;
+            }
+      
+            tr:hover {
+              background-color: #f2f2f2;
+            }
+          </style>
+        </head>
+        <body>
+          <header>
+            <h2>LifeJacket</h2>
+            <h1>Informe de ventas</h1>
+            <p>Fecha del reporte: ${new Date().toLocaleDateString()}</p>
+          </header>
+          <table>
+            <tr>
+              <th>Fecha</th>
+              <th>Precio de venta</th>
+              <th>Departamento</th>
+              <th>Municipio</th>
+              <th>Nombre del cliente</th>
+              <th>Apellido del cliente</th>
+              <th>Placa de vehículo</th>
+            </tr>
+            ${salesRows}
+          </table>
+        </body>
+      </html>
         `;
         
         const options = { format: 'Letter' };
