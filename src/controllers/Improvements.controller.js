@@ -53,7 +53,7 @@ export const updateImprovements = async (req, res) => {
 
         // If the improvement is disable it cannot be edited 
         if(improvement.improvementStatus === "false") {
-            return res.status(400).json({ message: 'No puedes editar esta mejora porque se encuentra deshabilitada.' });
+            return res.status(400).json({ message: 'No puedes editar esta mejora porque se encuentra deshabilitada' });
         }
 
         improvement.improvementDescription = improvementDescription

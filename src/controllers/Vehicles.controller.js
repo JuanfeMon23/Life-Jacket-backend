@@ -15,6 +15,7 @@ import { othervehicleinformation } from "../models/Othervehicleinformations.mode
 import { Purchase } from "../models/Purchases.model.js";
 import { Sale } from "../models/Sales.model.js";
 import { Exchange } from "../models/Exchanges.model.js";
+import { ExchangesDetails } from "../models/ExchangesDetails.model.js";
 
 //Function to get vehicles the list of vehicles
 export const getVehicles = async (req, res) => {
@@ -91,6 +92,22 @@ export const postVehicle = async (req, res) => {
             fuel, traction, soat, technomechanics, timingBelt, business, series,
             motor, register, chassis, capacity, service, identificationCard
         } = req.body;
+
+        // Check if a vehicle with the same licensePlate already exists
+        const existingVehicle = await Vehicle.findOne({
+            where: {
+                licensePlate: licensePlate
+            }
+        });
+
+        // If a vehicle with the same licensePlate exists
+        if (existingVehicle) {
+            // Check if the existing vehicle is active (vehicleStatus is "true")
+            if (existingVehicle.vehicleStatus === "true") {
+                return res.status(400).json({ message: 'El vehículo con esta placa ya está registrado y activo' });
+            }
+            // If the existing vehicle is inactive, allow the creation of a new vehicle
+        };
 
         // Create a new vehicle and store its ID in a variable
         const newVehicle = await Vehicle.create({
@@ -188,6 +205,7 @@ export const updateVehicleAndOther = async (req, res) => {
         // Return a response with the new vehicle and other related information
         return res.status(200).json({ vehicle, other });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };
@@ -198,7 +216,21 @@ export const updateVehicleAndOther = async (req, res) => {
 export const statusVehicle = async (req, res) => {
     const { idVehicle } = req.params;
     try {
-        const vehicle = await Vehicle.findByPk(idVehicle)
+        const vehicle = await Vehicle.findByPk(idVehicle);
+
+        // If trying to change from false to true, check if there is already an active vehicle with the same licensePlate
+        if (vehicle.vehicleStatus === "false") {
+            const activeVehicleWithSameLicensePlate = await Vehicle.findOne({
+                where: {
+                    licensePlate: vehicle.licensePlate,
+                    vehicleStatus: "true"
+                }
+            });
+
+            if (activeVehicleWithSameLicensePlate) {
+                return res.status(400).json({ message: 'Ya hay un vehículo activo con la misma placa' });
+            }
+        }
 
         //Change of vehicle status and saving in the database       
         if (vehicle.vehicleStatus === "true") {
@@ -242,26 +274,24 @@ export const deleteVehicle = async (req, res) => {
 
         const vehicleOther = await othervehicleinformation.findOne({where: {idVehicleOtherVehicleInformation : idVehicle}});
 
-        // Count the number of sales, purchases and exchanges associated with the vehicle
-        const saleCount = await vehicle.countSales();
-        const purchaseCount = await vehicle.countPurchases();
-        const exchangeCount = await vehicle.countExchanges();
+        // Check if the vehicle has associated sales
+        const sale = await Sale.findOne({ where: { idVehicleSale: idVehicle } });
 
-        //Check if the vehicle has associated sales, purchases and exchanges and prevent deletion
-        if (saleCount > 0){
-            return res.status(400).json({ message :"No se puede eliminar un vehiculo con ventas asociadas"});
-        }
-        if (purchaseCount > 0){
-            return res.status(400).json({ message :"No se puede eliminar un vehiculo con compras asociadas"});
-        }
-        if (exchangeCount > 0){
-            return res.status(400).json({ message :"No se puede eliminar un vehiculo con intercambios asociados"});
+        // Check if the vehicle has associated purchases
+        const purchase = await Purchase.findOne({ where: { idVehiclePurchase: idVehicle } });
+
+        // Check if the vehicle has associated exchanges
+        const exchanges = await ExchangesDetails.findAll({ where: { idVehicleExchange: idVehicle } });
+
+        // Check if the vehicle has associated sales, purchases, or exchanges and prevent deletion
+        if (sale || purchase || exchanges.length > 0) {
+            return res.status(400).json({ message: "No se puede eliminar un vehiculo con ventas, compras o intercambios asociados" });
         }
         
         await vehicle.destroy();
         await vehicleOther.destroy();
         
-        res.json(vehicle);
+        return res.status(200).json({ message: 'Vehiculo eliminado con éxito' });
 
     } catch (error) {
         return res.status(500).json({message : error.message});

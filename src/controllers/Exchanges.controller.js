@@ -204,7 +204,7 @@ export const statusExchange = async (req, res) => {
         const daysDifference = timeDifference / (1000 * 3600 * 24);
 
         if (daysDifference > 20) {
-            return res.status(400).json({ message: 'No puedes cambiar el estado del intercambio después de 20 días.' });
+            return res.status(400).json({ message: 'No puedes cambiar el estado del intercambio después de 20 días' });
         }
 
         const exchangeDetails = await ExchangesDetails.findAll({
@@ -302,7 +302,6 @@ export const reportExchange = async (req, res) => {
         let exchangesRows = '';
         exchange.forEach(e => {
             exchangesRows += `<tr>
-            <td>${e.idExchange}</td>
             <td>${e.exchangeDate}</td>
             <td>${e.exchangeCashPrice}</td>
             <td>${e.exchangeDepartment}</td>
@@ -389,7 +388,6 @@ export const reportExchange = async (req, res) => {
             </header>
             <table>
                 <tr>
-                <th>ID</th>
                 <th>Fecha</th>
                 <th>Efectivo involucrado</th>
                 <th>Departamento</th>

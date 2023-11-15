@@ -108,7 +108,7 @@ export const statusSale = async (req, res) => {
         const daysDifference = timeDifference / (1000 * 3600 * 24);
 
         if (daysDifference > 20) {
-            return res.status(400).json({ message: 'No puedes cambiar el estado de la venta después de 20 días.' });
+            return res.status(400).json({ message: 'No puedes cambiar el estado de la venta después de 20 días' });
         }
 
         //Update the status of the vehicle associated with the sale
@@ -168,9 +168,6 @@ export const searchSale = async (req, res) => {
     }
 };
 
-
-
-
 export const reportSale = async (req, res) => {
     //parameters
     const startDateSale = new Date(req.params.startDateSale);
@@ -198,7 +195,6 @@ export const reportSale = async (req, res) => {
         let salesRows = '';
         sale.forEach(s => {
           salesRows += `<tr>
-            <td>${s.idSale}</td>
             <td>${s.saleDate}</td>
             <td>${s.saleFinalPrice}</td>
             <td>${s.saleDepartment}</td>
@@ -279,7 +275,6 @@ export const reportSale = async (req, res) => {
           </header>
           <table>
             <tr>
-              <th>ID</th>
               <th>Fecha</th>
               <th>Precio de venta</th>
               <th>Departamento</th>

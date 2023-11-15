@@ -103,7 +103,7 @@ export const statusPurchase = async (req, res) => {
         const daysDifference = timeDifference / (1000 * 3600 * 24);
 
         if (daysDifference > 20) {
-            return res.status(400).json({ message: 'No puedes cambiar el estado de la compra después de 20 días.' });
+            return res.status(400).json({ message: 'No puedes cambiar el estado de la compra después de 20 días' });
         }
 
         // Update status purchase
@@ -188,7 +188,6 @@ export const reportPurchase = async (req, res) => {
         let purchasesRows = '';
         purchase.forEach(p => {
           purchasesRows += `<tr>
-            <td>${p.idPurchase}</td>
             <td>${p.purchaseDate}</td>
             <td>${p.purchaseFinalPrice}</td>
             <td>${p.purchaseDepartment}</td>
@@ -269,7 +268,6 @@ export const reportPurchase = async (req, res) => {
               </header>
               <table>
                 <tr>
-                  <th>ID</th>
                   <th>Fecha</th>
                   <th>Precio de compra</th>
                   <th>Departamento</th>
