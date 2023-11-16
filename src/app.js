@@ -21,6 +21,7 @@ dotenv.config();
 const FRONTEND = process.env.FRONTEND;
 export const JWT_SECRET = process.env.JWT_SECRET
 
+
 const app = express();
 
 app.use(express.json());
