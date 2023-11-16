@@ -7,7 +7,7 @@
  */
 
 import {Router} from 'express';
-import {getSales, getSale, postSale, statusSale, searchSale , reportSale } from '../controllers/Sales.controller.js';
+import {getSales, getSale, postSale, statusSale, searchSale , reportSale, contractSale } from '../controllers/Sales.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
 
 
@@ -24,3 +24,5 @@ SaleRoutes.patch('/Sales/:idSale', requiredToken, statusSale);
 SaleRoutes.get('/Sales/SearchE/:search', requiredToken, searchSale);
 
 SaleRoutes.get('/Sales/Report/:startDateSale/:finalDateSale', requiredToken, reportSale); 
+
+SaleRoutes.get('/Sales/Contract/:idSale', requiredToken, contractSale); 

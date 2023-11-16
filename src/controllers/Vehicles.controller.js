@@ -172,7 +172,7 @@ export const updateVehicleAndOther = async (req, res) => {
         const other = await othervehicleinformation.findOne({ where: { idVehicleOtherVehicleInformation: idVehicle } });
 
         if(vehicle.vehicleStatus === "false"){
-            return res.status(400).json({ message : "No puedes editar un vehiculo deshabilitado"});
+            return res.status(400).json({ message : "No puedes editar un vehículo deshabilitado"});
         }
 
         vehicle.vehicleType = vehicleType;
@@ -284,13 +284,13 @@ export const deleteVehicle = async (req, res) => {
 
         // Check if the vehicle has associated sales, purchases, or exchanges and prevent deletion
         if (sale || purchase || exchanges.length > 0) {
-            return res.status(400).json({ message: "No se puede eliminar un vehiculo con ventas, compras o intercambios asociados" });
+            return res.status(400).json({ message: "No se puede eliminar un vehículo con ventas, compras o intercambios asociados" });
         }
         
         await vehicle.destroy();
         await vehicleOther.destroy();
         
-        return res.status(200).json({ message: 'Vehiculo eliminado con éxito' });
+        return res.status(200).json({ message: 'Vehículo eliminado con éxito' });
 
     } catch (error) {
         return res.status(500).json({message : error.message});

@@ -158,9 +158,7 @@ export const searchPurchase = async (req, res) => {
 };
 
 
-
-
-
+//function to download pdf file with purchases report
 export const reportPurchase = async (req, res) => {
     //parameters
     const startDatePurchase = new Date(req.params.startDatePurchase);
@@ -293,6 +291,84 @@ export const reportPurchase = async (req, res) => {
             //send the stream to the client
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', 'attachment; filename=reporteCompra.pdf');
+            stream.pipe(res);
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+
+//function to download pdf file with purchase contract
+export const contractPurchase = async (req, res) => {
+    const { idPurchase } = req.params;
+
+    try {
+        const purchase = await Purchase.findByPk(idPurchase, {
+            include: [
+                {
+                    model: Client,
+                },
+                {
+                    model: Vehicle,
+                },
+            ],
+        });
+
+        //Create html with the purchase information
+        const html = `
+        <html>
+        <body>
+
+            ${purchase.purchaseDate}
+            ${purchase.purchaseFinalPrice}
+            ${purchase.purchaseDepartment}
+            ${purchase.purchaseMunicipality}
+            ${purchase.purchaseLimitations}
+            ${purchase.purchasePecuniaryPenalty}
+
+            
+            ${purchase.client.clientTypeDocument}
+            ${purchase.client.clientDocument}
+            ${purchase.client.clientName}
+            ${purchase.client.clientLastName}
+            ${purchase.client.clientDepartment}
+            ${purchase.client.clientMunicipality}
+            ${purchase.client.clientAddress}
+            ${purchase.client.clientPhoneNumber}
+            ${purchase.client.clientOtherContact}
+            ${purchase.client.clientOtherPhoneNumber}
+
+            ${purchase.vehicle.licensePlate}
+            ${purchase.vehicle.vehicleType}
+            ${purchase.vehicle.brand}
+            ${purchase.vehicle.model}
+            ${purchase.vehicle.type}
+            ${purchase.vehicle.line}
+            ${purchase.vehicle.color}
+            ${purchase.vehicle.business}
+            ${purchase.vehicle.series}
+            ${purchase.vehicle.motor}
+            ${purchase.vehicle.register}
+            ${purchase.vehicle.chassis}
+            ${purchase.vehicle.capacity}
+            ${purchase.vehicle.service}
+            ${purchase.vehicle.identificationCard}
+            
+        </body>
+        </html> 
+        `;
+
+        const options = { format: 'Letter' };
+        
+        //generates the PDF and saves it to the file
+        pdf.create(html, options).toStream(function(err, stream) {
+            if (err) {
+              return res.status(500).json({ message: err.message });
+            }
+            //send the stream to the client
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=contratoCompra.pdf');
             stream.pipe(res);
         });
     } catch (error) {

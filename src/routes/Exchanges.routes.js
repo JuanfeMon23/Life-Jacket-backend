@@ -7,26 +7,28 @@
  */
 
 import {Router} from 'express';
-import {getExchanges, getExchange, postExchange, updateExchange, postExchangeDetail, deleteExchangeDetail, cancelExchange, statusExchange, searchExchange, reportExchange } from '../controllers/Exchanges.controller.js';
-import { requiredToken } from '../middlewares/validatingToken.js';
+import {getExchanges, getExchange, postExchange, updateExchange, postExchangeDetail, deleteExchangeDetail, cancelExchange, statusExchange, searchExchange, reportExchange, contractExchange } from '../controllers/Exchanges.controller.js';
+
 export const ExchangeRoutes = Router();
 
-ExchangeRoutes.get('/Exchange', requiredToken , getExchanges);
+ExchangeRoutes.get('/Exchange',  getExchanges);
 
-ExchangeRoutes.get('/Exchange/:idExchange', requiredToken , getExchange);
+ExchangeRoutes.get('/Exchange/:idExchange',  getExchange);
 
-ExchangeRoutes.post('/Exchange', requiredToken , postExchange);
+ExchangeRoutes.post('/Exchange',  postExchange);
 
-ExchangeRoutes.put('/Exchange/:idExchange', requiredToken , updateExchange);
+ExchangeRoutes.put('/Exchange/:idExchange',  updateExchange);
 
-ExchangeRoutes.post('/Exchange/:idExchange', requiredToken , postExchangeDetail);
+ExchangeRoutes.post('/Exchange/:idExchange', postExchangeDetail);
 
-ExchangeRoutes.delete('/Exchange/Cancel/:idExchange', requiredToken , cancelExchange);
+ExchangeRoutes.delete('/Exchange/Cancel/:idExchange',  cancelExchange);
 
-ExchangeRoutes.delete('/Exchange/Detail/:idExchangeDetail', requiredToken , deleteExchangeDetail);
+ExchangeRoutes.delete('/Exchange/Detail/:idExchangeDetail', deleteExchangeDetail);
 
-ExchangeRoutes.patch('/Exchange/:idExchange', requiredToken , statusExchange);
+ExchangeRoutes.patch('/Exchange/:idExchange', statusExchange);
 
-ExchangeRoutes.get('/Exchange/SearchE/:search', requiredToken , searchExchange);
+ExchangeRoutes.get('/Exchange/SearchE/:search', searchExchange);
 
-ExchangeRoutes.get('/Exchange/Report/:startDateExchange/:finalDateExchange', requiredToken , reportExchange); 
+ExchangeRoutes.get('/Exchange/Report/:startDateExchange/:finalDateExchange', reportExchange); 
+
+ExchangeRoutes.get('/Exchange/Report/:idExchange', contractExchange); 

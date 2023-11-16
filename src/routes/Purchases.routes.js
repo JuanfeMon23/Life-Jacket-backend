@@ -7,7 +7,7 @@
  */
 
 import {Router} from 'express';
-import {getPurchases, getPurchase, postPurchase, statusPurchase, searchPurchase, reportPurchase } from '../controllers/Purchases.controller.js';
+import {getPurchases, getPurchase, postPurchase, statusPurchase, searchPurchase, reportPurchase, contractPurchase } from '../controllers/Purchases.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
 
 export const PurchaseRoutes = Router();
@@ -23,3 +23,5 @@ PurchaseRoutes.patch('/Purchases/:idPurchase', requiredToken , statusPurchase);
 PurchaseRoutes.get('/Purchases/SearchE/:search', requiredToken , searchPurchase);
 
 PurchaseRoutes.get('/Purchases/Report/:startDatePurchase/:finalDatePurchase', requiredToken , reportPurchase); 
+
+PurchaseRoutes.get('/Purchases/Contract/:idPurchase', requiredToken, contractPurchase); 

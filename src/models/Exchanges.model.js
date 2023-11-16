@@ -51,9 +51,9 @@ export const Exchange = sequelize.define('exchanges', {
         } 
     },
     exchangeCashPriceStatus: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.STRING,
       allowNull : false,
-      defaultValue : true
+      defaultValue : "true"
     },
     exchangeLimitations: {
         type: DataTypes.STRING(200),

@@ -168,6 +168,8 @@ export const searchSale = async (req, res) => {
     }
 };
 
+
+//function to download pdf file with sales report
 export const reportSale = async (req, res) => {
     //parameters
     const startDateSale = new Date(req.params.startDateSale);
@@ -299,6 +301,84 @@ export const reportSale = async (req, res) => {
             //send the stream to the client
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', 'attachment; filename=reporteVenta.pdf');
+            stream.pipe(res);
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+
+//function to download pdf file with sale contract
+export const contractSale = async (req, res) => {
+    const { idSale } = req.params;
+
+    try {
+        const sale = await Sale.findByPk(idSale, {
+            include: [
+                {
+                    model: Client,
+                },
+                {
+                    model: Vehicle,
+                },
+            ],
+        });
+
+        //Create html with the sale information
+        const html = `
+        <html>
+        <body>
+
+            ${sale.saleDate}
+            ${sale.saleFinalPrice}
+            ${sale.saleDepartment}
+            ${sale.saleMunicipality}
+            ${sale.saleLimitations}
+            ${sale.salePecuniaryPenalty}
+
+            
+            ${sale.client.clientTypeDocument}
+            ${sale.client.clientDocument}
+            ${sale.client.clientName}
+            ${sale.client.clientLastName}
+            ${sale.client.clientDepartment}
+            ${sale.client.clientMunicipality}
+            ${sale.client.clientAddress}
+            ${sale.client.clientPhoneNumber}
+            ${sale.client.clientOtherContact}
+            ${sale.client.clientOtherPhoneNumber}
+
+            ${sale.vehicle.licensePlate}
+            ${sale.vehicle.vehicleType}
+            ${sale.vehicle.brand}
+            ${sale.vehicle.model}
+            ${sale.vehicle.type}
+            ${sale.vehicle.line}
+            ${sale.vehicle.color}
+            ${sale.vehicle.business}
+            ${sale.vehicle.series}
+            ${sale.vehicle.motor}
+            ${sale.vehicle.register}
+            ${sale.vehicle.chassis}
+            ${sale.vehicle.capacity}
+            ${sale.vehicle.service}
+            ${sale.vehicle.identificationCard}
+            
+        </body>
+        </html> 
+        `;
+
+        const options = { format: 'Letter' };
+        
+        //generates the PDF and saves it to the file
+        pdf.create(html, options).toStream(function(err, stream) {
+            if (err) {
+              return res.status(500).json({ message: err.message });
+            }
+            //send the stream to the client
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=contratoVenta.pdf');
             stream.pipe(res);
         });
     } catch (error) {

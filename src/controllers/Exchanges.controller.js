@@ -120,7 +120,7 @@ export const postExchangeDetail = async (req, res) => {
     try {
         const {idVehicleExchange, vehicleStatusExchange} = req.body;
 
-        const vehicle = await Vehicle.findById(idVehicleExchange)
+        const vehicle = await Vehicle.findByPk(idVehicleExchange)
         
         const newExchangeDetail = await ExchangesDetails.create({
             idExchangeVehicle: idExchange, 
@@ -275,6 +275,8 @@ export const searchExchange = async (req, res) => {
     }
 };
 
+
+//function to download pdf file with exchanges report
 export const reportExchange = async (req, res) => {
     //parameters
     const startDateExchange = new Date(req.params.startDateExchange);
@@ -423,4 +425,116 @@ export const reportExchange = async (req, res) => {
 };
 
 
+//function to download pdf file with exchange contract
+export const contractExchange = async (req, res) => {
+    const { idExchange } = req.params;
 
+    try {
+        const exchange = await Exchange.findAll({
+            where: {
+                idExchange
+            },
+            //include exchanges related models
+            include: [
+                {
+                    model: Client
+                },
+                {
+                    model: Vehicle,
+                    as: 'vehiclesExchange' //Includes the vehicles that are part of the exchange detail
+                }
+            ]
+        });
+
+        
+        //Create html with the exchange information
+        const html = `
+        <html>
+        <body>
+
+            ${exchange.exchangeDate}
+            ${exchange.exchangeCashPrice}
+            ${exchange.exchangeCashPriceStatus}
+            ${exchange.exchangeLimitations}
+            ${exchange.exchangeDepartment}
+            ${exchange.exchangeMunicipality}
+            ${exchange.exchangePecuniaryPenalty}
+
+            
+            ${exchange.client.clientTypeDocument}
+            ${exchange.client.clientDocument}
+            ${exchange.client.clientName}
+            ${exchange.client.clientLastName}
+            ${exchange.client.clientDepartment}
+            ${exchange.client.clientMunicipality}
+            ${exchange.client.clientAddress}
+            ${exchange.client.clientPhoneNumber}
+            ${exchange.client.clientOtherContact}
+            ${exchange.client.clientOtherPhoneNumber}
+
+
+            ${sale.vehicle.licensePlate}
+            ${sale.vehicle.vehicleType}
+            ${sale.vehicle.brand}
+            ${sale.vehicle.model}
+            ${sale.vehicle.type}
+            ${sale.vehicle.line}
+            ${sale.vehicle.color}
+            ${sale.vehicle.business}
+            ${sale.vehicle.series}
+            ${sale.vehicle.motor}
+            ${sale.vehicle.register}
+            ${sale.vehicle.chassis}
+            ${sale.vehicle.capacity}
+            ${sale.vehicle.service}
+            ${sale.vehicle.identificationCard}
+
+            <table border="1">
+            <tr>
+                <th>ID</th>
+                <th>Modelo</th>
+                <th>Marca</th>
+                <!-- Agrega más encabezados según tus campos -->
+            </tr>
+            ${exchange[0].vehiclesExchange.map(vehicle => `
+                <tr>
+                    <td>${vehicle.licensePlate}</td>
+                    <td>${vehicle.vehicleType}</td>
+                    <td>${vehicle.brand}</td>
+                    <td>${vehicle.model}</td>
+                    <td>${vehicle.type}</td>
+                    <td>${vehicle.line}</td>
+                    <td>${vehicle.color}</td>
+                    <td>${vehicle.business}</td>
+                    <td>${vehicle.series}</td>
+                    <td>${vehicle.motor}</td>
+                    <td>${vehicle.register}</td>
+                    <td>${vehicle.chassis}</td>
+                    <td>${vehicle.capacity}</td>
+                    <td>${vehicle.service}</td>
+                    <td>${vehicle.identificationCard}</td>
+                    
+                </tr>
+            `).join('')}
+        </table>
+            
+        </body>
+        </html> 
+        `;
+
+        const options = { format: 'Letter' };
+        
+        //generates the PDF and saves it to the file
+        pdf.create(html, options).toStream(function(err, stream) {
+            if (err) {
+              return res.status(500).json({ message: err.message });
+            }
+            //send the stream to the client
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename=contratoCambio.pdf');
+            stream.pipe(res);
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};

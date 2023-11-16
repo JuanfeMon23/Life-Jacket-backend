@@ -107,7 +107,7 @@ export const updateUser = async (req,res) => {
         // Search for the user by their ID
         const user = await User.findByPk(idUser)
 
-        if(user.userStatus === false){
+        if(user.userStatus === "false"){
             return res.status(400).json({ message : 'No puedes editar un usuario deshabilitado'});
         }
 
@@ -128,49 +128,65 @@ export const updateUser = async (req,res) => {
     }
 };
 
-//Function to change the status (enabled/disabled) of a user
 export const statusUser = async (req, res) => {
     const { idUser } = req.params;
     try {
-        const user = await User.findByPk(idUser,{
-            include : {
-                model : Roles
+        const user = await User.findByPk(idUser, {
+            include: {
+                model: Roles
             }
-        })
+        });
 
-        if (user.Role.rolName === "Administrador" || "administrador" ){
-            return res.status(400).json({ message :"No se puede eliminar el usuario con rol de administrador"});
+        const adminUsers = await User.count({
+            where: {
+                '$Role.rolName$': 'Administrador',
+                userStatus: 'true'
+            },
+            include: {
+                model: Roles
+            }
+        });
+
+        if (user.Role.rolName === "Administrador" || "administrador" && adminUsers <= 1) {
+            return res.status(400).json({ message: "No se puede deshabilitar el único administrador activo" });
         }
 
-        //Change of user status and saving in the database
-        if(user.userStatus === 'true'){
-            user.userStatus = 'false'
-        } else if(user.userStatus === 'false'){
-            user.userStatus = 'true'
-        }
-
+        user.userStatus = user.userStatus === 'true' ? 'false' : 'true';
         await user.save();
         res.json(user);
 
     } catch (error) {
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 };
 
-//Function to delete a user
-export const deleteUser = async (req,res) => {
-    const {idUser} = req.params;
+export const deleteUser = async (req, res) => {
+    const { idUser } = req.params;
     try {
-        const user = await User.findByPk(idUser)
+        const user = await User.findByPk(idUser);
+
+        const adminUsers = await User.count({
+            where: {
+                '$Role.rolName$': 'Administrador',
+                userStatus: 'true'
+            },
+            include: {
+                model: Roles
+            }
+        });
+
+        if (user.Role.rolName === "Administrador" && adminUsers <= 1) {
+            return res.status(400).json({ message: "No se puede eliminar el único administrador activo" });
+        }
 
         await user.destroy();
-        console.log(user)
 
         return res.sendStatus(204);
     } catch (error) {
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 };
+
 
 
 //Function to search for clients based on various attributes (name and email)
