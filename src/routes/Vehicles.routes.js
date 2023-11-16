@@ -9,26 +9,27 @@
 import { Router } from "express";
 import { getVehicles, getVehicle, postVehicle, updateVehicleAndOther, statusVehicle, getSearchVehicle, deleteVehicle} from '../controllers/Vehicles.controller.js'
 import { requiredToken } from '../middlewares/validatingToken.js';
+import { hasLicenses } from "../middlewares/Licenses.js";
 
 
 export const VehiclesRoutes = Router();
 
 //Get 
-VehiclesRoutes.get('/Vehicles', requiredToken,  getVehicles);
+VehiclesRoutes.get('/Vehicles', requiredToken, hasLicenses(['Vehiculos']) ,  getVehicles);
 
 //GetOne and OtherInformation
-VehiclesRoutes.get('/Vehicles/:idVehicle', requiredToken, getVehicle);
+VehiclesRoutes.get('/Vehicles/:idVehicle', requiredToken, hasLicenses(['Vehiculos']) ,  getVehicle);
 
 //Create
-VehiclesRoutes.post('/Vehicles', requiredToken, postVehicle);
+VehiclesRoutes.post('/Vehicles', requiredToken, hasLicenses(['Vehiculos']) , postVehicle);
 
 //Update
-VehiclesRoutes.put('/Vehicles/:idVehicle', requiredToken, updateVehicleAndOther); 
+VehiclesRoutes.put('/Vehicles/:idVehicle', requiredToken, hasLicenses(['Vehiculos']) , updateVehicleAndOther); 
 
 //Disable
-VehiclesRoutes.patch('/Vehicles/:idVehicle', requiredToken, statusVehicle);
+VehiclesRoutes.patch('/Vehicles/:idVehicle', requiredToken, hasLicenses(['Vehiculos']) , statusVehicle);
 //Get Search
-VehiclesRoutes.get('/Vehicles/SearchE/:search', requiredToken, getSearchVehicle)
+VehiclesRoutes.get('/Vehicles/SearchE/:search', requiredToken, hasLicenses(['Vehiculos']) , getSearchVehicle)
 
 //Delete
-VehiclesRoutes.delete('/Vehicles/:idVehicle', requiredToken, deleteVehicle)
+VehiclesRoutes.delete('/Vehicles/:idVehicle', requiredToken, hasLicenses(['Vehiculos']) , deleteVehicle)

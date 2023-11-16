@@ -9,19 +9,20 @@
 import {Router} from 'express';
 import {getPurchases, getPurchase, postPurchase, statusPurchase, searchPurchase, reportPurchase, contractPurchase } from '../controllers/Purchases.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
+import { hasLicenses } from '../middlewares/Licenses.js';
 
 export const PurchaseRoutes = Router();
 
-PurchaseRoutes.get('/Purchases', requiredToken , getPurchases);
+PurchaseRoutes.get('/Purchases', requiredToken , hasLicenses(['Compras']) , getPurchases);
 
-PurchaseRoutes.get('/Purchases/:idPurchase', requiredToken , getPurchase);
+PurchaseRoutes.get('/Purchases/:idPurchase', requiredToken , hasLicenses(['Compras']) , getPurchase);
 
-PurchaseRoutes.post('/Purchases', requiredToken , postPurchase);
+PurchaseRoutes.post('/Purchases', requiredToken , hasLicenses(['Compras']) , postPurchase);
 
-PurchaseRoutes.patch('/Purchases/:idPurchase', requiredToken , statusPurchase);
+PurchaseRoutes.patch('/Purchases/:idPurchase', requiredToken , hasLicenses(['Compras']) , statusPurchase);
 
-PurchaseRoutes.get('/Purchases/SearchE/:search', requiredToken , searchPurchase);
+PurchaseRoutes.get('/Purchases/SearchE/:search', requiredToken , hasLicenses(['Compras']) , searchPurchase);
 
-PurchaseRoutes.get('/Purchases/Report/:startDatePurchase/:finalDatePurchase', requiredToken , reportPurchase); 
+PurchaseRoutes.get('/Purchases/Report/:startDatePurchase/:finalDatePurchase', requiredToken, hasLicenses(['Compras']) , reportPurchase); 
 
 PurchaseRoutes.get('/Purchases/Contract/:idPurchase', requiredToken, contractPurchase); 

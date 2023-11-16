@@ -218,10 +218,16 @@ export const Login =  async (req,res) => {
         const Match = await bcrypts.compare(userPassword,foundUser.userPassword);
         if (!Match) return res.status(400).json({ message : 'Contraseña incorrecta' });
 
+        const role = await Roles.findByPk(foundUser.idRolUser, {
+            include: License
+          });
+
         const token = await createAccesToken({
             idUser : foundUser.idUser,
             userEmail : foundUser.userEmail,
-            userName : foundUser.userName
+            userName : foundUser.userName,
+            Role : role,
+            Licenses: role.Licenses.map(license => license.licenseName)
         });
 
         res.cookie("token", token, {

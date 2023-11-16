@@ -9,20 +9,21 @@
 import {Router} from 'express';
 import {getSales, getSale, postSale, statusSale, searchSale , reportSale, contractSale } from '../controllers/Sales.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
+import { hasLicenses } from '../middlewares/Licenses.js';
 
 
 export const SaleRoutes = Router();
 
-SaleRoutes.get('/Sales', requiredToken, getSales);
+SaleRoutes.get('/Sales', requiredToken, hasLicenses(['Ventas']) , getSales);
 
-SaleRoutes.get('/Sales/:idSale', requiredToken, getSale);
+SaleRoutes.get('/Sales/:idSale', requiredToken, hasLicenses(['Ventas']) , getSale);
 
-SaleRoutes.post('/Sales', requiredToken, postSale);
+SaleRoutes.post('/Sales', requiredToken, hasLicenses(['Ventas']) , postSale);
 
-SaleRoutes.patch('/Sales/:idSale', requiredToken, statusSale);
+SaleRoutes.patch('/Sales/:idSale', requiredToken, hasLicenses(['Ventas']) , statusSale);
 
-SaleRoutes.get('/Sales/SearchE/:search', requiredToken, searchSale);
+SaleRoutes.get('/Sales/SearchE/:search', requiredToken, hasLicenses(['Ventas']) , searchSale);
 
-SaleRoutes.get('/Sales/Report/:startDateSale/:finalDateSale', requiredToken, reportSale); 
+SaleRoutes.get('/Sales/Report/:startDateSale/:finalDateSale', requiredToken, hasLicenses(['Ventas']) , reportSale); 
 
 SaleRoutes.get('/Sales/Contract/:idSale', requiredToken, contractSale); 
