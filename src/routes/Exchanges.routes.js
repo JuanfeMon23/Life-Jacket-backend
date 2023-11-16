@@ -9,24 +9,26 @@
 import {Router} from 'express';
 import {getExchanges, getExchange, postExchange, updateExchange, postExchangeDetail, deleteExchangeDetail, cancelExchange, statusExchange, searchExchange, reportExchange } from '../controllers/Exchanges.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
+import { hasLicenses } from '../middlewares/Licenses.js';
+
 export const ExchangeRoutes = Router();
 
-ExchangeRoutes.get('/Exchange', requiredToken , getExchanges);
+ExchangeRoutes.get('/Exchange', requiredToken , hasLicenses(['Cambios']) , getExchanges);
 
-ExchangeRoutes.get('/Exchange/:idExchange', requiredToken , getExchange);
+ExchangeRoutes.get('/Exchange/:idExchange', requiredToken , hasLicenses(['Cambios']) , getExchange);
 
-ExchangeRoutes.post('/Exchange', requiredToken , postExchange);
+ExchangeRoutes.post('/Exchange', requiredToken , hasLicenses(['Cambios']) , postExchange);
 
-ExchangeRoutes.put('/Exchange/:idExchange', requiredToken , updateExchange);
+ExchangeRoutes.put('/Exchange/:idExchange', requiredToken , hasLicenses(['Cambios']) , updateExchange);
 
-ExchangeRoutes.post('/Exchange/:idExchange', requiredToken , postExchangeDetail);
+ExchangeRoutes.post('/Exchange/:idExchange', requiredToken , hasLicenses(['Cambios']) , postExchangeDetail);
 
-ExchangeRoutes.delete('/Exchange/Cancel/:idExchange', requiredToken , cancelExchange);
+ExchangeRoutes.delete('/Exchange/Cancel/:idExchange', requiredToken , hasLicenses(['Cambios']) , cancelExchange);
 
-ExchangeRoutes.delete('/Exchange/Detail/:idExchangeDetail', requiredToken , deleteExchangeDetail);
+ExchangeRoutes.delete('/Exchange/Detail/:idExchangeDetail', requiredToken , hasLicenses(['Cambios']) , deleteExchangeDetail);
 
-ExchangeRoutes.patch('/Exchange/:idExchange', requiredToken , statusExchange);
+ExchangeRoutes.patch('/Exchange/:idExchange', requiredToken , hasLicenses(['Cambios']) , statusExchange);
 
-ExchangeRoutes.get('/Exchange/SearchE/:search', requiredToken , searchExchange);
+ExchangeRoutes.get('/Exchange/SearchE/:search', requiredToken , hasLicenses(['Cambios']) , searchExchange);
 
-ExchangeRoutes.get('/Exchange/Report/:startDateExchange/:finalDateExchange', requiredToken , reportExchange); 
+ExchangeRoutes.get('/Exchange/Report/:startDateExchange/:finalDateExchange', requiredToken , hasLicenses(['Cambios']) , reportExchange); 
