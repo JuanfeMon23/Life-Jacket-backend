@@ -9,17 +9,18 @@
 import {Router} from 'express';
 import {getClients, postClient, updateClient, deleteClient, statusClient, searchClient} from '../controllers/Clients.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
+import { hasLicenses } from '../middlewares/Licenses.js';
 
 export const ClientRoutes = Router();
 
-ClientRoutes.get('/Clients', requiredToken , getClients);
+ClientRoutes.get('/Clients', requiredToken , hasLicenses(['Clientes']) , getClients);
 
-ClientRoutes.post('/Clients', requiredToken , postClient);
+ClientRoutes.post('/Clients', requiredToken , hasLicenses(['Clientes']), postClient);
 
-ClientRoutes.put('/Clients/:idClient', requiredToken , updateClient);
+ClientRoutes.put('/Clients/:idClient', requiredToken , hasLicenses(['Clientes']),  updateClient);
 
-ClientRoutes.delete('/Clients/:idClient',requiredToken , deleteClient);
+ClientRoutes.delete('/Clients/:idClient',requiredToken , hasLicenses(['Clientes']),  deleteClient);
 
-ClientRoutes.patch('/Clients/:idClient',requiredToken , statusClient);
+ClientRoutes.patch('/Clients/:idClient',requiredToken , hasLicenses(['Clientes']),  statusClient);
 
-ClientRoutes.get('/Clients/SearchE/:search',requiredToken , searchClient);
+ClientRoutes.get('/Clients/SearchE/:search',requiredToken , hasLicenses(['Clientes']),  searchClient);

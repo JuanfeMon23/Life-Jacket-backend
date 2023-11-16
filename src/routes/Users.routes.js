@@ -9,13 +9,14 @@
 import {Router} from 'express';
 import { getUsers , postUser, updateUser, deleteUser,getUser, userSearch, statusUser } from '../controllers/Users.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
+import { hasLicenses } from '../middlewares/Licenses.js';
 export const UserRoutes = Router();
 
-UserRoutes.get('/Users',   getUsers);
-UserRoutes.post('/Users',  postUser),
-UserRoutes.put('/Users/:idUser', requiredToken,  updateUser);
-UserRoutes.delete('/Users/:idUser', requiredToken, deleteUser);
-UserRoutes.get('/Users/:idUser', requiredToken, getUser);
-UserRoutes.get('/Users/SearchE/:search', requiredToken, userSearch);
-UserRoutes.patch('/UserS/:idUser', requiredToken, statusUser);
+UserRoutes.get('/Users', requiredToken,  hasLicenses(['Usuarios']) ,  getUsers);
+UserRoutes.post('/Users', requiredToken, hasLicenses(['Usuarios']) ,  postUser),
+UserRoutes.put('/Users/:idUser', requiredToken, hasLicenses(['Usuarios']) ,  updateUser);
+UserRoutes.delete('/Users/:idUser', requiredToken, hasLicenses(['Usuarios']) , deleteUser);
+UserRoutes.get('/Users/:idUser', requiredToken, hasLicenses(['Usuarios']) , getUser);
+UserRoutes.get('/Users/SearchE/:search', requiredToken, hasLicenses(['Usuarios']) , userSearch);
+UserRoutes.patch('/UserS/:idUser', requiredToken, hasLicenses(['Usuarios']) , statusUser);
 
