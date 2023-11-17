@@ -15,21 +15,21 @@ import { hasLicenses } from "../middlewares/Licenses.js";
 export const VehiclesRoutes = Router();
 
 //Get 
-VehiclesRoutes.get('/Vehicles', requiredToken, hasLicenses(['Vehiculos']) ,  getVehicles);
+VehiclesRoutes.get('/Vehicles', getVehicles);
 
 //GetOne and OtherInformation
-VehiclesRoutes.get('/Vehicles/:idVehicle', requiredToken, hasLicenses(['Vehiculos']) ,  getVehicle);
+VehiclesRoutes.get('/Vehicles/:idVehicle', getVehicle);
 
 //Create
-VehiclesRoutes.post('/Vehicles', requiredToken, hasLicenses(['Vehiculos']) , postVehicle);
+VehiclesRoutes.post('/Vehicles', postVehicle);
 
 //Update
-VehiclesRoutes.put('/Vehicles/:idVehicle', requiredToken, hasLicenses(['Vehiculos']) , updateVehicleAndOther); 
+VehiclesRoutes.put('/Vehicles/:idVehicle', updateVehicleAndOther); 
 
 //Disable
-VehiclesRoutes.patch('/Vehicles/:idVehicle', requiredToken, hasLicenses(['Vehiculos']) , statusVehicle);
+VehiclesRoutes.patch('/Vehicles/:idVehicle', statusVehicle);
 //Get Search
-VehiclesRoutes.get('/Vehicles/SearchE/:search', requiredToken, hasLicenses(['Vehiculos']) , getSearchVehicle)
+VehiclesRoutes.get('/Vehicles/SearchE/:search', getSearchVehicle)
 
 //Delete
-VehiclesRoutes.delete('/Vehicles/:idVehicle', requiredToken, hasLicenses(['Vehiculos']) , deleteVehicle)
+VehiclesRoutes.delete('/Vehicles/:idVehicle', deleteVehicle)

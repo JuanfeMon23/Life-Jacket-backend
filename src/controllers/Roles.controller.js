@@ -99,7 +99,7 @@ export const deleteRol = async (req,res) => {
             return res.status(400).json({ message :"No se puede eliminar un rol con usuarios asociados"});
         }
 
-        if (rol.rolName === "Administrador" || "administrador" ){
+        if (rol.rolName === "Administrador" || rol.rolName === "administrador" ){
             return res.status(400).json({ message :"No se puede eliminar el rol de administrador"});
         }
 

@@ -13,6 +13,7 @@ import {Vehicle} from '../models/Vehicles.model.js';
 import pdf from 'html-pdf';
 import { Op } from 'sequelize';
 import app from '../app.js';
+import { othervehicleinformation } from '../models/Othervehicleinformations.model.js';
 
 //Function to get the list of purchases
 export const getPurchases = async (req, res) => {
@@ -311,9 +312,17 @@ export const contractPurchase = async (req, res) => {
                 },
                 {
                     model: Vehicle,
+                    include: [
+                        {
+                            model: othervehicleinformation,
+
+                        }
+                    ]
                 },
             ],
         });
+
+        
 
         //Create html with the purchase information
         const html = `
@@ -346,14 +355,14 @@ export const contractPurchase = async (req, res) => {
             ${purchase.vehicle.type}
             ${purchase.vehicle.line}
             ${purchase.vehicle.color}
-            ${purchase.vehicle.business}
-            ${purchase.vehicle.series}
-            ${purchase.vehicle.motor}
-            ${purchase.vehicle.register}
-            ${purchase.vehicle.chassis}
-            ${purchase.vehicle.capacity}
-            ${purchase.vehicle.service}
-            ${purchase.vehicle.identificationCard}
+            ${purchase.vehicle.othervehicleinformation.business}
+            ${purchase.vehicle.othervehicleinformation.series}
+            ${purchase.vehicle.othervehicleinformation.motor}
+            ${purchase.vehicle.othervehicleinformation.register}
+            ${purchase.vehicle.othervehicleinformation.chassis}
+            ${purchase.vehicle.othervehicleinformation.capacity}
+            ${purchase.vehicle.othervehicleinformation.service}
+            ${purchase.vehicle.othervehicleinformation.identificationCard}
             
         </body>
         </html> 

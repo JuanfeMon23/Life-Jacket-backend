@@ -12,7 +12,9 @@ import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
 import {Improvements} from '../models/Improvements.model.js';
 import { Purchase } from '../models/Purchases.model.js';
+import { User } from '../models/Users.model.js';
 import {ExchangesDetails} from '../models/ExchangesDetails.model.js';
+import { othervehicleinformation } from '../models/Othervehicleinformations.model.js';
 import pdf from 'html-pdf';
 import { Op } from 'sequelize';
 import app from '../app.js';
@@ -430,10 +432,7 @@ export const contractExchange = async (req, res) => {
     const { idExchange } = req.params;
 
     try {
-        const exchange = await Exchange.findAll({
-            where: {
-                idExchange
-            },
+        const exchange = await Exchange.findByPk(idExchange, {
             //include exchanges related models
             include: [
                 {
@@ -441,18 +440,127 @@ export const contractExchange = async (req, res) => {
                 },
                 {
                     model: Vehicle,
-                    as: 'vehiclesExchange' //Includes the vehicles that are part of the exchange detail
+                    as: 'vehiclesExchange',
+                    include: [
+                        {
+                            model: othervehicleinformation,
+
+                        }
+                    ]
                 }
             ]
         });
 
+        const user = await User.findOne({
+            where: {
+                userDocument : process.env.DOCUMENT
+            },
+        });
+
+        if (!user) {
+            return res.status(200).json({ message: 'No puedes descargar el contrato ya que la persona encargada del intercambio no se encuentra registrada en usuarios' });
+        }
+        
+
+        function addZeroPrefix(number) {
+            return number < 10 ? '0' + number : number;
+        }
+
+        const date = exchange.exchangeDate;
+        const formattedDate = `${addZeroPrefix(date.getDate())}/${addZeroPrefix(date.getMonth() + 1)}/${date.getFullYear()} ${addZeroPrefix(date.getHours())}:${addZeroPrefix(date.getMinutes())}`;
         
         //Create html with the exchange information
         const html = `
         <html>
+        <style>
+                body {
+                    border: 2px solid black; 
+                    padding: 10px; 
+                    margin: 25px; 
+                    border-radius: 10px; 
+                    font-family: sans-serif;
+                }
+                h1 {
+                    color: black; 
+                    font-weight: 700; 
+                    font-size: 22px ;
+                    text-align: center;
+                    margin-bottom: 15px;
+                    margin-top: 20px; 
+                }
+                .content {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    margin-left: 180vh;
+                    margin-bottom: 7vh;
+                }
+                .date-box {
+                    display: flex;
+                    align-items: center;
+                }
+                .date-part {
+                    border: 1px solid #000;
+                    padding: 3px;
+                    box-sizing: border-box;
+                    display: inline-block;
+                }
+                .contenttwo {
+                    display: flex;
+                    justify-content: space-between;  
+                    flex-wrap: wrap; 
+                }
+                .box {
+                    border: 1px solid #000;
+                    padding: 5px;
+                    box-sizing: border-box;
+                    width: 45%;
+                    margin-bottom: 5px;
+                }
+                h2 {
+                    text-align: center;
+                    margin-bottom: 5px; 
+        </style>
         <body>
 
-            ${exchange.exchangeDate}
+            <h1>CONTRATO DE COMPRAVENTA</h1>
+
+            <div class="content">
+                <div class="date-box">
+                    Fecha: <div class="date-part">${formattedDate}</div>
+                </div>
+            </div>
+
+            <div class="contenttwo">
+                <div class="box">
+                    <h2>Comprador</h2>
+                    ${exchange.client.clientTypeDocument}
+                    ${exchange.client.clientDocument}
+                    ${exchange.client.clientName}
+                    ${exchange.client.clientLastName}
+                    ${exchange.client.clientDepartment}
+                    ${exchange.client.clientMunicipality}
+                    ${exchange.client.clientAddress}
+                    ${exchange.client.clientPhoneNumber}
+                    ${exchange.client.clientOtherContact}
+                    ${exchange.client.clientOtherPhoneNumber}
+                </div>
+        
+                <div class="box">
+                    <h2>Vendedor</h2>
+                    ${user.userTypeDocument}
+                    ${user.userDocument}
+                    ${user.userName}
+                    ${user.userLastName}
+                    ${user.userDepartment}
+                    ${user.userMunicipality}
+                    ${user.userAddress}
+                    ${user.userPhoneNumber}
+                    ${user.userOtherPhoneNumber}
+                </div>
+            </div>
+
+
             ${exchange.exchangeCashPrice}
             ${exchange.exchangeCashPriceStatus}
             ${exchange.exchangeLimitations}
@@ -460,43 +568,13 @@ export const contractExchange = async (req, res) => {
             ${exchange.exchangeMunicipality}
             ${exchange.exchangePecuniaryPenalty}
 
-            
-            ${exchange.client.clientTypeDocument}
-            ${exchange.client.clientDocument}
-            ${exchange.client.clientName}
-            ${exchange.client.clientLastName}
-            ${exchange.client.clientDepartment}
-            ${exchange.client.clientMunicipality}
-            ${exchange.client.clientAddress}
-            ${exchange.client.clientPhoneNumber}
-            ${exchange.client.clientOtherContact}
-            ${exchange.client.clientOtherPhoneNumber}
 
 
-            ${sale.vehicle.licensePlate}
-            ${sale.vehicle.vehicleType}
-            ${sale.vehicle.brand}
-            ${sale.vehicle.model}
-            ${sale.vehicle.type}
-            ${sale.vehicle.line}
-            ${sale.vehicle.color}
-            ${sale.vehicle.business}
-            ${sale.vehicle.series}
-            ${sale.vehicle.motor}
-            ${sale.vehicle.register}
-            ${sale.vehicle.chassis}
-            ${sale.vehicle.capacity}
-            ${sale.vehicle.service}
-            ${sale.vehicle.identificationCard}
 
             <table border="1">
             <tr>
-                <th>ID</th>
-                <th>Modelo</th>
-                <th>Marca</th>
-                <!-- Agrega más encabezados según tus campos -->
             </tr>
-            ${exchange[0].vehiclesExchange.map(vehicle => `
+            ${exchange.vehiclesExchange.map(vehicle => `
                 <tr>
                     <td>${vehicle.licensePlate}</td>
                     <td>${vehicle.vehicleType}</td>
@@ -505,14 +583,14 @@ export const contractExchange = async (req, res) => {
                     <td>${vehicle.type}</td>
                     <td>${vehicle.line}</td>
                     <td>${vehicle.color}</td>
-                    <td>${vehicle.business}</td>
-                    <td>${vehicle.series}</td>
-                    <td>${vehicle.motor}</td>
-                    <td>${vehicle.register}</td>
-                    <td>${vehicle.chassis}</td>
-                    <td>${vehicle.capacity}</td>
-                    <td>${vehicle.service}</td>
-                    <td>${vehicle.identificationCard}</td>
+                    <td>${vehicle.othervehicleinformation.business}</td>
+                    <td>${vehicle.othervehicleinformation.series}</td>
+                    <td>${vehicle.othervehicleinformation.motor}</td>
+                    <td>${vehicle.othervehicleinformation.register}</td>
+                    <td>${vehicle.othervehicleinformation.chassis}</td>
+                    <td>${vehicle.othervehicleinformation.capacity}</td>
+                    <td>${vehicle.othervehicleinformation.service}</td>
+                    <td>${vehicle.othervehicleinformation.identificationCard}</td>
                     
                 </tr>
             `).join('')}

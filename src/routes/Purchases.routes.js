@@ -25,4 +25,4 @@ PurchaseRoutes.get('/Purchases/SearchE/:search', requiredToken , hasLicenses(['C
 
 PurchaseRoutes.get('/Purchases/Report/:startDatePurchase/:finalDatePurchase', requiredToken, hasLicenses(['Compras']) , reportPurchase); 
 
-PurchaseRoutes.get('/Purchases/Contract/:idPurchase', requiredToken, contractPurchase); 
+PurchaseRoutes.get('/Purchases/Contract/:idPurchase', contractPurchase); 

@@ -175,7 +175,7 @@ export const deleteUser = async (req, res) => {
             }
         });
 
-        if (user.Role.rolName === "Administrador" && adminUsers <= 1) {
+        if (user.Role.rolName === "Administrador" || user.Role.rolName === "administrador"  && adminUsers <= 1) {
             return res.status(400).json({ message: "No se puede eliminar el único administrador activo" });
         }
 

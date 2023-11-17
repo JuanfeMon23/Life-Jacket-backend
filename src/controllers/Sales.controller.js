@@ -10,6 +10,7 @@
 import {Sale} from '../models/Sales.model.js';
 import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
+import { othervehicleinformation } from '../models/Othervehicleinformations.model.js';
 import pdf from 'html-pdf';
 import { Op } from 'sequelize';
 import app from '../app.js';
@@ -321,6 +322,12 @@ export const contractSale = async (req, res) => {
                 },
                 {
                     model: Vehicle,
+                    include: [
+                        {
+                            model: othervehicleinformation,
+
+                        }
+                    ]
                 },
             ],
         });
@@ -356,14 +363,14 @@ export const contractSale = async (req, res) => {
             ${sale.vehicle.type}
             ${sale.vehicle.line}
             ${sale.vehicle.color}
-            ${sale.vehicle.business}
-            ${sale.vehicle.series}
-            ${sale.vehicle.motor}
-            ${sale.vehicle.register}
-            ${sale.vehicle.chassis}
-            ${sale.vehicle.capacity}
-            ${sale.vehicle.service}
-            ${sale.vehicle.identificationCard}
+            ${sale.vehicle.othervehicleinformation.business}
+            ${sale.vehicle.othervehicleinformation.series}
+            ${sale.vehicle.othervehicleinformation.motor}
+            ${sale.vehicle.othervehicleinformation.register}
+            ${sale.vehicle.othervehicleinformation.chassis}
+            ${sale.vehicle.othervehicleinformation.capacity}
+            ${sale.vehicle.othervehicleinformation.service}
+            ${sale.vehicle.othervehicleinformation.identificationCard}
             
         </body>
         </html> 
