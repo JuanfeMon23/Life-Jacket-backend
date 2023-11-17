@@ -10,9 +10,10 @@ export async function getVehicleTypes(req, res) {
         ],
       });
 
+ 
     res.json(distinctVehicleTypes);
   } catch (error) {
-    console.error(error);
+
     res.status(500).json({ message: 'Error al obtener los tipos de vehículos.' });
   }
 }
@@ -31,9 +32,10 @@ export async function getVehicleBrand(req, res) {
       },
     });
 
+
     res.json(distinctBrandNames);
   } catch (error) {
-    console.error(error);
+
     res.status(500).json({ message: 'Error al obtener los nombres de marcas para el tipo de vehículo dado.' });
   }
 }
@@ -45,7 +47,7 @@ export async function getVehicleLines(req, res) {
 
   try {
     const distinctBrandLines = await Brands.findAll({
-      attributes: [[sequelize.literal('DISTINCT "BrandLine"'), 'BrandLine']],
+      attributes: ['BrandLine'],
       where: {
         VehicleType: {
           [Op.like]: vehicleType,
@@ -55,6 +57,7 @@ export async function getVehicleLines(req, res) {
         },
       },
     });
+
 
     res.json(distinctBrandLines);
   } catch (error) {
