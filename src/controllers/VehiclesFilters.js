@@ -20,8 +20,6 @@ export async function getVehicleTypes(req, res) {
 
 export async function getVehicleBrand(req, res) {
   const vehicleType = req.query.vehicleType;
-  console.log(vehicleType);
-  console.log(req.query);
   try {
     const distinctBrandNames = await Brands.findAll({
       attributes: [
