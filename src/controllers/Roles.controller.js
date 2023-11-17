@@ -95,17 +95,17 @@ export const deleteRol = async (req,res) => {
         const userCount = await rol.countUsers();
 
         //Check if the rol has associated users and prevent deletion
-        if (userCount > 0){
-            return res.status(400).json({ message :"No se puede eliminar un rol con usuarios asociados"});
-        }
-
+        
         if (rol.rolName === "Administrador" || rol.rolName === "administrador" ){
             return res.status(400).json({ message :"No se puede eliminar el rol de administrador"});
         }
-
+        
+        if (userCount > 0){
+            return res.status(400).json({ message :"No se puede eliminar un rol con usuarios asociados"});
+        }
         await rol.destroy();
 
-        return res.sendStatus(200).json({ message: 'Rol eliminado con éxito' });
+        return res.status(200).json({ message: 'Rol eliminado con éxito' });
     } catch (error) {
         return res.status(500).json({message : error.message});
     }

@@ -7,15 +7,13 @@
  */
 
 import {Router} from 'express';
-import {getPurchases, getPurchase, postPurchase, statusPurchase, searchPurchase, reportPurchase, contractPurchase } from '../controllers/Purchases.controller.js';
+import {getPurchases, postPurchase, statusPurchase, searchPurchase, reportPurchase, contractPurchase } from '../controllers/Purchases.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
 import { hasLicenses } from '../middlewares/Licenses.js';
 
 export const PurchaseRoutes = Router();
 
 PurchaseRoutes.get('/Purchases', requiredToken , hasLicenses(['Compras']) , getPurchases);
-
-PurchaseRoutes.get('/Purchases/:idPurchase', requiredToken , hasLicenses(['Compras']) , getPurchase);
 
 PurchaseRoutes.post('/Purchases', requiredToken , hasLicenses(['Compras']) , postPurchase);
 
@@ -25,4 +23,4 @@ PurchaseRoutes.get('/Purchases/SearchE/:search', requiredToken , hasLicenses(['C
 
 PurchaseRoutes.get('/Purchases/Report/:startDatePurchase/:finalDatePurchase', requiredToken, hasLicenses(['Compras']) , reportPurchase); 
 
-PurchaseRoutes.get('/Purchases/Contract/:idPurchase', contractPurchase); 
+PurchaseRoutes.get('/Purchases/Contract/:idPurchase', requiredToken , hasLicenses(['Compras']) , contractPurchase); 

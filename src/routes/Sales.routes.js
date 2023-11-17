@@ -16,8 +16,6 @@ export const SaleRoutes = Router();
 
 SaleRoutes.get('/Sales', requiredToken, hasLicenses(['Ventas']) , getSales);
 
-SaleRoutes.get('/Sales/:idSale', requiredToken, hasLicenses(['Ventas']) , getSale);
-
 SaleRoutes.post('/Sales', requiredToken, hasLicenses(['Ventas']) , postSale);
 
 SaleRoutes.patch('/Sales/:idSale', requiredToken, hasLicenses(['Ventas']) , statusSale);
@@ -26,4 +24,4 @@ SaleRoutes.get('/Sales/SearchE/:search', requiredToken, hasLicenses(['Ventas']) 
 
 SaleRoutes.get('/Sales/Report/:startDateSale/:finalDateSale', requiredToken, hasLicenses(['Ventas']) , reportSale); 
 
-SaleRoutes.get('/Sales/Contract/:idSale', requiredToken, contractSale); 
+SaleRoutes.get('/Sales/Contract/:idSale', requiredToken, requiredToken , hasLicenses(['Ventas']) , contractSale); 

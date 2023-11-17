@@ -7,7 +7,7 @@
  */
 
 import {Router} from 'express';
-import {getClients, postClient, updateClient, deleteClient, statusClient, searchClient} from '../controllers/Clients.controller.js';
+import {getClients, postClient, updateClient, deleteClient, statusClient} from '../controllers/Clients.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
 import { hasLicenses } from '../middlewares/Licenses.js';
 
@@ -23,4 +23,3 @@ ClientRoutes.delete('/Clients/:idClient',requiredToken , hasLicenses(['Clientes'
 
 ClientRoutes.patch('/Clients/:idClient',requiredToken , hasLicenses(['Clientes']),  statusClient);
 
-ClientRoutes.get('/Clients/SearchE/:search',requiredToken , hasLicenses(['Clientes']),  searchClient);

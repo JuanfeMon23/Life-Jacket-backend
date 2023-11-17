@@ -13,7 +13,9 @@ import { hasLicenses } from "../middlewares/Licenses.js";
 export const ImprovementsRoutes = Router();
 
 ImprovementsRoutes.get('/Improvements', requiredToken , hasLicenses(['Mejoras']) , getImprovements);
+
 ImprovementsRoutes.post('/Improvements', requiredToken , hasLicenses(['Mejoras']) , postImprovements);
+
 ImprovementsRoutes.put('/Improvements/:idImprovements', requiredToken , hasLicenses(['Mejoras']) , updateImprovements);
-ImprovementsRoutes.get('/Improvements/Search/:search', requiredToken , hasLicenses(['Mejoras']) , getSearchImprovements);
+
 ImprovementsRoutes.delete('/Improvements/:idImprovements', requiredToken , hasLicenses(['Mejoras']) , deleteImprovements);

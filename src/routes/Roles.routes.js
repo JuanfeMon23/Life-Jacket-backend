@@ -13,8 +13,11 @@ import { hasLicenses } from "../middlewares/Licenses.js";
 export const RolRoutes =  Router();
 
 RolRoutes.get('/Roles', requiredToken,  hasLicenses(['Roles']) , getRoles );
-RolRoutes.get('/Roles/:idRol', requiredToken, hasLicenses(['Roles']) ,  getRol)
+
 RolRoutes.post('/Roles', requiredToken, hasLicenses(['Roles']) , createRol);
+
 RolRoutes.put('/Roles/:idRol' , requiredToken, hasLicenses(['Roles']) , updateRol);
+
 RolRoutes.delete('/Roles/:idRol', requiredToken, hasLicenses(['Roles']) , deleteRol);
+
 RolRoutes.post('/Roles/:idRol/Licenses/:idLicense', requiredToken , hasLicenses(['Roles']) , addLicenses);

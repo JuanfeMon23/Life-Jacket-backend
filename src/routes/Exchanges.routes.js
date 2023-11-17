@@ -13,24 +13,20 @@ import { hasLicenses } from '../middlewares/Licenses.js';
 
 export const ExchangeRoutes = Router();
 
-ExchangeRoutes.get('/Exchange', getExchanges);
+ExchangeRoutes.get('/Exchange', requiredToken , hasLicenses(['Cambios']) ,  getExchanges);
 
-ExchangeRoutes.get('/Exchange/:idExchange', getExchange);
+ExchangeRoutes.post('/Exchange', requiredToken , hasLicenses(['Cambios']) , postExchange);
 
-ExchangeRoutes.post('/Exchange', postExchange);
+ExchangeRoutes.put('/Exchange/:idExchange', requiredToken , hasLicenses(['Cambios']) , updateExchange);
 
-ExchangeRoutes.put('/Exchange/:idExchange', updateExchange);
+ExchangeRoutes.post('/Exchange/:idExchange', requiredToken , hasLicenses(['Cambios']) , postExchangeDetail);
+ 
+ExchangeRoutes.delete('/Exchange/Cancel/:idExchange', requiredToken , hasLicenses(['Cambios']) , cancelExchange);
 
-ExchangeRoutes.post('/Exchange/:idExchange', postExchangeDetail);
+ExchangeRoutes.delete('/Exchange/Detail/:idExchangeDetail', requiredToken , hasLicenses(['Cambios']) , deleteExchangeDetail);
 
-ExchangeRoutes.delete('/Exchange/Cancel/:idExchange', cancelExchange);
+ExchangeRoutes.patch('/Exchange/:idExchange', requiredToken , hasLicenses(['Cambios']) , statusExchange);
 
-ExchangeRoutes.delete('/Exchange/Detail/:idExchangeDetail', deleteExchangeDetail);
+ExchangeRoutes.get('/Exchange/Report/:startDateExchange/:finalDateExchange', requiredToken , hasLicenses(['Cambios']) , reportExchange); 
 
-ExchangeRoutes.patch('/Exchange/:idExchange', statusExchange);
-
-ExchangeRoutes.get('/Exchange/SearchE/:search', searchExchange);
-
-ExchangeRoutes.get('/Exchange/Report/:startDateExchange/:finalDateExchange', reportExchange); 
-
-ExchangeRoutes.get('/Exchange/Contract/:idExchange', contractExchange); 
+ExchangeRoutes.get('/Exchange/Contract/:idExchange', requiredToken , hasLicenses(['Cambios']) , contractExchange); 
