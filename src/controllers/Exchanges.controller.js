@@ -473,66 +473,118 @@ export const contractExchange = async (req, res) => {
         const html = `
         <html>
         <style>
-                body {
-                    border: 2px solid black; 
-                    padding: 10px; 
-                    margin: 25px; 
-                    border-radius: 10px; 
-                    font-family: sans-serif;
-                }
-                h1 {
-                    color: black; 
-                    font-weight: 700; 
-                    font-size: 22px ;
-                    text-align: center;
-                    margin-bottom: 15px;
-                    margin-top: 20px; 
-                }
-                .content {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-start;
-                    margin-left: 180vh;
-                    margin-bottom: 7vh;
-                }
-                .date-box {
-                    display: flex;
-                    align-items: center;
-                }
-                .date-part {
-                    border: 1px solid #000;
-                    padding: 3px;
-                    box-sizing: border-box;
-                    display: inline-block;
-                }
-                .contenttwo {
-                    display: flex;
-                    justify-content: space-between;  
-                    flex-wrap: wrap; 
-                }
-                .box {
-                    border: 1px solid #000;
-                    padding: 5px;
-                    box-sizing: border-box;
-                    width: 45%;
-                    margin-bottom: 5px;
-                }
-                h2 {
-                    text-align: center;
-                    margin-bottom: 5px; 
+            .contentone{
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 20px;
+            }
+    
+            .contenttwo {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center; 
+            }
+
+            .contenttwo > div {
+                border: 1px solid #000;
+                border-radius: 10px;
+                text-align: center;
+              }
+
+            h1 {
+                color: black; 
+                font-weight: 700; 
+                font-size: 22px ;
+                text-align: center;
+                margin-bottom: 15px;
+                margin-top: 20px; 
+            }
+            h2 {
+                text-align: center;
+                margin: 2px;
+                font-size: 15px;
+            }
+            .pone{
+                font-weight: 400; 
+                font-size: 14px;
+                margin: 10px;
+                text-align: justify;
+            }
+
+            .ptwo{
+                font-weight: 600; 
+                font-size: 14px;
+                margin: 10px;
+                text-align: justify;
+            }
+            .pthree{
+                font-weight: 400; 
+                font-size: 10px;
+                margin: 10px;
+                text-align: justify;
+            }
+            .pfour{
+                font-weight: 400; 
+                font-size: 14px;
+                margin: 10px;
+                text-align: center;
+            }
+            body {
+                border: 2px solid black;
+                padding: 10px;
+                margin: 20px;
+                border-radius: 10px;
+                font-family: sans-serif;
+            }
+            .date-box {
+                display: flex;
+                align-items: center;
+                margin-left: 75%
+            }
+            .date-part {
+                border: 1px solid #000;
+                padding: 3px;
+                box-sizing: border-box;
+                display: inline-block;
+            }
+            .pricebox{
+                border: 1px solid #000;
+                padding: 20px; 
+                margin: 10px;
+                overflow-wrap: break-word;
+                border-radius: 10px;
+                text-align: justify; 
+            
+            }
+        
+            table {
+                width: 100%;
+                margin-top: 20px;
+            }
+            
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            
+            th, td {
+                padding: 8px;
+                text-align: left;
+            }
         </style>
         <body>
 
             <h1>CONTRATO DE COMPRAVENTA</h1>
 
-            <div class="content">
+            <div class="contentone">
                 <div class="date-box">
                     Fecha: <div class="date-part">${formattedDate}</div>
                 </div>
             </div>
-
             <div class="contenttwo">
-                <div class="box">
+                <div>
                     <h2>Comprador</h2>
                     ${exchange.client.clientTypeDocument}
                     ${exchange.client.clientDocument}
@@ -545,8 +597,8 @@ export const contractExchange = async (req, res) => {
                     ${exchange.client.clientOtherContact}
                     ${exchange.client.clientOtherPhoneNumber}
                 </div>
-        
-                <div class="box">
+            
+                <div>
                     <h2>Vendedor</h2>
                     ${user.userTypeDocument}
                     ${user.userDocument}
@@ -559,18 +611,7 @@ export const contractExchange = async (req, res) => {
                     ${user.userOtherPhoneNumber}
                 </div>
             </div>
-
-
-            ${exchange.exchangeCashPrice}
-            ${exchange.exchangeCashPriceStatus}
-            ${exchange.exchangeLimitations}
-            ${exchange.exchangeDepartment}
-            ${exchange.exchangeMunicipality}
-            ${exchange.exchangePecuniaryPenalty}
-
-
-
-
+            <p class="pone">Por medio del presente Contrato de Compra-Venta, EL COMPRADOR declara haber recibido real y materialmente el automotor descrito en este título valor a completa y entera satisfacción y se obliga a pagar el precio en la forma pactada aqui mismo. Pago que se efectuará en la ciudad en moneda colombiana de curso legal.</p>
             <table border="1">
             <tr>
             </tr>
@@ -594,7 +635,32 @@ export const contractExchange = async (req, res) => {
                     
                 </tr>
             `).join('')}
-        </table>
+            </table>
+            <div class="pricebox">
+                El dinero en efectivo convenido para este intercambio, es la suma de: $${exchange.exchangeCashPrice} COP que será pagado de la siguiente forma: ___________________________________________________
+                ____________________________________________________________________________
+                ____________________________________________________________________________
+                Limitaciones: ${exchange.exchangeLimitations}
+            </div>
+            <p class="pone">
+                El Vendedor garantiza que el vehículo materia de esta negaciación es de exclusiva propiedad, no soporta gravámenes o embargo alguno, y que el vehículo fue introducido legalmente al país y que sobre él no existen multas ni infracciones de tránsito y que está a paz y salvo con el Tesoro Municipal y Nacional por concepto de Impuestos.<br>
+                El Vendedor se compromete por medio de la presente a devolver el valor del vehículo en venta en caso de que las autoridades civiles o de tránsito lo requieran para cualquier diligencia judicial, Penal o Aduanera. Excusado el protesto y rechazo y sin que alegue a su favor la doctrina Comprador o Vendedor de Buena Fé.
+            </p>
+            <p class="ptwo">
+                El presente contrato presta merito ejecutivo para hacer efectivas las obligaciones contenidas en el, sin necesidad de requerimiento judicial o extrajudicial.<br>
+                para todos los efectos legales del presente contrato se toma como domicilio la ciudad de ${exchange.exchangeMunicipality}, ${exchange.exchangeDepartment}.<br>
+                Cabe anotar que el carro fue entregado con peritaje bajo entera satisfacción y cualquier anomalía debe ser
+                atendida por el comprador.
+            </p>
+            <p class="pthree">Dando cumplimiento al artículo 8 de la ley 1480 del 12 de Octubre del 2011 nos permitimos informarie que el COMPRADOR declara conocer el estado actual del vehículo usado y haber verificado el funcionamiento del mismo, por lo que exime al VENDEDOR de garantia por vicios o defectos que surjan con posterioridad.</p>
+            <p class="pfour">
+                Vehículo usado no tiene garantia ni por parte del vendedor ni del intermediario.<br><br>
+                CLAUSULA PENAL
+            </p>
+            <p class="ptwo">Las partes establecen como sanción pecuniaria a cargo de quien incumpla una cualquiera de las estipulaciones derivadas de este acto juridico la suma de: $${exchange.exchangePecuniaryPenalty} COP.</p>
+
+
+
             
         </body>
         </html> 
