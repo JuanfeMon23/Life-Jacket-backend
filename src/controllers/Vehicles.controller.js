@@ -217,6 +217,10 @@ export const statusVehicle = async (req, res) => {
     try {
         const vehicle = await Vehicle.findByPk(idVehicle);
 
+        const sale = await Sale.findOne({ where: { idVehicleSale: idVehicle } });
+
+        const exchanges = await ExchangesDetails.findAll({ where: { idVehicleExchange: idVehicle, vehicleStatusExchange : "false" } });
+
         // If trying to change from false to true, check if there is already an active vehicle with the same licensePlate
         if (vehicle.vehicleStatus === "false") {
             const activeVehicleWithSameLicensePlate = await Vehicle.findOne({
@@ -229,6 +233,10 @@ export const statusVehicle = async (req, res) => {
             if (activeVehicleWithSameLicensePlate) {
                 return res.status(400).json({ message: 'Ya hay un vehículo activo con la misma placa' });
             }
+        }
+
+        if (sale || exchanges.length > 0 ) {
+            return res.status(400).json({ message: "No puedes activar un vehículo que se encuentra con una venta o intercambio asociado" });
         }
 
         //Change of vehicle status and saving in the database       

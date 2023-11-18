@@ -473,25 +473,37 @@ export const contractExchange = async (req, res) => {
         const html = `
         <html>
         <style>
+            body {
+                border: 2px solid black;
+                padding: 10px;
+                margin: 20px;
+                border-radius: 10px;
+                font-family: sans-serif;
+            }
             .contentone{
-                display: flex;
-                flex-direction: column;
                 align-items: flex-start;
                 margin-bottom: 20px;
             }
     
             .contenttwo {
-                display: flex;
-                flex-direction: row;
                 justify-content: space-around;
-                align-items: center; 
             }
 
             .contenttwo > div {
                 border: 1px solid #000;
                 border-radius: 10px;
                 text-align: center;
-              }
+                margin-top: 15px;
+                width: 350px;
+                height: 150px
+            }
+
+            .contentdiv{
+                position: relative;
+                left: 400px;
+                top: -167px;
+            }
+
 
             h1 {
                 color: black; 
@@ -509,8 +521,9 @@ export const contractExchange = async (req, res) => {
             .pone{
                 font-weight: 400; 
                 font-size: 14px;
-                margin: 10px;
                 text-align: justify;
+                position: relative;
+                top: -160px;
             }
 
             .ptwo{
@@ -531,15 +544,7 @@ export const contractExchange = async (req, res) => {
                 margin: 10px;
                 text-align: center;
             }
-            body {
-                border: 2px solid black;
-                padding: 10px;
-                margin: 20px;
-                border-radius: 10px;
-                font-family: sans-serif;
-            }
             .date-box {
-                display: flex;
                 align-items: center;
                 margin-left: 75%
             }
@@ -558,6 +563,31 @@ export const contractExchange = async (req, res) => {
                 text-align: justify; 
             
             }
+
+            .formvehicle{
+                width: 150px;
+                height: 300px;
+                position: relative;
+                top: 200px;
+                border: 1px solid #000;
+                margin: 5px;
+            }
+
+            .contenedor-firma {
+                display: flex;
+                justify-content: space-between;
+                margin: 20px;
+              }
+          
+              .firma {
+                text-align: center;
+              }
+          
+              .linea-firma {
+                border-bottom: 2px solid #000;
+                width: 150px;
+                margin: 10px auto;
+              }
         
             table {
                 width: 100%;
@@ -584,7 +614,7 @@ export const contractExchange = async (req, res) => {
                 </div>
             </div>
             <div class="contenttwo">
-                <div>
+                <div class="contentdivtwo">
                     <h2>Comprador</h2>
                     ${exchange.client.clientTypeDocument}
                     ${exchange.client.clientDocument}
@@ -598,7 +628,7 @@ export const contractExchange = async (req, res) => {
                     ${exchange.client.clientOtherPhoneNumber}
                 </div>
             
-                <div>
+                <div class="contentdiv">
                     <h2>Vendedor</h2>
                     ${user.userTypeDocument}
                     ${user.userDocument}
@@ -612,30 +642,18 @@ export const contractExchange = async (req, res) => {
                 </div>
             </div>
             <p class="pone">Por medio del presente Contrato de Compra-Venta, EL COMPRADOR declara haber recibido real y materialmente el automotor descrito en este título valor a completa y entera satisfacción y se obliga a pagar el precio en la forma pactada aqui mismo. Pago que se efectuará en la ciudad en moneda colombiana de curso legal.</p>
-            <table border="1">
-            <tr>
-            </tr>
-            ${exchange.vehiclesExchange.map(vehicle => `
-                <tr>
-                    <td>${vehicle.licensePlate}</td>
-                    <td>${vehicle.vehicleType}</td>
-                    <td>${vehicle.brand}</td>
-                    <td>${vehicle.model}</td>
-                    <td>${vehicle.type}</td>
-                    <td>${vehicle.line}</td>
-                    <td>${vehicle.color}</td>
-                    <td>${vehicle.othervehicleinformation.business}</td>
-                    <td>${vehicle.othervehicleinformation.series}</td>
-                    <td>${vehicle.othervehicleinformation.motor}</td>
-                    <td>${vehicle.othervehicleinformation.register}</td>
-                    <td>${vehicle.othervehicleinformation.chassis}</td>
-                    <td>${vehicle.othervehicleinformation.capacity}</td>
-                    <td>${vehicle.othervehicleinformation.service}</td>
-                    <td>${vehicle.othervehicleinformation.identificationCard}</td>
-                    
-                </tr>
-            `).join('')}
-            </table>
+            
+                ${exchange.vehiclesExchange.map(vehicle => `
+                    <div class="formvehicle">
+                        <p>Vehículo: ${vehicle.vehicleType}</p>
+                        <p>Marca: ${vehicle.brand} </p>
+                        <p>Modelo: ${vehicle.model}</p>
+                        <p>Capacidad: ${vehicle.othervehicleinformation.capacity}</p>
+                        <p>Tipo: ${vehicle.type}</p>
+                        <p>Color: ${vehicle.color}</p>
+                        <p>Servicio: ${vehicle.othervehicleinformation.service}</p>
+                    </div>     
+                `).join('')}
             <div class="pricebox">
                 El dinero en efectivo convenido para este intercambio, es la suma de: $${exchange.exchangeCashPrice} COP que será pagado de la siguiente forma: ___________________________________________________
                 ____________________________________________________________________________
@@ -658,8 +676,19 @@ export const contractExchange = async (req, res) => {
                 CLAUSULA PENAL
             </p>
             <p class="ptwo">Las partes establecen como sanción pecuniaria a cargo de quien incumpla una cualquiera de las estipulaciones derivadas de este acto juridico la suma de: $${exchange.exchangePecuniaryPenalty} COP.</p>
+            <p class="pfour">ACEPTADA</p>
 
-
+            <div class="contenedor-firma">
+            <div class="firma">
+              <div class="linea-firma"></div>
+              FIRMA
+            </div>
+        
+            <div class="firma">
+              <div class="linea-firma"></div>
+              FIRMA
+            </div>
+          </div>
 
             
         </body>

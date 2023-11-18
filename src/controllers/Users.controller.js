@@ -142,12 +142,12 @@ export const statusUser = async (req, res) => {
                 '$Role.rolName$': 'Administrador',
                 userStatus: 'true'
             },
-            include: {
+            include: [{
                 model: Roles
-            }
+            }]
         });
 
-        if (user.Role.rolName === "Administrador" || "administrador" && adminUsers <= 1) {
+        if (adminUsers <= 1 && user.userStatus === "true") {
             return res.status(400).json({ message: "No se puede deshabilitar el único administrador activo" });
         }
 
@@ -164,20 +164,6 @@ export const deleteUser = async (req, res) => {
     const { idUser } = req.params;
     try {
         const user = await User.findByPk(idUser);
-
-        const adminUsers = await User.count({
-            where: {
-                '$Role.rolName$': 'Administrador',
-                userStatus: 'true'
-            },
-            include: {
-                model: Roles
-            }
-        });
-
-        if (user.Role.rolName === "Administrador" || user.Role.rolName === "administrador"  && adminUsers <= 1) {
-            return res.status(400).json({ message: "No se puede eliminar el único administrador activo" });
-        }
 
         await user.destroy();
 
@@ -213,7 +199,7 @@ export const Login =  async (req,res) => {
 
     try {
         const foundUser = await User.findOne({where : {userEmail}});
-        if (!foundUser ) return res.status(400).json({ message : 'Email invalido' });
+        if (!foundUser ) return res.status(400).json({ message : 'Email inválido' });
 
         const Match = await bcrypts.compare(userPassword,foundUser.userPassword);
         if (!Match) return res.status(400).json({ message : 'Contraseña incorrecta' });
@@ -279,7 +265,7 @@ export const PasswordRecovery = async (req, res) => {
 
     try {
         const foundUser = await User.findOne({where : {userEmail}});
-        if (!foundUser ) return res.status(400).json({ message : 'Email invalido' });
+        if (!foundUser ) return res.status(400).json({ message : 'Email inválido' });
 
         const transporter = nodemailer.createTransport({
             service : 'gmail',
@@ -294,7 +280,7 @@ export const PasswordRecovery = async (req, res) => {
         const mailOptions = {
             from : 'curpion123@gmail.com',
             to : `${foundUser.userEmail}`,
-            subject : 'Enlace para la recuperacion de la contraseña en el aplicativo lifejacket.',
+            subject : 'Enlace para la recuperación de la contraseña en el aplicativo lifejacket.',
             text : `${port}/${foundUser.idUser}`
         };
 
@@ -302,7 +288,7 @@ export const PasswordRecovery = async (req, res) => {
             if(err){
                 return res.status(400).json({message : err.message})
             } else {
-                return res.status(299).json({message : 'Recuperacion enviada con exito.'})
+                return res.status(299).json({message : 'Recuperación enviada con éxito!'})
             }
         })
     } catch (error) {
@@ -330,7 +316,7 @@ export const resetPassword = async (req, res) => {
 
         await user.save();
 
-        res.status(201).json({ message: 'Contraseña actualizada con éxito.' });
+        res.status(201).json({ message: 'Contraseña actualizada con éxito!' });
     } catch (error) {
         console.error(error);
         res.status(400).json({ message: error.message });
