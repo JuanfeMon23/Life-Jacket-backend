@@ -562,20 +562,20 @@ export const contractPurchase = async (req, res) => {
                 <p>Vehículo: ${purchase.vehicle.vehicleType}</p>
                 <p>Marca: ${purchase.vehicle.brand} </p>
                 <p>Modelo: ${purchase.vehicle.model}</p>
-                <p>Capacidad: ${purchase.vehicle.othervehicleinformation.capacity}</p>
+                <p>Capacidad: ${purchase.vehicle.othervehicleinformation.capacity ? purchase.vehicle.othervehicleinformation.capacity : 'Sin datos.'}</p>
                 <p>Tipo: ${purchase.vehicle.type}</p>
                 <p>Color: ${purchase.vehicle.color}</p>
-                <p>Servicio: ${purchase.vehicle.othervehicleinformation.service}</p>
+                <p>Servicio: ${purchase.vehicle.othervehicleinformation.service ? purchase.vehicle.othervehicleinformation.service  : 'Sin datos.'}</p>
             </div>
             <div class="formvehicletwo">
                 <p>Línea: ${purchase.vehicle.line}</p>
-                <p>Motor N°: ${purchase.vehicle.othervehicleinformation.motor} </p>
-                <p>Chasis N°: ${purchase.vehicle.othervehicleinformation.chassis}</p>
-                <p>Serie N°: ${purchase.vehicle.othervehicleinformation.series} </p>
+                <p>Motor N°: ${purchase.vehicle.othervehicleinformation.motor ? purchase.vehicle.othervehicleinformation.motor  : 'Sin datos.'} </p>
+                <p>Chasis N°: ${purchase.vehicle.othervehicleinformation.chassis ?  purchase.vehicle.othervehicleinformation.motor : 'Sin datos.'} </p>
+                <p>Serie N°: ${purchase.vehicle.othervehicleinformation.series ?  purchase.vehicle.othervehicleinformation.series : 'Sin datos.'} </p>
                 <p>Placa N°: ${purchase.vehicle.licensePlate}</p>
-                <p>Empresa: ${purchase.vehicle.othervehicleinformation.business}</p>
-                <p>Matrícula a nombre de: ${purchase.vehicle.othervehicleinformation.register}</p>
-                <p>C.C. N°: ${purchase.vehicle.othervehicleinformation.identificationCard}</p>
+                <p>Empresa: ${purchase.vehicle.othervehicleinformation.business ? purchase.vehicle.othervehicleinformation.business : 'Sin datos.'}</p>
+                <p>Matrícula a nombre de: ${purchase.vehicle.othervehicleinformation.register ? purchase.vehicle.othervehicleinformation.register  : 'Sin datos.'}</p>
+                <p>C.C. N°: ${purchase.vehicle.othervehicleinformation.identificationCard ? purchase.vehicle.othervehicleinformation.identificationCard : 'Sin datos.'}</p>
             </div>
 
             <div class="pricebox">

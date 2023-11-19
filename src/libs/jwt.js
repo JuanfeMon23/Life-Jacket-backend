@@ -8,7 +8,7 @@ export function createAccesToken(payload){
             payload,
             JWT_SECRET ,
         {
-            expiresIn : 3600,
+            expiresIn : 36000,
         }, (err, token)  => {
             if (err) reject(err);
             resolve(token);

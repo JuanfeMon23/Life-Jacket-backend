@@ -573,20 +573,20 @@ export const contractSale = async (req, res) => {
                 <p>Vehículo: ${sale.vehicle.vehicleType}</p>
                 <p>Marca: ${sale.vehicle.brand} </p>
                 <p>Modelo: ${sale.vehicle.model}</p>
-                <p>Capacidad: ${sale.vehicle.othervehicleinformation.capacity}</p>
+                <p>Capacidad: ${sale.vehicle.othervehicleinformation.capacity ? sale.vehicle.othervehicleinformation.capacity : 'Sin datos.' }</p>
                 <p>Tipo: ${sale.vehicle.type}</p>
                 <p>Color: ${sale.vehicle.color}</p>
-                <p>Servicio: ${sale.vehicle.othervehicleinformation.service}</p>
+                <p>Servicio: ${sale.vehicle.othervehicleinformation.service ? sale.vehicle.othervehicleinformation.service  : 'Sin datos.'}</p>
             </div>
             <div class="formvehicletwo">
                 <p>Línea: ${sale.vehicle.line}</p>
-                <p>Motor N°: ${sale.vehicle.othervehicleinformation.motor} </p>
-                <p>Chasis N°: ${sale.vehicle.othervehicleinformation.chassis}</p>
-                <p>Serie N°: ${sale.vehicle.othervehicleinformation.series} </p>
+                <p>Motor N°: ${sale.vehicle.othervehicleinformation.motor  ? sale.vehicle.othervehicleinformation.motor   : 'Sin datos.'} </p>
+                <p>Chasis N°: ${sale.vehicle.othervehicleinformation.chassis ? sale.vehicle.othervehicleinformation.chassis  : 'Sin datos.'}</p>
+                <p>Serie N°: ${sale.vehicle.othervehicleinformation.series ? sale.vehicle.othervehicleinformation.series  : 'Sin datos.'} </p>
                 <p>Placa N°: ${sale.vehicle.licensePlate}</p>
-                <p>Empresa: ${sale.vehicle.othervehicleinformation.business}</p>
-                <p>Matrícula a nombre de: ${sale.vehicle.othervehicleinformation.register}</p>
-                <p>C.C. N°: ${sale.vehicle.othervehicleinformation.identificationCard}</p>
+                <p>Empresa: ${sale.vehicle.othervehicleinformation.business ? sale.vehicle.othervehicleinformation.business  : 'Sin datos.'}</p>
+                <p>Matrícula a nombre de: ${sale.vehicle.othervehicleinformation.register ? sale.vehicle.othervehicleinformation.register  : 'Sin datos.'}</p>
+                <p>C.C. N°: ${sale.vehicle.othervehicleinformation.identificationCard ?  sale.vehicle.othervehicleinformation.identificationCard : 'Sin datos.'}</p>
             </div>
 
             <div class="pricebox">
