@@ -7,7 +7,7 @@
  */
 
 import {Router} from 'express';
-import { getUsers , postUser, updateUser, deleteUser,getUser, userSearch, statusUser } from '../controllers/Users.controller.js';
+import { getUsers , postUser, updateUser, deleteUser,getUser, statusUser } from '../controllers/Users.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
 import { hasLicenses } from '../middlewares/Licenses.js';
 export const UserRoutes = Router();

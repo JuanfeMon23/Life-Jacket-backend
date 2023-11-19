@@ -7,7 +7,7 @@
  */
 
 import {Router} from 'express';
-import {getExchanges, getExchange, postExchange, updateExchange, postExchangeDetail, deleteExchangeDetail, cancelExchange, statusExchange, searchExchange, reportExchange, contractExchange } from '../controllers/Exchanges.controller.js';
+import {getExchanges, getExchange, postExchange, updateExchange, postExchangeDetail, deleteExchangeDetail, cancelExchange, statusExchange, reportExchange } from '../controllers/Exchanges.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
 import { hasLicenses } from '../middlewares/Licenses.js';
 
@@ -28,5 +28,3 @@ ExchangeRoutes.delete('/Exchange/Detail/:idExchangeDetail', requiredToken , hasL
 ExchangeRoutes.patch('/Exchange/:idExchange', requiredToken , hasLicenses(['Cambios']) , statusExchange);
 
 ExchangeRoutes.get('/Exchange/Report/:startDateExchange/:finalDateExchange', requiredToken , hasLicenses(['Cambios']) , reportExchange); 
-
-ExchangeRoutes.get('/Exchange/Contract/:idExchange', requiredToken , hasLicenses(['Cambios']) , contractExchange); 

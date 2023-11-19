@@ -10,6 +10,7 @@
 import {Purchase} from '../models/Purchases.model.js';
 import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
+import {User} from '../models/Users.model.js';
 import pdf from 'html-pdf';
 import { Op } from 'sequelize';
 import app from '../app.js';
@@ -299,16 +300,16 @@ export const reportPurchase = async (req, res) => {
     }
 };
 
-
 //function to download pdf file with purchase contract
 export const contractPurchase = async (req, res) => {
     const { idPurchase } = req.params;
 
     try {
         const purchase = await Purchase.findByPk(idPurchase, {
+            //include purchases related models
             include: [
                 {
-                    model: Client,
+                    model: Client
                 },
                 {
                     model: Vehicle,
@@ -318,57 +319,308 @@ export const contractPurchase = async (req, res) => {
 
                         }
                     ]
-                },
-            ],
+                }
+            ]
         });
 
-        
+        const user = await User.findOne({
+            where: {
+                userDocument : process.env.DOCUMENT
+            },
+        });
 
-        //Create html with the purchase information
+        if (!user) {
+            return res.status(200).json({ message: 'No puedes descargar el contrato ya que la persona encargada de la compra no se encuentra registrada en usuarios' });
+        }
+        
+        function addZeroPrefix(number) {
+            return number < 10 ? '0' + number : number;
+        }
+        
+        // Validación de fecha
+        const date = purchase.purchaseDate ? new Date(purchase.purchaseDate) : null;
+        
+        const formattedDate = `${addZeroPrefix(date.getDate())}/${addZeroPrefix(date.getMonth() + 1)}/${date.getFullYear()}`;
+        
+        //Create html with the sale information
         const html = `
         <html>
+        <style>
+            body {
+                border: 2px solid black;
+                padding: 10px;
+                margin: 20px;
+                border-radius: 10px;
+                font-family: sans-serif;
+                height: 95%;
+            }
+            .contentone{
+                align-items: flex-start;
+                margin-bottom: 20px;
+            }
+    
+            .contenttwo {
+                justify-content: space-around;
+                margin: 10px;
+            }
+
+            .contenttwo > div {
+                border: 1px solid #000;
+                border-radius: 10px;
+                text-align: center;
+                margin-top: 5px;
+                width: 350px;
+                height: 150px
+            }
+
+            .client{
+                text-align: left;
+                margin-left: 18px;
+                text-align: justify;
+            }
+
+            .contentdiv{
+                position: relative;
+                left: 380px;
+                top: -157px;
+            }
+
+
+            h1 {
+                color: black; 
+                font-weight: 700; 
+                font-size: 22px ;
+                text-align: center;
+                margin-bottom: 15px;
+                margin-top: 20px; 
+            }
+            h2 {
+                text-align: center;
+                margin: 5px;
+                font-size: 16px;
+            }
+            .pone{
+                font-weight: 400; 
+                font-size: 14px;
+                margin: 10px;
+                text-align: justify;
+                position: relative;
+                top: -155px;
+            }
+
+            .poneo{
+                font-weight: 400; 
+                font-size: 14px;
+                margin: 10px;
+                text-align: justify;
+                position: relative;
+                top: -490px;
+            }
+
+            .ptwo{
+                font-weight: 600; 
+                font-size: 14px;
+                margin: 10px;
+                text-align: justify;
+                position: relative;
+                bottom: 500px;
+            }
+            .pthree{
+                font-weight: 400; 
+                font-size: 10px;
+                margin: 10px;
+                text-align: justify;
+                position: relative;
+                bottom: 500px;
+            }
+            .pfour{
+                font-weight: 400; 
+                font-size: 14px;
+                margin: 10px;
+                text-align: center;
+                position: relative;
+                bottom: 500px;
+            }
+
+            .date-box {
+                align-items: center;
+                margin-left: 80%
+            }
+
+            .date-part {
+                border: 1px solid #000;
+                padding: 3px;
+                box-sizing: border-box;
+                display: inline-block;
+            }
+
+            .pricebox{
+                border: 1px solid #000;
+                padding: 20px; 
+                margin: 10px;
+                overflow-wrap: break-word;
+                border-radius: 10px;
+                text-align: justify; 
+                position: relative;
+                bottom: 490px;
+            }
+
+            .formvehicle{
+                width: 250px;
+                height: 300px;
+                position: relative;
+                top: -145px;
+                margin: 20px;
+                left: 70px;
+                text-align: justify; 
+            }
+
+            .formvehicletwo{
+                width: 250px;
+                height: 300px;
+                position: relative;
+                top: -470px;
+                margin: 5px;
+                left: 430px;
+                text-align: justify; 
+            }
+
+          
+            .firmaone {
+                text-align: center;
+                position: relative;
+                bottom: 391px;
+                right: 225px;
+            }
+
+            .firmatwo {
+                text-align: center;
+                position: relative;
+                left: 125px;
+                bottom: 430px
+            }
+          
+            .linea-firma {
+                border-bottom: 2px solid #000;
+                width: 230px;
+                margin: 10px auto;
+            }
+
+            .boxonehuella{
+                border: 1px solid #000;
+                width: 90px;
+                height: 120px;
+                position: relative;
+                bottom: 550px;
+                left: 275px
+            }
+
+            .boxtwohuella{
+                border: 1px solid #000;
+                width: 90px;
+                height: 120px;
+                position: relative;
+                bottom: 665px;
+                left: 635px
+            }
+        
+        </style>
         <body>
 
-            ${purchase.purchaseDate}
-            ${purchase.purchaseFinalPrice}
-            ${purchase.purchaseDepartment}
-            ${purchase.purchaseMunicipality}
-            ${purchase.purchaseLimitations}
-            ${purchase.purchasePecuniaryPenalty}
+            <h1>CONTRATO DE COMPRAVENTA</h1>
 
+            <div class="contentone">
+                <div class="date-box">
+                    Fecha: <div class="date-part">${formattedDate}</div>
+                </div>
+            </div>
+            <div class="contenttwo">
+                <div class="contentdivtwo">
+                    <h2>COMPRADOR</h2>
+                        <p class="client">
+                        ${user.userName} ${user.userLastName}<br>
+                        ${user.userTypeDocument} N° ${user.userDocument} de ${user.userMunicipality}, ${user.userDepartment}<br>
+                        Dirección: ${user.userAddress}<br>
+                        Teléfono: ${user.userPhoneNumber}, ${user.userOtherPhoneNumber}
+                        </p>
+                </div>
             
-            ${purchase.client.clientTypeDocument}
-            ${purchase.client.clientDocument}
-            ${purchase.client.clientName}
-            ${purchase.client.clientLastName}
-            ${purchase.client.clientDepartment}
-            ${purchase.client.clientMunicipality}
-            ${purchase.client.clientAddress}
-            ${purchase.client.clientPhoneNumber}
-            ${purchase.client.clientOtherContact}
-            ${purchase.client.clientOtherPhoneNumber}
+                <div class="contentdiv">
+                    <h2>VENDEDOR</h2>
+                        <p class="client">
+                        ${purchase.client.clientName} ${purchase.client.clientLastName}<br>
+                        ${purchase.client.clientTypeDocument} N° ${purchase.client.clientDocument} de ${purchase.client.clientMunicipality}, ${purchase.client.clientDepartment}<br>
+                        Dirección: ${purchase.client.clientAddress}<br>
+                        Teléfono: ${purchase.client.clientPhoneNumber}<br>
+                        Otro contacto: ${purchase.client.clientOtherContact}, ${purchase.client.clientOtherPhoneNumber}
+                        </p>
+                </div>
+            </div>
+            <p class="pone">Por medio del presente Contrato de Compra-Venta, EL COMPRADOR declara haber recibido real y materialmente el automotor descrito en este título valor a completa y entera satisfacción y se obliga a pagar el precio en la forma pactada aquí mismo. Pago que se efectuará en la ciudad en moneda colombiana de curso legal.</p>
+            
+            <div class="formvehicle">
+                <p>Vehículo: ${purchase.vehicle.vehicleType}</p>
+                <p>Marca: ${purchase.vehicle.brand} </p>
+                <p>Modelo: ${purchase.vehicle.model}</p>
+                <p>Capacidad: ${purchase.vehicle.othervehicleinformation.capacity}</p>
+                <p>Tipo: ${purchase.vehicle.type}</p>
+                <p>Color: ${purchase.vehicle.color}</p>
+                <p>Servicio: ${purchase.vehicle.othervehicleinformation.service}</p>
+            </div>
+            <div class="formvehicletwo">
+                <p>Línea: ${purchase.vehicle.line}</p>
+                <p>Motor N°: ${purchase.vehicle.othervehicleinformation.motor} </p>
+                <p>Chasis N°: ${purchase.vehicle.othervehicleinformation.chassis}</p>
+                <p>Serie N°: ${purchase.vehicle.othervehicleinformation.series} </p>
+                <p>Placa N°: ${purchase.vehicle.licensePlate}</p>
+                <p>Empresa: ${purchase.vehicle.othervehicleinformation.business}</p>
+                <p>Matrícula a nombre de: ${purchase.vehicle.othervehicleinformation.register}</p>
+                <p>C.C. N°: ${purchase.vehicle.othervehicleinformation.identificationCard}</p>
+            </div>
 
-            ${purchase.vehicle.licensePlate}
-            ${purchase.vehicle.vehicleType}
-            ${purchase.vehicle.brand}
-            ${purchase.vehicle.model}
-            ${purchase.vehicle.type}
-            ${purchase.vehicle.line}
-            ${purchase.vehicle.color}
-            ${purchase.vehicle.othervehicleinformation.business}
-            ${purchase.vehicle.othervehicleinformation.series}
-            ${purchase.vehicle.othervehicleinformation.motor}
-            ${purchase.vehicle.othervehicleinformation.register}
-            ${purchase.vehicle.othervehicleinformation.chassis}
-            ${purchase.vehicle.othervehicleinformation.capacity}
-            ${purchase.vehicle.othervehicleinformation.service}
-            ${purchase.vehicle.othervehicleinformation.identificationCard}
+            <div class="pricebox">
+                El dinero concebido para esta venta, es la suma de: $${purchase.purchaseFinalPrice} COP que será pagada de la siguiente forma: ___________________________________________________
+                ____________________________________________________________________________
+                ____________________________________________________________________________<br>
+                Limitaciones: ${purchase.purchaseLimitations}
+            </div>
+            <p class="poneo">
+                El Vendedor garantiza que el vehículo materia de esta negaciación es de exclusiva propiedad, no soporta gravámenes o embargo alguno, y que el vehículo fue introducido legalmente al país y que sobre él no existen multas ni infracciones de tránsito y que está a paz y salvo con el Tesoro Municipal y Nacional por concepto de Impuestos.<br>
+                El Vendedor se compromete por medio de la presente a devolver el valor del vehículo en venta en caso de que las autoridades civiles o de tránsito lo requieran para cualquier diligencia judicial, Penal o Aduanera. Excusado el protesto y rechazo y sin que alegue a su favor la doctrina Comprador o Vendedor de Buena Fé.
+            </p>
+            <p class="ptwo">
+                El presente contrato presta merito ejecutivo para hacer efectivas las obligaciones contenidas en el, sin necesidad de requerimiento judicial o extrajudicial.<br>
+                para todos los efectos legales del presente contrato se toma como domicilio la ciudad de ${purchase.purchaseMunicipality}, ${purchase.purchaseDepartment}.<br>
+                Cabe anotar que el carro fue entregado con peritaje bajo entera satisfacción y cualquier anomalía debe ser
+                atendida por el comprador.
+            </p>
+            <p class="pthree">Dando cumplimiento al artículo 8 de la ley 1480 del 12 de Octubre del 2011 nos permitimos informarie que el COMPRADOR declara conocer el estado actual del vehículo usado y haber verificado el funcionamiento del mismo, por lo que exime al VENDEDOR de garantia por vicios o defectos que surjan con posterioridad.</p>
+            <p class="pfour">
+                Vehículo usado no tiene garantia ni por parte del vendedor ni del intermediario.<br><br>
+                CLAUSULA PENAL
+            </p>
+            <p class="ptwo">Las partes establecen como sanción pecuniaria a cargo de quien incumpla una cualquiera de las estipulaciones derivadas de este acto juridico la suma de: $${purchase.purchasePecuniaryPenalty} COP.</p>
+            <p class="pfour">ACEPTADA</p>
+
+
+            <div class="firmaone">
+              <div class="linea-firma"></div>
+              FIRMA COMPRADOR
+            </div>
+        
+            <div class="firmatwo">
+              <div class="linea-firma"></div>
+              FIRMA VENDEDOR
+            </div>
+
+            <div class="boxonehuella"></div>
+            <div class="boxtwohuella"></div>
             
         </body>
         </html> 
         `;
 
-        const options = { format: 'Letter' };
+        const options = { format: 'Letter', height: '15in', width: '8.5in' };
         
         //generates the PDF and saves it to the file
         pdf.create(html, options).toStream(function(err, stream) {

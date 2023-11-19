@@ -7,7 +7,7 @@
  */
 
 import { Router } from "express";
-import { getImprovements, postImprovements, updateImprovements, getSearchImprovements, deleteImprovements } from "../controllers/Improvements.controller.js";
+import { getImprovements, postImprovements, updateImprovements, deleteImprovements } from "../controllers/Improvements.controller.js";
 import { requiredToken } from '../middlewares/validatingToken.js';
 import { hasLicenses } from "../middlewares/Licenses.js";
 export const ImprovementsRoutes = Router();
