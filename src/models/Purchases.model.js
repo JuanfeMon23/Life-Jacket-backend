@@ -17,7 +17,7 @@ export const Purchase = sequelize.define('purchases', {
         autoIncrement: true
     },
     purchaseDate: {
-        type: DataTypes.DATEONLY,
+        type: DataTypes.DATE,
         allowNull : false,
         validate: {
             notNull: {

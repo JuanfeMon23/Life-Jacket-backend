@@ -17,7 +17,7 @@ export const Sale = sequelize.define('sales', {
         autoIncrement: true
     },
     saleDate: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
       validate: {
         notNull: {

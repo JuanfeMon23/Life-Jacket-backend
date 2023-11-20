@@ -49,3 +49,31 @@ export const postBrands = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+
+export const createBrands = async (req,res) => {
+    const {VehicleType, NameBrand, BrandLine } = req.body;
+    try {
+
+        const newBrand = await Brands.create({
+            VehicleType, NameBrand, BrandLine
+        })
+
+        return res.status(200).json(newBrand);
+    } catch (error) {
+        return res.status(500).json({message : error.message});
+    }
+};
+
+
+export const deleteBrands = async (req,res) => {
+    const {idBrand} = req.params;
+    try {
+        const brand = await Brands.findByPk(idBrand);
+
+        await brand.destroy();
+        return res.sendStatus(204);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};

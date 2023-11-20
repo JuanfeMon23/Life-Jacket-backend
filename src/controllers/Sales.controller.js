@@ -344,14 +344,22 @@ export const contractSale = async (req, res) => {
             return res.status(200).json({ message: 'No puedes descargar el contrato ya que la persona encargada de la venta no se encuentra registrada en usuarios' });
         }
         
-        function addZeroPrefix(number) {
-            return number < 10 ? '0' + number : number;
+        const date = sale.saleDate ? new Date(sale.saleDate) : null;
+
+        let formattedDate;
+        if (date) {
+          const hours = addZeroPrefix(date.getHours());
+          const minutes = addZeroPrefix(date.getMinutes());
+        
+          formattedDate = `${addZeroPrefix(date.getDate())}/${addZeroPrefix(date.getMonth() + 1)}/${date.getFullYear()} ${hours}:${minutes}`;
+        } else {
+          formattedDate = 'Fecha no disponible';
         }
         
-        // Validación de fecha
-        const date = sale.saleDate ? new Date(sale.saleDate) : null;
         
-        const formattedDate = `${addZeroPrefix(date.getDate())}/${addZeroPrefix(date.getMonth() + 1)}/${date.getFullYear()}`;
+        function addZeroPrefix(value) {
+          return value < 10 ? `0${value}` : value;
+        }
         
         //Create html with the sale information
         const html = `
