@@ -147,13 +147,14 @@ export const statusUser = async (req, res) => {
             }]
         });
 
-        if (adminUsers <= 1 && user.userStatus === "true") {
+        if (user.Role.rolName === "Administrador" && user.userStatus === "true" && adminUsers <= 1) {
             return res.status(400).json({ message: "No se puede deshabilitar el único administrador activo" });
         }
 
         user.userStatus = user.userStatus === 'true' ? 'false' : 'true';
         await user.save();
-        res.json(user);
+        
+        return res.sendStatus(204);
 
     } catch (error) {
         return res.status(500).json({ message: error.message });

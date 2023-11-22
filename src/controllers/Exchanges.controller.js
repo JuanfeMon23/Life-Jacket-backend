@@ -159,10 +159,14 @@ export const cancelExchange = async (req, res) => {
         });
 
         for (const exchangeDetail of exchangesD) {
+            const vehicle = await Vehicle.findByPk(exchangeDetail.idVehicleExchange);
+            if(exchangeDetail.vehicleStatusExchange === "false"){
+                await vehicle.update({ vehicleStatus : "true" });
+            }
             await exchangeDetail.destroy();
         }
 
-        return res.status(200).json({ message: 'Intercambio cancelado con éxito' });
+        return res.status(200).json({ message: 'Intercambio cancelado con éxito!' });
 
     } catch (error) {
         return res.status(500).json({message : error.message});
@@ -175,9 +179,15 @@ export const deleteExchangeDetail = async (req, res) => {
     try {
         const exchangeD = await ExchangesDetails.findByPk(idExchangeDetail);
 
+        const vehicle = await Vehicle.findByPk(exchangeD.idVehicleExchange);
+
+        if(exchangeD.vehicleStatusExchange === "false"){
+            await vehicle.update({ vehicleStatus : "true" });
+        }
+
         await exchangeD.destroy();
 
-        return res.status(200).json({ message: 'Detalle de intercambio eliminado con éxito' });
+        return res.status(200).json({ message: 'Detalle de intercambio eliminado con éxito!' });
 
     } catch (error) {
         return res.status(500).json({message : error.message});
@@ -213,8 +223,9 @@ export const statusExchange = async (req, res) => {
           });
 
         for (const exchangeDetail of exchangeDetails) {
+            const vehicle = await Vehicle.findByPk(exchangeDetail.idVehicleExchange);
             if (exchangeDetail.vehicleStatusExchange === "false") {
-                await exchangeDetail.Vehicle.update({
+                await vehicle.update({
                     vehicleStatus: "true"
                 });
             }
