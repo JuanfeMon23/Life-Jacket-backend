@@ -146,13 +146,22 @@ export const statusUser = async (req, res) => {
                 model: Roles
             }]
         });
+        
+        const userRequest = req.User.userEmail 
+        if(user.userEmail === userRequest) return res.status(400).json({message : 'No puedes cambiar tu propio estado.'});
 
         if (user.Role.rolName === "Administrador" && user.userStatus === "true" && adminUsers <= 1) {
             return res.status(400).json({ message: "No se puede deshabilitar el único administrador activo" });
         }
 
         user.userStatus = user.userStatus === 'true' ? 'false' : 'true';
+
+
+
+
+
         await user.save();
+        
         
         return res.sendStatus(204);
 
@@ -204,6 +213,8 @@ export const Login =  async (req,res) => {
 
         const Match = await bcrypts.compare(userPassword,foundUser.userPassword);
         if (!Match) return res.status(400).json({ message : 'Contraseña incorrecta' });
+
+        if(foundUser.userStatus === "false") return res.status(400).json({message : 'Acceso denegado.'})
 
         const role = await Roles.findByPk(foundUser.idRolUser, {
             include: License
