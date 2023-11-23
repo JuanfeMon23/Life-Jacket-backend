@@ -22,6 +22,11 @@ export const getExchanges = async (req, res) => {
     try {
         //Query the database to get the list of exchanges
         const exchanges = await Exchange.findAll({
+            where: {
+                exchangeDate: {
+                    [Op.ne]: '2023-01-01' // Excludes exchanges with the specified date
+                }
+            },
             include: [
                 {
                     model: Client
@@ -97,6 +102,13 @@ export const updateExchange = async (req, res) => {
         //Query the database to obtain a purchase by its ID
         const exchange = await Exchange.findByPk(idExchange); 
 
+        // Check if there are associated vehicles
+        const associatedVehicles = await ExchangesDetails.findAll({
+            where: {
+                idExchangeVehicle: idExchange,
+            },
+        });
+
         exchange.exchangeDate = exchangeDate
         exchange.exchangeCashPrice = exchangeCashPrice
         exchange.exchangeCashPriceStatus = exchangeCashPriceStatus
@@ -105,6 +117,10 @@ export const updateExchange = async (req, res) => {
         exchange.exchangeMunicipality = exchangeMunicipality
         exchange.exchangePecuniaryPenalty = exchangePecuniaryPenalty
         exchange.idClientExchange = idClientExchange
+
+        if (associatedVehicles.length === 0) {
+            return res.status(400).json({ message: 'No puedes crear el intercambio si no tienes vehículos asociados. Inténtalo de nuevo.' });
+        }
 
         await exchange.save()
         return res.status(200).json(exchange);

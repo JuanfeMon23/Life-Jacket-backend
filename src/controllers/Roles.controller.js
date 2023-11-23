@@ -20,7 +20,7 @@ export const createRol = async (req,res)  => {
         //Function to create a new rol
 
         const foundName = await Roles.findOne({where : {rolName}});
-        if(foundName) return res.status(400).json({message : 'Nombre ya registrado.'})
+        if(foundName) return res.status(400).json({message : 'Nombre ya registrado'})
 
         const newRol = await Roles.create({
             rolName
@@ -71,7 +71,7 @@ export const updateRol = async (req,res) => {
         const {rolName} = req.body;
 
         const foundName = await Roles.findOne({where : {rolName}});
-        if(foundName) return res.status(400).json({message : 'Nombre ya registrado.'})
+        if(foundName) return res.status(400).json({message : 'Nombre ya registrado'})
 
         // Search for the rol by their ID
         const rol = await Roles.findByPk(idRol);
@@ -105,7 +105,7 @@ export const deleteRol = async (req,res) => {
         }
         await rol.destroy();
 
-        return res.status(200).json({ message: 'Rol eliminado con éxito' });
+        return res.status(200).json({ message: 'Rol eliminado con éxito!' });
     } catch (error) {
         return res.status(500).json({message : error.message});
     }
