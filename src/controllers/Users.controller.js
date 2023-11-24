@@ -234,7 +234,9 @@ export const Login =  async (req,res) => {
             httpOnly : false
         });
 
-        res.json(token);
+        const decoded = jwt.decode(token);
+
+        res.json(decoded);
 
     } catch (error) {
         console.log(error);
@@ -252,10 +254,11 @@ export const verifyToken = async (req, res) => {
         const userFound = await User.findByPk(user.idUser);
         if(!userFound) return res.status(401).json({message : 'Unautorized'});
 
-        return res.json({
-            idUser : userFound.idUser,
-            email : userFound.email
-        });
+        const decoded = jwt.decode(token);
+
+        return res.json(
+            decoded
+        );
     });
 };
 
