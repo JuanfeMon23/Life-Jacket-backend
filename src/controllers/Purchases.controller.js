@@ -68,6 +68,14 @@ export const postPurchase = async (req, res) => {
     try {
         const {purchaseDate, purchaseFinalPrice, purchaseLimitations, purchaseDepartment, purchaseMunicipality, purchasePecuniaryPenalty, idClientPurchase, idVehiclePurchase} = req.body;
 
+        const id = idVehiclePurchase
+
+        const purchase = await Purchase.findOne({where: {idVehiclePurchase: id, purchaseStatus: "true"}});
+
+        if (purchase){
+            return res.status(500).json({ message: 'El vehículo ya tiene una compra activa' });
+        }
+
         //Function to create a new purchase
         const newPurchase = await Purchase.create({
             purchaseDate,

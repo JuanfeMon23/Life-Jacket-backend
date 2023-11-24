@@ -69,6 +69,14 @@ export const postSale = async (req, res) => {
     try {
         const {saleDate, saleFinalPrice, saleLimitations, saleDepartment, saleMunicipality, salePecuniaryPenalty, idClientSale, idVehicleSale} = req.body;
 
+        const id = idVehicleSale
+
+        const sale = await Sale.findOne({where: {idVehicleSale: id, saleStatus: "true"}});
+
+        if (sale){
+            return res.status(500).json({ message: 'El vehículo ya tiene una venta activa' });
+        }
+
         const vehicle = await Vehicle.findByPk(idVehicleSale);
         
         //Function to create a new sale
