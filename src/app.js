@@ -13,6 +13,7 @@ import { SaleRoutes } from './routes/Sales.routes.js';
 import { PurchaseRoutes } from './routes/Purchases.routes.js';
 import { BrandRoutes } from './routes/Brand.routes.js';
 import { DashboardRoutes } from './routes/Dashboard.routes.js';
+import { DepartmentsRoutes } from './routes/Departments.routes.js';
 import cors from 'cors';
 import dotenv from 'dotenv'
 
@@ -43,6 +44,7 @@ app.use('/api', VehiclesRoutes);
 app.use('/api', ImprovementsRoutes);
 app.use('/api', BrandRoutes);
 app.use('/api', DashboardRoutes);
+app.use('/api', DepartmentsRoutes);
 
 
 export default app;
