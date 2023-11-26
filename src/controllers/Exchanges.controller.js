@@ -22,6 +22,27 @@ export const getExchanges = async (req, res) => {
     try {
         //Query the database to get the list of exchanges
         const exchanges = await Exchange.findAll({
+            include: [
+                {
+                    model: Client
+                },
+                {
+                    model: Vehicle,
+                    as: 'vehiclesExchange' //Includes the vehicles that are part of the exchange detail
+                }
+            ]
+        });
+        res.json(exchanges);
+    } catch (error) {
+        res.status(500).json({message : error.message});
+    }
+};
+
+//Function to get the list of exchanges filtered
+export const getExchangesFiltered = async (req, res) => {
+    try {
+        //Query the database to get the list of exchanges
+        const exchanges = await Exchange.findAll({
             where: {
                 exchangeLimitations: {
                     [Op.ne]: 'abcdefghijklmnopqrstuvwxyz' 
@@ -135,6 +156,11 @@ export const postExchangeDetail = async (req, res) => {
     try {
         const {idVehicleExchange, vehicleStatusExchange} = req.body;
 
+    const exchangeExists = await Exchange.findByPk(idExchange);
+
+    if (!exchangeExists) {
+        return res.status(404).json({ message: 'El intercambio no existe.' });
+    }
         const vehicle = await Vehicle.findByPk(idVehicleExchange)
         
         const newExchangeDetail = await ExchangesDetails.create({
@@ -154,7 +180,7 @@ export const postExchangeDetail = async (req, res) => {
        return res.status(200).json(newExchangeDetail);
 
    } catch (error) {
-       return res.status(500).json({message : error.message});
+       return res.status(500).json({message : 'Error al crear el detalle de intercambio.', error: error.message});
    }
 };
 

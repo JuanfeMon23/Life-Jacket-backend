@@ -209,12 +209,12 @@ export const Login =  async (req,res) => {
 
     try {
         const foundUser = await User.findOne({where : {userEmail}});
-        if (!foundUser ) return res.status(400).json({ message : 'Email inválido' });
+        if (!foundUser ) return res.status(400).json({ message : 'Correo inválido' });
 
         const Match = await bcrypts.compare(userPassword,foundUser.userPassword);
         if (!Match) return res.status(400).json({ message : 'Contraseña incorrecta' });
 
-        if(foundUser.userStatus === "false") return res.status(400).json({message : 'Acceso denegado.'})
+        if(foundUser.userStatus === "false") return res.status(400).json({message : 'Acceso denegado'})
 
         const role = await Roles.findByPk(foundUser.idRolUser, {
             include: License
@@ -280,7 +280,7 @@ export const PasswordRecovery = async (req, res) => {
 
     try {
         const foundUser = await User.findOne({where : {userEmail}});
-        if (!foundUser ) return res.status(400).json({ message : 'Email inválido' });
+        if (!foundUser ) return res.status(400).json({ message : 'Correo inválido' });
 
         const transporter = nodemailer.createTransport({
             service : 'gmail',
@@ -322,7 +322,7 @@ export const resetPassword = async (req, res) => {
         const user = await User.findByPk(idUser);
 
         if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado.' });
+            return res.status(404).json({ message: 'Usuario no encontrado' });
         }
 
         const foundPassword = await bcrypts.hash(newUserPassword, 10);

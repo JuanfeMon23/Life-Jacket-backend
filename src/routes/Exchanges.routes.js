@@ -7,13 +7,15 @@
  */
 
 import {Router} from 'express';
-import {getExchanges, getExchange, postExchange, updateExchange, postExchangeDetail, deleteExchangeDetail, cancelExchange, statusExchange, reportExchange } from '../controllers/Exchanges.controller.js';
+import {getExchanges, getExchange, getExchangesFiltered, postExchange, updateExchange, postExchangeDetail, deleteExchangeDetail, cancelExchange, statusExchange, reportExchange } from '../controllers/Exchanges.controller.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
 import { hasLicenses } from '../middlewares/Licenses.js';
 
 export const ExchangeRoutes = Router();
 
 ExchangeRoutes.get('/Exchange', requiredToken , hasLicenses(['Cambios']) ,  getExchanges);
+
+ExchangeRoutes.get('/Exchange-Filtered', requiredToken , hasLicenses(['Cambios']) ,  getExchangesFiltered);
 
 ExchangeRoutes.post('/Exchange', requiredToken , hasLicenses(['Cambios']) , postExchange);
 
