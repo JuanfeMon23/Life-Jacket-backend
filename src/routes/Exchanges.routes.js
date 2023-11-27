@@ -13,20 +13,20 @@ import { hasLicenses } from '../middlewares/Licenses.js';
 
 export const ExchangeRoutes = Router();
 
-ExchangeRoutes.get('/Exchange', requiredToken , hasLicenses(['Cambios']) ,  getExchanges);
+ExchangeRoutes.get('/Exchange', requiredToken , hasLicenses(['Intercambios']) ,  getExchanges);
 
-ExchangeRoutes.get('/Exchange-Filtered', requiredToken , hasLicenses(['Cambios']) ,  getExchangesFiltered);
+ExchangeRoutes.get('/Exchange-Filtered', requiredToken , hasLicenses(['Intercambios']) ,  getExchangesFiltered);
 
-ExchangeRoutes.post('/Exchange', requiredToken , hasLicenses(['Cambios']) , postExchange);
+ExchangeRoutes.post('/Exchange', requiredToken , hasLicenses(['Intercambios']) , postExchange);
 
-ExchangeRoutes.put('/Exchange/:idExchange', requiredToken , hasLicenses(['Cambios']) , updateExchange);
+ExchangeRoutes.put('/Exchange/:idExchange', requiredToken , hasLicenses(['Intercambios']) , updateExchange);
 
-ExchangeRoutes.post('/Exchange/:idExchange', requiredToken , hasLicenses(['Cambios']) , postExchangeDetail);
+ExchangeRoutes.post('/Exchange/:idExchange', requiredToken , hasLicenses(['Intercambios']) , postExchangeDetail);
  
-ExchangeRoutes.delete('/Exchange/Cancel/:idExchange', requiredToken , hasLicenses(['Cambios']) , cancelExchange);
+ExchangeRoutes.delete('/Exchange/Cancel/:idExchange', requiredToken , hasLicenses(['Intercambios']) , cancelExchange);
 
-ExchangeRoutes.delete('/Exchange/Detail/:idExchangeDetail', requiredToken , hasLicenses(['Cambios']) , deleteExchangeDetail);
+ExchangeRoutes.delete('/Exchange/Detail/:idExchangeDetail', requiredToken , hasLicenses(['Intercambios']) , deleteExchangeDetail);
 
-ExchangeRoutes.patch('/Exchange/:idExchange', requiredToken , hasLicenses(['Cambios']) , statusExchange);
+ExchangeRoutes.patch('/Exchange/:idExchange', requiredToken , hasLicenses(['Intercambios']) , statusExchange);
 
-ExchangeRoutes.get('/Exchange/Report/:startDateExchange/:finalDateExchange', requiredToken , hasLicenses(['Cambios']) , reportExchange); 
+ExchangeRoutes.get('/Exchange/Report/:startDateExchange/:finalDateExchange', requiredToken , hasLicenses(['Intercambios']) , reportExchange); 
