@@ -214,12 +214,12 @@ export const Vehicle = sequelize.define('vehicles', {
         }
     },
     soat : {
-        type : DataTypes.DATE,
+        type : DataTypes.DATEONLY,
         allowNull: true
     },
 
     technomechanics : {
-        type : DataTypes.DATE,
+        type : DataTypes.DATEONLY,
         allowNull: true
     },
 

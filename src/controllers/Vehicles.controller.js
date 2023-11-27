@@ -159,27 +159,24 @@ export const updateVehicleAndOther = async (req, res) => {
     try {
         // Extract data from the request body to update a vehicle
         const {
-            vehicleType, brand, model, type, line, color, mileage, cylinderCapacity,
+            color, mileage, cylinderCapacity,
             fuel, traction, soat, technomechanics, timingBelt, business, series,
             motor, register, chassis, capacity, service, identificationCard
         } = req.body;
 
 
         // Find the vehicle by its ID
-        const vehicle = await Vehicle.findByPk(idVehicle);
-
-        // Find the other vehicle information by its FK
-        const other = await othervehicleinformation.findOne({ where: { idVehicleOtherVehicleInformation: idVehicle } });
-
+        const vehicle = await Vehicle.findByPk(idVehicle, {
+            include : [
+                {
+                    model : othervehicleinformation
+                }
+            ],
+        });
         if(vehicle.vehicleStatus === "false"){
             return res.status(400).json({ message : "No puedes editar un vehículo deshabilitado"});
         }
 
-        vehicle.vehicleType = vehicleType;
-        vehicle.brand = brand;
-        vehicle.model = model;
-        vehicle.type = type;
-        vehicle.line = line;
         vehicle.color = color;
         vehicle.mileage = mileage;
         vehicle.cylinderCapacity = cylinderCapacity;
@@ -188,22 +185,19 @@ export const updateVehicleAndOther = async (req, res) => {
         vehicle.soat = soat;
         vehicle.technomechanics = technomechanics;
         vehicle.timingBelt = timingBelt;
-            
+        vehicle.othervehicleinformation.business = business;
 
-        other.business = business;
-        other.series = series;
-        other.motor = motor;
-        other.register = register;
-        other.chassis = chassis;
-        other.capacity = capacity;
-        other.service = service;
-        other.identificationCard = identificationCard;
+        vehicle.othervehicleinformation.series = series;
+        vehicle.othervehicleinformation.motor = motor;
+        vehicle.othervehicleinformation.register = register;
+        vehicle.othervehicleinformation.chassis = chassis;
+        vehicle.othervehicleinformation.capacity = capacity;
+        vehicle.othervehicleinformation.service = service;
+        vehicle.othervehicleinformation.identificationCard = identificationCard;
 
-        await other.save();
         await vehicle.save();    
 
-        // Return a response with the new vehicle and other related information
-        return res.status(200).json({ vehicle, other });
+        return res.status(200).json({ message: 'Vehículo actualizado con éxito!' });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
