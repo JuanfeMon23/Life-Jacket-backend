@@ -21,6 +21,9 @@ import dotenv from 'dotenv'
 dotenv.config();
 const FRONTEND = process.env.FRONTEND;
 export const JWT_SECRET = process.env.JWT_SECRET
+export const EMAIL = process.env.EMAIL
+export const PASSWORD = process.env.PASSWORD
+export const EMAIL_PORT = process.env.EMAIL_PORT
 
 
 const app = express();

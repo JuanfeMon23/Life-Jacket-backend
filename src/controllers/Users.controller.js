@@ -9,7 +9,7 @@
 
 import { User } from "../models/Users.model.js";
 import { Roles } from "../models/Roles.model.js";
-import app from "../app.js";
+import app, { EMAIL, EMAIL_PORT, PASSWORD } from "../app.js";
 import bcrypts from 'bcryptjs';
 import { Op } from "sequelize";
 import  jwt  from "jsonwebtoken";
@@ -285,15 +285,15 @@ export const PasswordRecovery = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service : 'gmail',
             auth : {
-                user: 'curpion123@gmail.com',
-                pass: 'orjf totw pftj inmi'
+                user: EMAIL,
+                pass: PASSWORD
             }
         });
 
-        const port = 'http://localhost:5173/ResetPassword';
+        const port = EMAIL_PORT;
 
         const mailOptions = {
-            from : 'curpion123@gmail.com',
+            from : EMAIL,
             to : `${foundUser.userEmail}`,
             subject : 'Enlace para la recuperación de la contraseña en el aplicativo lifejacket.',
             text : `${port}/${foundUser.idUser}`
