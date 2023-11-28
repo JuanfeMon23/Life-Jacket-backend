@@ -206,8 +206,16 @@ export const reportSale = async (req, res) => {
         //information is displayed in table form
         let salesRows = '';
         sale.forEach(s => {
+            const formattedDate = new Date(s.saleDate).toLocaleString('es-ES', {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric'
+            });
           salesRows += `<tr>
-            <td>${s.saleDate}</td>
+            <td>${formattedDate}</td>
             <td>${s.saleFinalPrice}</td>
             <td>${s.saleDepartment}</td>
             <td>${s.saleMunicipality}</td>

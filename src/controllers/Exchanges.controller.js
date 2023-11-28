@@ -355,8 +355,16 @@ export const reportExchange = async (req, res) => {
         //information is displayed in table form
         let exchangesRows = '';
         exchange.forEach(e => {
+            const formattedDate = new Date(e.exchangeDate).toLocaleString('es-ES', {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric'
+            });
             exchangesRows += `<tr>
-            <td>${e.exchangeDate}</td>
+            <td>${formattedDate}</td>
             <td>${e.exchangeCashPrice}</td>
             <td>${e.exchangeDepartment}</td>
             <td>${e.exchangeMunicipality}</td>

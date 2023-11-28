@@ -194,9 +194,18 @@ export const reportPurchase = async (req, res) => {
 
         //information is displayed in table form
         let purchasesRows = '';
+        
         purchase.forEach(p => {
+            const formattedDate = new Date(p.purchaseDate).toLocaleString('es-ES', {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric'
+            });
           purchasesRows += `<tr>
-            <td>${p.purchaseDate}</td>
+            <td>${formattedDate}</td>
             <td>${p.purchaseFinalPrice}</td>
             <td>${p.purchaseDepartment}</td>
             <td>${p.purchaseMunicipality}</td>
