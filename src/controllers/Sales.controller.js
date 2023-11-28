@@ -12,6 +12,7 @@ import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
 import { othervehicleinformation } from '../models/Othervehicleinformations.model.js';
 import { User } from '../models/Users.model.js';
+import { Improvements } from '../models/Improvements.model.js';
 import pdf from 'html-pdf';
 import { Op } from 'sequelize';
 import app from '../app.js';
@@ -77,7 +78,11 @@ export const postSale = async (req, res) => {
             return res.status(500).json({ message: 'El vehículo ya tiene una venta activa' });
         }
 
-        const vehicle = await Vehicle.findByPk(idVehicleSale);
+        const vehicle = await Vehicle.findByPk(idVehicleSale, {
+            include : [{
+                model : Improvements
+            }]
+        });
         
         //Function to create a new sale
         const newSale = await Sale.create({
@@ -93,6 +98,14 @@ export const postSale = async (req, res) => {
 
         await vehicle.update({ vehicleStatus : "false" });
 
+        // If the vehicle is disabled, we disable the associated improvements
+        if (vehicle.vehicleStatus === "false") {
+            for (let Improvements of vehicle.improvements) {
+                Improvements.improvementStatus = "false";
+                await Improvements.save();
+            }
+        }
+
         return res.status(200).json(newSale);
     } catch (error) {
         return res.status(500).json({message : error.message});
@@ -106,7 +119,10 @@ export const statusSale = async (req, res) => {
     try {
         const sale = await Sale.findByPk(idSale, {
             include: [{
-                model: Vehicle
+                model: Vehicle, 
+                    include : [{
+                        model : Improvements
+                    }]
             }]
         });
 
@@ -125,6 +141,13 @@ export const statusSale = async (req, res) => {
         await sale.vehicle.update({
             vehicleStatus : "true"
         });
+
+        if (sale.vehicle.vehicleStatus === "true") {
+            for (let Improvements of sale.vehicle.improvements) {
+                Improvements.improvementStatus = "true";
+                await Improvements.save();
+            }
+        }
 
         // Update status sale
         await sale.update({

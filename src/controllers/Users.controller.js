@@ -70,10 +70,10 @@ export const postUser = async  (req,res) => {
         const userPasswordHash = await bcrypts.hash(userPassword, 10);
 
         const foundDocument = await User.findOne({where : {userDocument}});
-        if(foundDocument) return res.status(400).json({message : 'Documento ya registrado.'});
+        if(foundDocument) return res.status(400).json({message : 'Documento ya registrado'});
 
         const foundEmail = await User.findOne({where : {userEmail}});
-        if (foundEmail) return res.status(400).json({message : 'Email ya registrado.'});
+        if (foundEmail) return res.status(400).json({message : 'Correo electrónico ya registrado'});
 
 
         //Function to create a new user
@@ -148,7 +148,7 @@ export const statusUser = async (req, res) => {
         });
         
         const userRequest = req.User.userEmail 
-        if(user.userEmail === userRequest) return res.status(400).json({message : 'No puedes cambiar tu propio estado.'});
+        if(user.userEmail === userRequest) return res.status(400).json({message : 'No puedes cambiar tu propio estado'});
 
         if (user.Role.rolName === "Administrador" && user.userStatus === "true" && adminUsers <= 1) {
             return res.status(400).json({ message: "No se puede deshabilitar el único administrador activo" });
@@ -295,7 +295,7 @@ export const PasswordRecovery = async (req, res) => {
         const mailOptions = {
             from : 'curpion123@gmail.com',
             to : `${foundUser.userEmail}`,
-            subject : 'Enlace para la recuperación de la contraseña en el aplicativo lifejacket.',
+            subject : 'Enlace para la recuperación de la contraseña en el aplicativo lifejacket',
             text : `${port}/${foundUser.idUser}`
         };
 

@@ -209,11 +209,32 @@ export const updateVehicleAndOther = async (req, res) => {
 export const statusVehicle = async (req, res) => {
     const { idVehicle } = req.params;
     try {
-        const vehicle = await Vehicle.findByPk(idVehicle);
+        const vehicle = await Vehicle.findByPk(idVehicle,{
+            include : [
+                {
+                    model : Improvements
+                }
+            ]
+        });
 
-        const sale = await Sale.findOne({ where: { idVehicleSale: idVehicle } });
+        const sale = await Sale.findOne({ 
+            where: { 
+              idVehicleSale: idVehicle,
+            },
+            include: [{
+              model: Vehicle,
+              where: {
+                vehicleStatus: "false"
+              }
+            }]
+          });
 
-        const exchanges = await ExchangesDetails.findAll({ where: { idVehicleExchange: idVehicle, vehicleStatusExchange : "false" } });
+        const exchanges = await ExchangesDetails.findAll({ 
+            where: { 
+                idVehicleExchange: idVehicle, 
+                vehicleStatusExchange : "false" 
+            }
+        });
 
         // If trying to change from false to true, check if there is already an active vehicle with the same licensePlate
         if (vehicle.vehicleStatus === "false") {
@@ -230,7 +251,7 @@ export const statusVehicle = async (req, res) => {
         }
 
         if (sale || exchanges.length > 0 ) {
-            return res.status(400).json({ message: "No puedes activar un vehículo que se encuentra con una venta o intercambio asociado" });
+            return res.status(400).json({ message: "No puedes activar un vehículo que se encuentra con una venta o intercambio asociado activo" });
         }
 
         //Change of vehicle status and saving in the database       
@@ -244,15 +265,13 @@ export const statusVehicle = async (req, res) => {
 
         // If the vehicle is disabled, we disable the associated improvements
         if (vehicle.vehicleStatus === "false") {
-            const improvements = await Improvements.findAll({ where: { idVehicleImprovement: idVehicle } });
-            for (let Improvements of improvements) {
+            for (let Improvements of vehicle.improvements) {
                 Improvements.improvementStatus = "false";
                 await Improvements.save();
             }
         }
         else { // If the vehicle is enabled, we enable the associated improvements
-            const improvements = await Improvements.findAll({ where: { idVehicleImprovement: idVehicle } });
-            for (let Improvements of improvements) {
+            for (let Improvements of vehicle.improvements) {
                 Improvements.improvementStatus = "true";
                 await Improvements.save();
             }

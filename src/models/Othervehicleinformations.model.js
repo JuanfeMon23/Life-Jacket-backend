@@ -19,21 +19,7 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
 
     business : {
         type: DataTypes.STRING(20),
-        allowNull: true,
-        validate : {
-            noSpecialCharacters(value) {
-                const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-                if (specialCharacters.test(value)) {
-                  throw new Error('Este campo no puede contener caracteres especiales');
-                }
-            }, 
-
-            noNumbers(value) {
-                if (/[0-9]/.test(value)) {
-                    throw new Error('Este campo no puede contener número')
-                }
-            }
-        }
+        allowNull: true
     },
 
     series : {
@@ -68,8 +54,8 @@ export const othervehicleinformation = sequelize.define('othervehicleinformation
             },
 
             len: {
-                args: [7, 12],
-                msg: 'Este campo debe tener entre 7 y 12 caracteres',
+                args: [7, 20],
+                msg: 'Este campo debe tener entre 7 y 20 caracteres',
             }
         }
     },
