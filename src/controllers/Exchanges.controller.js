@@ -12,6 +12,7 @@ import {Client} from '../models/Clients.model.js';
 import {Vehicle} from '../models/Vehicles.model.js';
 import { User } from '../models/Users.model.js';
 import {ExchangesDetails} from '../models/ExchangesDetails.model.js';
+import { Improvements } from '../models/Improvements.model.js';
 import { othervehicleinformation } from '../models/Othervehicleinformations.model.js';
 import pdf from 'html-pdf';
 import { Op } from 'sequelize';
@@ -161,7 +162,11 @@ export const postExchangeDetail = async (req, res) => {
     if (!exchangeExists) {
         return res.status(404).json({ message: 'El intercambio no existe.' });
     }
-        const vehicle = await Vehicle.findByPk(idVehicleExchange)
+        const vehicle = await Vehicle.findByPk(idVehicleExchange, {
+            include : [{
+                model : Improvements
+            }]
+        });
         
         const newExchangeDetail = await ExchangesDetails.create({
             idExchangeVehicle: idExchange, 
@@ -173,8 +178,16 @@ export const postExchangeDetail = async (req, res) => {
 
         if(vehicleStatusExchangeValue === "false"){
             await vehicle.update({ vehicleStatus : "false" });
+            for (let Improvements of vehicle.improvements) {
+                Improvements.improvementStatus = "false";
+                await Improvements.save();
+            }
         }else{
             await vehicle.update({ vehicleStatus : "true" })
+            for (let Improvements of vehicle.improvements) {
+                Improvements.improvementStatus = "true";
+                await Improvements.save();
+            }
         }
 
        return res.status(200).json(newExchangeDetail);
@@ -199,9 +212,17 @@ export const cancelExchange = async (req, res) => {
         });
 
         for (const exchangeDetail of exchangesD) {
-            const vehicle = await Vehicle.findByPk(exchangeDetail.idVehicleExchange);
+            const vehicle = await Vehicle.findByPk(exchangeDetail.idVehicleExchange, {
+                include : [{
+                    model : Improvements
+                }]
+            });
             if(exchangeDetail.vehicleStatusExchange === "false"){
                 await vehicle.update({ vehicleStatus : "true" });
+                for (let Improvements of vehicle.improvements) {
+                    Improvements.improvementStatus = "true";
+                    await Improvements.save();
+                }
             }
             await exchangeDetail.destroy();
         }
@@ -221,10 +242,18 @@ export const deleteExchangeDetail = async (req, res) => {
     try {
         const exchangeD = await ExchangesDetails.findByPk(idExchangeDetail);
 
-        const vehicle = await Vehicle.findByPk(exchangeD.idVehicleExchange);
+        const vehicle = await Vehicle.findByPk(exchangeD.idVehicleExchange, {
+            include : [{
+                model : Improvements
+            }]
+        });
 
         if(exchangeD.vehicleStatusExchange === "false"){
             await vehicle.update({ vehicleStatus : "true" });
+            for (let Improvements of vehicle.improvements) {
+                Improvements.improvementStatus = "true";
+                await Improvements.save();
+            }
         }
 
         await exchangeD.destroy();
@@ -265,11 +294,20 @@ export const statusExchange = async (req, res) => {
           });
 
         for (const exchangeDetail of exchangeDetails) {
-            const vehicle = await Vehicle.findByPk(exchangeDetail.idVehicleExchange);
+            const vehicle = await Vehicle.findByPk(exchangeDetail.idVehicleExchange, {
+                include : [{
+                    model : Improvements
+                }]
+            });
+
             if (exchangeDetail.vehicleStatusExchange === "false") {
                 await vehicle.update({
                     vehicleStatus: "true"
                 });
+                for (let Improvements of vehicle.improvements) {
+                    Improvements.improvementStatus = "true";
+                    await Improvements.save();
+                }
             }
             await exchangeDetail.update({
                 vehicleStatusExchange : "anulado"
