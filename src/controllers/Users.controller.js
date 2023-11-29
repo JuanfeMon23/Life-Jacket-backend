@@ -248,7 +248,7 @@ export const verifyToken = async (req, res) => {
     const {token} = req.cookies;
     if(!token) return res.status(401).json({message : 'Unautorized'});
 
-    jwt.verify(token, JWT_SECRET, async (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
         if(err) return res.status(401).json({message : 'Unautorized'});
 
         const userFound = await User.findByPk(user.idUser);
@@ -285,18 +285,18 @@ export const PasswordRecovery = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service : 'gmail',
             auth : {
-                user: EMAIL,
-                pass: PASSWORD
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD
             }
         });
 
-        const port = EMAIL_PORT;
+
 
         const mailOptions = {
-            from : EMAIL,
+            from : process.env.EMAIL,
             to : `${foundUser.userEmail}`,
             subject : 'Enlace para la recuperación de la contraseña en el aplicativo lifejacket',
-            text : `${port}/${foundUser.idUser}`
+            text : `${process.env.EMAIL_PORT}/${foundUser.idUser}`
         };
 
         transporter.sendMail(mailOptions, (err, response) => {

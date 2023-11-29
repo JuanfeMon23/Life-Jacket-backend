@@ -14,5 +14,10 @@ export const Departments = sequelize.define('Department',{
     Municipe : {
         type : DataTypes.STRING(20),
         allowNull: false
-    }
+    },
+
+    
+}, {
+ timestamps: false
+
 })

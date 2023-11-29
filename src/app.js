@@ -32,7 +32,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
     credentials : true,
-    origin : FRONTEND
+    origin : process.env.FRONTEND
 }));
 
 app.use('/api', UserRoutes);
