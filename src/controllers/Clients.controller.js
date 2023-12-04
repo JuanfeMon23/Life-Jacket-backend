@@ -100,7 +100,7 @@ export const postClient = async (req, res) => {
 export const updateClient = async (req, res) => {
     const { idClient } = req.params;
     try {
-        const {clientName, clientLastName, clientDepartment, clientMunicipality, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber} = req.body;
+        const {clientName, clientLastName, clientAddress, clientPhoneNumber, clientOtherContact, clientOtherPhoneNumber} = req.body;
 
         // Search for the client by their ID
         const client = await Client.findByPk(idClient);
@@ -111,8 +111,6 @@ export const updateClient = async (req, res) => {
 
         client.clientName = clientName
         client.clientLastName = clientLastName
-        client.clientDepartment = clientDepartment
-        client.clientMunicipality = clientMunicipality
         client.clientAddress = clientAddress
         client.clientPhoneNumber = clientPhoneNumber
         client.clientOtherContact = clientOtherContact
