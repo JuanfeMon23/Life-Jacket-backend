@@ -191,18 +191,16 @@ export const getSalesDataByAmountCard = async () => {
     // Retrieves the sales of the current month without taking into account the time.
     const monthlySales = await Sale.findAll({
       where: {
-        saleStatus: "true"
+        saleStatus: "true",
+        saleDate: {
+          [Op.between]: [startDate, endDate]
+        }
       },
       attributes: [
         [sequelize.fn('MONTH', sequelize.fn('DATE', sequelize.col('saleDate'))), 'month'],
         [sequelize.fn('YEAR', sequelize.fn('DATE', sequelize.col('saleDate'))), 'year'],
         [sequelize.fn('SUM', sequelize.col('saleFinalPrice')), 'totalAmount']
       ],
-      where: {
-        saleDate: {
-          [Op.between]: [startDate, endDate]
-        }
-      },
       group: ['month', 'year'],
     });
 
@@ -243,18 +241,16 @@ export const getPurchasesDataByAmountCard = async () => {
     // Retrieves the purchases of the current month without taking into account the time.
     const monthlyPurchases = await Purchase.findAll({
       where: {
-        purchaseStatus: "true"
+        purchaseStatus: "true",
+        purchaseDate: {
+          [Op.between]: [startDate, endDate]
+        }
       },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('purchaseDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('purchaseDate')), 'year'],
         [sequelize.fn('SUM', sequelize.col('purchaseFinalPrice')), 'totalAmount']
       ],
-      where: {
-        purchaseDate: {
-          [Op.between]: [startDate, endDate]
-        }
-      },
       group: ['month', 'year'],
     });
 
@@ -295,18 +291,17 @@ export const getImprovementsDataByAmountCard = async () => {
     // Retrieves the improvements of the current month without taking into account the time.
     const monthlyImprovements = await Improvements.findAll({
       where: {
-        improvementStatus : "true"
+        improvementStatus : "true",
+        improvementDate: {
+          [Op.between]: [startDate, endDate]
+        }
       },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('improvementDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('improvementDate')), 'year'],
         [sequelize.fn('SUM', sequelize.col('improvementPrice')), 'totalAmount']
       ],
-      where: {
-        improvementDate: {
-          [Op.between]: [startDate, endDate]
-        }
-      },
+
       group: ['month', 'year'],
     });
 
@@ -347,18 +342,16 @@ export const getExchangesDataByAmountCard = async () => {
     // Retrieves the exchanges of the current month without taking into account the time.
     const monthlyExchanges = await Exchange.findAll({
       where: {
-        exchangeStatus : "true"
+        exchangeStatus : "true",
+        exchangeDate: {
+          [Op.between]: [startDate, endDate]
+        }
       },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
         [sequelize.fn('YEAR', sequelize.col('exchangeDate')), 'year'],
         [sequelize.fn('COUNT', sequelize.col('idExchange')), 'totalExchanges']
       ],
-      where: {
-        exchangeDate: {
-          [Op.between]: [startDate, endDate]
-        }
-      },
       group: ['month', 'year'],
     });
 
