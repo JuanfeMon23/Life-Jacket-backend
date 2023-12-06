@@ -31,9 +31,12 @@ export const Brands = sequelize.define('Brand', {
     BrandLine  : {
         type : DataTypes.STRING(60),
         allowNull : true
-        }
-    
-})
+    },
+},
+    {
+        timestamps : false
+    }
+)
 
 
 
