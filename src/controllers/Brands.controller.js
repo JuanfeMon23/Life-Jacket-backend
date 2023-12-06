@@ -50,13 +50,26 @@ export const postBrands = async (req, res) => {
     }
 };
 
-
-export const createBrands = async (req,res) => {
+export const createLines = async (req,res) => {
     const {VehicleType, NameBrand, BrandLine } = req.body;
     try {
 
-        const newBrand = await Brands.create({
+        const newLine = await Brands.create({
             VehicleType, NameBrand, BrandLine
+        })
+
+        return res.status(200).json(newLine);
+    } catch (error) {
+        return res.status(500).json({message : error.message});
+    }
+};
+
+export const createBrands = async (req,res) => {
+    const {VehicleType, NameBrand } = req.body;
+    try {
+
+        const newBrand = await Brands.create({
+            VehicleType, NameBrand
         })
 
         return res.status(200).json(newBrand);

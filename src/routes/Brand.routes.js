@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getBrands, postBrands, createBrands, deleteBrands} from '../controllers/Brands.controller.js';
+import {getBrands, postBrands, createBrands, deleteBrands, createLines} from '../controllers/Brands.controller.js';
 import {getVehicleTypes, getVehicleBrand, getVehicleLines}   from '../controllers/VehiclesFilters.js';
 import { hasLicenses } from '../middlewares/Licenses.js';
 import { requiredToken } from '../middlewares/validatingToken.js';
@@ -16,5 +16,7 @@ BrandRoutes.get('/vehicles-lines', getVehicleLines);
 
 
 BrandRoutes.post('/Brands/Create', requiredToken,hasLicenses(['Vehiculos']),  createBrands);
+
+BrandRoutes.post('/Lines/Create', requiredToken,hasLicenses(['Vehiculos']), createLines);
 
 BrandRoutes.delete('/Brands/Delete/:idBrand',requiredToken, hasLicenses(['Vehiculos']), deleteBrands); 
