@@ -97,6 +97,13 @@ export const getExchange = async (req,res) => {
 //Function add a default exchange in the database
 export const postExchange = async (req, res) => {
      try {
+
+        const user = await User.findOne({
+            where: {
+                idUser : 1
+            }
+        });
+
         //Function to create a default exchange 
         const newExchange = await Exchange.create({
             exchangeDate : "01/01/2023",
@@ -105,7 +112,7 @@ export const postExchange = async (req, res) => {
             exchangeDepartment : "",
             exchangeMunicipality : "",
             exchangePecuniaryPenalty : 0,
-            idClientExchange : 1
+            idClientExchange : user.idUser
         });
 
         return res.status(200).json(newExchange);

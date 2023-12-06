@@ -30,12 +30,7 @@ export const Brands = sequelize.define('Brand', {
     },
     BrandLine  : {
         type : DataTypes.STRING(60),
-        allowNull : false,
-        validate : {
-            notNull : {
-                msg : 'Campo obligatorio.'
-            }
-        }
+        allowNull : true
         }
     
 })

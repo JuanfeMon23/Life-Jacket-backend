@@ -102,7 +102,7 @@ export const postUser = async  (req,res) => {
 export const updateUser = async (req,res) => {
     const {idUser} = req.params;
     try {
-        const {userDepartment,  userMunicipality,  userName, userLastName, userEmail, userAddress, userPhoneNumber, userOtherPhoneNumber} = req.body
+        const { userName, userLastName, userEmail, userAddress, userPhoneNumber, userOtherPhoneNumber} = req.body
 
         // Search for the user by their ID
         const user = await User.findByPk(idUser)
@@ -111,8 +111,6 @@ export const updateUser = async (req,res) => {
             return res.status(400).json({ message : 'No puedes editar un usuario deshabilitado'});
         }
 
-        user.userDepartment = userDepartment;
-        user.userMunicipality = userMunicipality;
         user.userName = userName;
         user.userLastName = userLastName;
         user.userEmail = userEmail;
