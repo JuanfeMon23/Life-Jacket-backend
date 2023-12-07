@@ -10,6 +10,7 @@
 import { Roles } from "../models/Roles.model.js";
 import { License } from "../models/Licenses.model.js";
 import { LicensesRols } from "../models/LicensesRoles.model.js";
+import { User } from "../models/Users.model.js";
 import app from "../app.js";
 
 //Function add a new rol in the database
@@ -84,6 +85,54 @@ export const updateRol = async (req,res) => {
         
     }
 };
+
+// Function to change the status (enabled/disabled) of a rol
+export const statusRol = async (req, res) => {
+    const { idRol } = req.params;
+    try {
+        const role = await Roles.findByPk(idRol);
+
+        console.log(req)
+
+        const userReq = req.User.Role.rolName;
+
+        if(role.rolName === userReq){
+            return res.status(400).json({ message: 'No puedes cambiar el estado de tu rol' });
+        }
+
+        if (role.rolName === "Administrador") {
+            return res.status(400).json({ message: 'El rol de administrador no se puede deshabilitar' });
+        }
+
+        // Change of client status and saving in the database
+        if (role.rolStatus === "true") {
+            role.rolStatus = "false";
+        } else if (role.rolStatus === "false") {
+            role.rolStatus = "true";
+        }
+
+        await role.save();
+
+        // Update the status of associated users based on the status of the role
+        const users = await User.findAll({
+            where: {
+                idRolUser: idRol
+            }
+        });
+
+        for (let user of users) {
+            user.userStatus = role.rolStatus;
+            await user.save();
+        }
+
+        res.json(role);
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+
 
 //Function to delete a rol if they  have no associated users
 export const deleteRol = async (req,res) => {
