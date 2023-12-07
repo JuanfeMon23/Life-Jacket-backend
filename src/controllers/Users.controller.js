@@ -102,7 +102,7 @@ export const postUser = async  (req,res) => {
 export const updateUser = async (req,res) => {
     const {idUser} = req.params;
     try {
-        const {userName, userLastName, userEmail, userAddress, userPhoneNumber, userOtherPhoneNumber} = req.body
+        const {userName, userLastName, userEmail, userAddress, userPhoneNumber, userOtherPhoneNumber, idRolUser} = req.body
 
         // Search for the user by their ID
         const user = await User.findByPk(idUser)
@@ -117,6 +117,7 @@ export const updateUser = async (req,res) => {
         user.userAddress = userAddress;
         user.userPhoneNumber = userPhoneNumber;
         user.userOtherPhoneNumber = userOtherPhoneNumber;
+        user.idRolUser = idRolUser;
 
         await user.save();
         res.json(user);
@@ -134,6 +135,10 @@ export const statusUser = async (req, res) => {
                 model: Roles
             }
         });
+
+        if(user.Role.rolStatus === "false"){
+            return res.status(400).json({message : 'No puedes habilitar un usuario con el rol deshabilitado'});
+        }
 
         const adminUsers = await User.count({
             where: {
@@ -207,10 +212,10 @@ export const Login =  async (req,res) => {
 
     try {
         const foundUser = await User.findOne({where : {userEmail}});
-        if (!foundUser ) return res.status(400).json({ message : 'Correo inválido' });
+        if (!foundUser ) return res.status(400).json({ message : 'Credenciales inválidas' });
 
         const Match = await bcrypts.compare(userPassword,foundUser.userPassword);
-        if (!Match) return res.status(400).json({ message : 'Contraseña incorrecta' });
+        if (!Match) return res.status(400).json({ message : 'Credenciales inválidas' });
 
         if(foundUser.userStatus === "false") return res.status(400).json({message : 'Acceso denegado'})
 
@@ -278,7 +283,7 @@ export const PasswordRecovery = async (req, res) => {
 
     try {
         const foundUser = await User.findOne({where : {userEmail}});
-        if (!foundUser ) return res.status(400).json({ message : 'Correo inválido' });
+        if (!foundUser ) return res.status(400).json({ message : 'Credenciales inválidas' });
 
         const transporter = nodemailer.createTransport({
             service : 'gmail',
@@ -320,7 +325,7 @@ export const resetPassword = async (req, res) => {
         const user = await User.findByPk(idUser);
 
         if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
+            return res.status(404).json({ message: 'Credenciales inválidas' });
         }
 
         const foundPassword = await bcrypts.hash(newUserPassword, 10);
