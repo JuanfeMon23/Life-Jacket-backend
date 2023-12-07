@@ -16,7 +16,8 @@ BrandRoutes.get('/vehicles-lines', getVehicleLines);
 
 
 BrandRoutes.post('/Brands/Create', requiredToken,hasLicenses(['Vehiculos']),  createBrands);
+BrandRoutes.post('/Lines/Create', requiredToken,hasLicenses(['Vehiculos']),  createLines);
 
-BrandRoutes.post('/Lines/Create', requiredToken,hasLicenses(['Vehiculos']), createLines);
 
 BrandRoutes.delete('/Brands/Delete/:idBrand',requiredToken, hasLicenses(['Vehiculos']), deleteBrands); 
+

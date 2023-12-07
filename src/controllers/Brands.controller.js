@@ -12,7 +12,6 @@ export const getBrands = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
 export const postBrands = async (req, res) => {
     try {
         const data = await fs.readFile('vehicles.json', 'utf-8');
@@ -50,6 +49,7 @@ export const postBrands = async (req, res) => {
     }
 };
 
+
 export const createLines = async (req,res) => {
     const {VehicleType, NameBrand, BrandLine } = req.body;
     try {
@@ -77,7 +77,6 @@ export const createBrands = async (req,res) => {
         return res.status(500).json({message : error.message});
     }
 };
-
 
 export const deleteBrands = async (req,res) => {
     const {idBrand} = req.params;
