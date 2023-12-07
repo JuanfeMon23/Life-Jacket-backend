@@ -102,7 +102,7 @@ export const postUser = async  (req,res) => {
 export const updateUser = async (req,res) => {
     const {idUser} = req.params;
     try {
-        const { userName, userLastName, userEmail, userAddress, userPhoneNumber, userOtherPhoneNumber} = req.body
+        const { userName, userLastName, userEmail, userAddress, userPhoneNumber, userOtherPhoneNumber, idRolUser} = req.body
 
         // Search for the user by their ID
         const user = await User.findByPk(idUser)
@@ -117,6 +117,7 @@ export const updateUser = async (req,res) => {
         user.userAddress = userAddress;
         user.userPhoneNumber = userPhoneNumber;
         user.userOtherPhoneNumber = userOtherPhoneNumber;
+        user.idRolUser = idRolUser;
 
         await user.save();
         res.json(user);
