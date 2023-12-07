@@ -205,6 +205,7 @@ export const updateVehicleAndOther = async (req, res) => {
 
 
 
+
 //Function to change the status (enabled/disabled) of a vehicle
 export const statusVehicle = async (req, res) => {
     const { idVehicle } = req.params;
@@ -217,6 +218,27 @@ export const statusVehicle = async (req, res) => {
             ]
         });
 
+        const sales = await Sale.findAll({
+            where: {
+                idVehicleSale: idVehicle,
+                saleStatus: "true"
+            }
+        });
+
+        const exchangeD = await ExchangesDetails.findAll({
+            where: {
+                idVehicleExchange: idVehicle,
+                vehicleStatusExchange: "false",
+            }
+        })
+
+        if (sales.length > 0) {
+            return res.status(400).json({ message: 'No se puede habilitar el vehículo debido a ventas o intercambios activos asociados.' });
+        }
+
+        if (exchangeD.length > 0) {
+            return res.status(400).json({ message: 'No se puede habilitar el vehículo debido a ventas o intercambios activos asociados.' });
+        }
 
         // If trying to change from false to true, check if there is already an active vehicle with the same licensePlate
         if (vehicle.vehicleStatus === "false") {
@@ -261,7 +283,6 @@ export const statusVehicle = async (req, res) => {
         return res.status(500).json({message : error.message});
     }
 };
-
 
 
 //Function to delete a vehicle if they have no associated sales, purchases or exchanges
