@@ -101,6 +101,7 @@ export const postExchange = async (req, res) => {
         const newExchange = await Exchange.create({
             exchangeDate : "01/01/2023",
             exchangeCashPrice : 0,
+            exchangeCashPrice : "No aplica",
             exchangeLimitations : "abcdefghijklmnopqrstuvwxyz",
             exchangeDepartment : "",
             exchangeMunicipality : "",

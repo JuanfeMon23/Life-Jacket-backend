@@ -134,10 +134,11 @@ export const getTotalVehicles = async (req, res) => {
 //Retrieves and formats data on total exchanges amounts for each month and year.
 export const getExchangesDataByAmount = async (req, res) => {
   try {
-    // Retrieve monthly sales data including month, year, and total amount.
-    const monthlyExchanges = await Exchange.findAll({
+    // Retrieve monthly sales data for exchangeCashPriceStatus equal to "true".
+    const trueExchanges = await Exchange.findAll({
       where: {
-        exchangeStatus: "true"
+        exchangeStatus: "true",
+        exchangeCashPriceStatus: "true"
       },
       attributes: [
         [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
@@ -147,9 +148,9 @@ export const getExchangesDataByAmount = async (req, res) => {
       ],
       group: ['month', 'year'],
     });
-    
-    // Format the retrieved data into a more readable format.
-    const formattedDataExchanges = monthlyExchanges.map((result) => {
+
+    // Format the retrieved data for "true" exchangeCashPriceStatus.
+    const formattedTrueExchanges = trueExchanges.map((result) => {
       return {
         month: result.getDataValue('month'),
         year: result.getDataValue('year'),
@@ -158,11 +159,40 @@ export const getExchangesDataByAmount = async (req, res) => {
       };
     });
 
-    res.json(formattedDataExchanges);
+    // Retrieve monthly sales data for exchangeCashPriceStatus equal to "false".
+    const falseExchanges = await Exchange.findAll({
+      where: {
+        exchangeStatus: "true",
+        exchangeCashPriceStatus: "false"
+      },
+      attributes: [
+        [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
+        [sequelize.fn('YEAR', sequelize.col('exchangeDate')), 'year'],
+        [sequelize.fn('SUM', sequelize.col('exchangeCashPrice')), 'totalAmount'],
+        'exchangeCashPriceStatus'
+      ],
+      group: ['month', 'year'],
+    });
+
+    // Format the retrieved data for "false" exchangeCashPriceStatus.
+    const formattedFalseExchanges = falseExchanges.map((result) => {
+      return {
+        month: result.getDataValue('month'),
+        year: result.getDataValue('year'),
+        totalAmount: result.getDataValue('totalAmount'),
+        exchangeCashPriceStatus: result.getDataValue('exchangeCashPriceStatus')
+      };
+    });
+
+    res.json({
+      trueExchanges: formattedTrueExchanges,
+      falseExchanges: formattedFalseExchanges
+    });
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener datos de intercambios por cantidad de dinero' });
   }
-}; 
+};
+
 
 
 //Cards
