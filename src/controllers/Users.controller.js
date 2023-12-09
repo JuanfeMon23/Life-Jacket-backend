@@ -102,13 +102,31 @@ export const postUser = async  (req,res) => {
 export const updateUser = async (req,res) => {
     const {idUser} = req.params;
     try {
-        const {userName, userLastName, userEmail, userAddress, userPhoneNumber, userOtherPhoneNumber, idRolUser} = req.body
+        const { userName, userLastName, userEmail, userAddress, userPhoneNumber, userOtherPhoneNumber, idRolUser} = req.body
 
         // Search for the user by their ID
-        const user = await User.findByPk(idUser)
+        const user = await User.findByPk(idUser, {
+            include: [{
+                model: Roles
+            }]
+        });
+
+        const adminUsers = await User.count({
+            where: {
+                '$Role.rolName$': 'Administrador',
+                userStatus: 'true'
+            },
+            include: [{
+                model: Roles
+            }]
+        });
 
         if(user.userStatus === "false"){
             return res.status(400).json({ message : 'No puedes editar un usuario deshabilitado'});
+        }
+
+        if (user.Role.rolName === "Administrador" && adminUsers <= 1) {
+            return res.status(400).json({ message: "No se puede editar el único administrador" });
         }
 
         user.userName = userName;
@@ -126,6 +144,7 @@ export const updateUser = async (req,res) => {
         return res.status(500).json({message : error.message});
     }
 };
+
 
 export const statusUser = async (req, res) => {
     const { idUser } = req.params;
