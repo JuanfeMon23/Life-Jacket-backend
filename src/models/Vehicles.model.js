@@ -184,7 +184,6 @@ export const Vehicle = sequelize.define('vehicles', {
         type : DataTypes.STRING(20),
         allowNull: true,
         validate : {
-            notEmpty : true,
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
                 if (specialCharacters.test(value)) {
@@ -203,8 +202,6 @@ export const Vehicle = sequelize.define('vehicles', {
         type : DataTypes.STRING(20),
         allowNull: true,
         validate : {
-            notEmpty : true,
-
             noSpecialCharacters(value) {
                 const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
                 if (specialCharacters.test(value)) {
