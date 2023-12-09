@@ -31,8 +31,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    credentials : true,
-    origin : FRONTEND
+    origin : true,
+    credentials : true
 }));
 
 app.use('/api', UserRoutes);
