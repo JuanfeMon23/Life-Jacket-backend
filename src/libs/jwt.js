@@ -15,3 +15,17 @@ export function createAccesToken(payload){
         })
     })
 };
+
+export function createPasswordToken(payload){
+    return new Promise((resolve, reject) => {
+        jwt.sign(
+            payload,
+            JWT_SECRET ,
+        {
+            expiresIn : 600,
+        }, (err, token)  => {
+            if (err) reject(err);
+            resolve(token);
+        })
+    }) 
+}

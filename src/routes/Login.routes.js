@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Login , Logout, PasswordRecovery, resetPassword } from "../controllers/Users.controller.js";
+import { Login , Logout, PasswordRecovery, resetPassword, verifyTokenPassword } from "../controllers/Users.controller.js";
 import { requiredToken } from "../middlewares/validatingToken.js";
 import { verifyToken } from "../controllers/Users.controller.js";
 
@@ -10,3 +10,4 @@ LoginRouter.post('/Logout', requiredToken,  Logout);
 LoginRouter.get('/Verify' ,  verifyToken);
 LoginRouter.post('/Password' , PasswordRecovery );
 LoginRouter.patch('/ResetPassword/:idUser', resetPassword);
+LoginRouter.post('/Verify-token-password', verifyTokenPassword);

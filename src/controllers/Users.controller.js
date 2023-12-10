@@ -13,7 +13,7 @@ import app, { EMAIL, EMAIL_PORT, PASSWORD } from "../app.js";
 import bcrypts from 'bcryptjs';
 import { Op } from "sequelize";
 import  jwt  from "jsonwebtoken";
-import { createAccesToken } from "../libs/jwt.js";
+import { createAccesToken, createPasswordToken } from "../libs/jwt.js";
 import { JWT_SECRET } from "../app.js";
 import { License } from "../models/Licenses.model.js";
 import nodemailer from 'nodemailer';
@@ -309,11 +309,23 @@ export const PasswordRecovery = async (req, res) => {
 
         const port = EMAIL_PORT;
 
+        const role = await Roles.findByPk(foundUser.idRolUser, {
+            include: License
+          });
+
+        const token = await createPasswordToken({
+            idUser : foundUser.idUser,
+            userEmail : foundUser.userEmail,
+            userName : foundUser.userName,
+            Role : role,
+            Licenses: role.Licenses.map(license => license.licenseName)
+        });
+
         const mailOptions = {
             from : EMAIL,
             to : `${foundUser.userEmail}`,
-            subject : 'Enlace para la recuperación de la contraseña en el aplicativo lifejacket',
-            text : `${port}/${foundUser.idUser}`
+            subject : 'Token de recuperación de contraseña para el aplicativo LifeJacket.',
+            text : `${token}`
         };
 
         transporter.sendMail(mailOptions, (err, response) => {
@@ -328,6 +340,22 @@ export const PasswordRecovery = async (req, res) => {
         return res.status(400).json({message : error.message})
     }
 };
+
+export const verifyTokenPassword = async (req,res) => {
+    const {token} = req.body
+    try {
+        jwt.verify(token, JWT_SECRET, async (err, user) => {
+            if(err) return res.status(401).json({message : 'Token invalido'});
+      
+            const decoded = jwt.decode(token);
+    
+            return res.status(200).json(decoded)
+        });
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({message : error.message})
+    }
+}
 
 
 export const resetPassword = async (req, res) => {
