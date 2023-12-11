@@ -15,7 +15,7 @@ import { hasLicenses } from "../middlewares/Licenses.js";
 export const VehiclesRoutes = Router();
 
 //Get 
-VehiclesRoutes.get('/Vehicles', requiredToken , hasLicenses(['Vehiculos']) , getVehicles);
+VehiclesRoutes.get('/Vehicles' , getVehicles);
 
 //Create
 VehiclesRoutes.post('/Vehicles', requiredToken , hasLicenses(['Vehiculos']) , postVehicle);
