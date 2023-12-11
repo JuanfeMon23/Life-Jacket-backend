@@ -10,3 +10,4 @@ LoginRouter.post('/Logout', requiredToken,  Logout);
 LoginRouter.get('/Verify' ,  verifyToken);
 LoginRouter.post('/Password' , PasswordRecovery );
 LoginRouter.patch('/ResetPassword/:idUser', resetPassword);
+oginRouter.post('/Verify-token-password', verifyTokenPassword);
