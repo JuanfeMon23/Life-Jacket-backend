@@ -20,6 +20,17 @@ import { Sequelize } from 'sequelize';
 
 //Get monthly sales data by the amount of money.
 //Retrieves and formats data on total sales amounts for each month and year.
+
+export function convertToInternationalCurrencySystem (labelValue) {
+  return Math.abs(Number(labelValue)) >= 1.0e+9
+  ? (Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2) + "B"
+  : Math.abs(Number(labelValue)) >= 1.0e+6
+  ? (Math.abs(Number(labelValue)) / 1.0e+6).toFixed(2) + "M"
+  : Math.abs(Number(labelValue)) >= 1.0e+3
+  ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + "K"
+  : Math.abs(Number(labelValue));
+}
+
 export const getSalesDataByAmount = async (req, res) => {
   try {
     // Retrieve monthly sales data including month, year, and total amount.
@@ -40,6 +51,35 @@ export const getSalesDataByAmount = async (req, res) => {
         month: result.getDataValue('month'),
         year: result.getDataValue('year'),
         totalAmount: result.getDataValue('totalAmount')
+      };
+    });
+
+    res.json(formattedDataSales);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener datos de ventas por cantidad de dinero' });
+  }
+};
+
+export const salesToMobile = async (req, res) => {
+  try {
+    // Retrieve monthly sales data including month, year, and total amount.
+    const monthlySales = await Sale.findAll({
+      where: {
+        saleStatus : "true"
+      },
+      attributes: [
+        [sequelize.fn('MONTH', sequelize.col('saleDate')), 'month'],
+        [sequelize.fn('YEAR', sequelize.col('saleDate')), 'year'],
+        [sequelize.fn('SUM', sequelize.col('saleFinalPrice')), 'totalAmount']
+      ],
+      group: ['month', 'year'],
+    });
+    // Format the retrieved data into a more readable format.
+    const formattedDataSales = monthlySales.map((result) => {
+      return {
+        month: result.getDataValue('month'),
+        year: result.getDataValue('year'),
+        totalAmount: convertToInternationalCurrencySystem(result.getDataValue('totalAmount'))
       };
     });
 
@@ -80,6 +120,36 @@ export const getPurchasesDataByAmount = async (req, res) => {
   }
 };
 
+export const purchasesToMobile = async (req, res) => {
+  try {
+    // Retrieve monthly purchases data including month, year, and total amount.
+    const monthlyPurchases = await Purchase.findAll({
+      where: {
+        purchaseStatus : "true"
+      },
+      attributes: [
+        [sequelize.fn('MONTH', sequelize.col('purchaseDate')), 'month'],
+        [sequelize.fn('YEAR', sequelize.col('purchaseDate')), 'year'],
+        [sequelize.fn('SUM', sequelize.col('purchaseFinalPrice')), 'totalAmount']
+      ],
+      group: ['month', 'year'],
+    });
+    // Format the retrieved data into a more readable format.
+    const formattedDataPurchases = monthlyPurchases.map((result) => {
+      return {
+        month: result.getDataValue('month'),
+        year: result.getDataValue('year'),
+        totalAmount: convertToInternationalCurrencySystem(result.getDataValue('totalAmount'))
+      };
+    });
+
+    res.json(formattedDataPurchases);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener datos de compras por cantidad de dinero' });
+  }
+};
+
+
 //Get monthly improvements data by the amount of money.
 //Retrieves and formats data on total improvements amounts for each month and year.
 export const getImprovementsDataByAmount = async (req, res) => {
@@ -111,6 +181,35 @@ export const getImprovementsDataByAmount = async (req, res) => {
   }
 };
 
+export const improvementsTomobile = async (req, res) => {
+  try {
+    // Retrieve monthly improvements data including month, year, and total amount.
+    const monthlyImprovements = await Improvements.findAll({
+      where: {
+        improvementStatus : "true"
+      },
+      attributes: [
+        [sequelize.fn('MONTH', sequelize.col('improvementDate')), 'month'],
+        [sequelize.fn('YEAR', sequelize.col('improvementDate')), 'year'],
+        [sequelize.fn('SUM', sequelize.col('improvementPrice')), 'totalAmount']
+      ],
+      group: ['month', 'year'],
+    });
+     // Format the retrieved data into a more readable format.
+    const formattedDataImprovements = monthlyImprovements.map((result) => {
+      return {
+        month: result.getDataValue('month'),
+        year: result.getDataValue('year'),
+        totalAmount: convertToInternationalCurrencySystem(result.getDataValue('totalAmount'))
+      };
+    });
+
+    res.json(formattedDataImprovements);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener datos de compras por cantidad de dinero' });
+  }
+};
+
 
 //Get the total count of active vehicles.
 //Retrieves the total count of vehicles with the status set to true.
@@ -132,6 +231,68 @@ export const getTotalVehicles = async (req, res) => {
 
 //Get monthly exchanges data by the amount of money.
 //Retrieves and formats data on total exchanges amounts for each month and year.
+export const exchangesToMobile = async (req, res) => {
+  try {
+    // Retrieve monthly sales data for exchangeCashPriceStatus equal to "true".
+    const trueExchanges = await Exchange.findAll({
+      where: {
+        exchangeStatus: "true",
+        exchangeCashPriceStatus: "true"
+      },
+      attributes: [
+        [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
+        [sequelize.fn('YEAR', sequelize.col('exchangeDate')), 'year'],
+        [sequelize.fn('SUM', sequelize.col('exchangeCashPrice')), 'totalAmount'],
+        'exchangeCashPriceStatus'
+      ],
+      group: ['month', 'year'],
+    });
+
+    // Format the retrieved data for "true" exchangeCashPriceStatus.
+    const formattedTrueExchanges = trueExchanges.map((result) => {
+      return {
+        month: result.getDataValue('month'),
+        year: result.getDataValue('year'),
+        totalAmount: convertToInternationalCurrencySystem(result.getDataValue('totalAmount')),
+        exchangeCashPriceStatus: result.getDataValue('exchangeCashPriceStatus')
+      };
+    });
+
+    // Retrieve monthly sales data for exchangeCashPriceStatus equal to "false".
+    const falseExchanges = await Exchange.findAll({
+      where: {
+        exchangeStatus: "true",
+        exchangeCashPriceStatus: "false"
+      },
+      attributes: [
+        [sequelize.fn('MONTH', sequelize.col('exchangeDate')), 'month'],
+        [sequelize.fn('YEAR', sequelize.col('exchangeDate')), 'year'],
+        [sequelize.fn('SUM', sequelize.col('exchangeCashPrice')), 'totalAmount'],
+        'exchangeCashPriceStatus'
+      ],
+      group: ['month', 'year'],
+    });
+
+    // Format the retrieved data for "false" exchangeCashPriceStatus.
+    const formattedFalseExchanges = falseExchanges.map((result) => {
+      return {
+        month: result.getDataValue('month'),
+        year: result.getDataValue('year'),
+        totalAmount: convertToInternationalCurrencySystem(result.getDataValue('totalAmount')),
+        exchangeCashPriceStatus: result.getDataValue('exchangeCashPriceStatus')
+      };
+    });
+
+
+    res.json({
+      trueExchanges: formattedTrueExchanges,
+      falseExchanges: formattedFalseExchanges
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener datos de intercambios por cantidad de dinero' });
+  }
+};
+
 export const getExchangesDataByAmount = async (req, res) => {
   try {
     // Retrieve monthly sales data for exchangeCashPriceStatus equal to "true".

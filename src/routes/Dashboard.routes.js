@@ -11,7 +11,7 @@ import {Router} from 'express';
 import {checkMonthChangeMiddlewareSales, checkMonthChangeMiddlewarePurchases, checkMonthChangeMiddlewareImprovements, checkMonthChangeMiddlewareExchanges} from "../middlewares/monthChangeMiddleware.js"
 
 import {getSalesDataByAmount, getPurchasesDataByAmount, getExchangesDataByAmount, getImprovementsDataByAmount,getTotalVehicles,
-  getSaleAmountCard, getPurchaseAmountCard, getImprovementAmountCard, getExchangeAmountCard} from '../controllers/Dashboard.controller.js';
+  getSaleAmountCard, getPurchaseAmountCard, getImprovementAmountCard, getExchangeAmountCard, salesToMobile, purchasesToMobile, improvementsTomobile, exchangesToMobile } from '../controllers/Dashboard.controller.js';
 
 import { requiredToken } from '../middlewares/validatingToken.js';
 
@@ -34,3 +34,11 @@ DashboardRoutes.get('/Dashboard/Purchases/withMonth/Card' , checkMonthChangeMidd
 DashboardRoutes.get('/Dashboard/Improvements/withMonth/Card' , checkMonthChangeMiddlewareImprovements, getImprovementAmountCard);
 
 DashboardRoutes.get('/Dashboard/Exchanges/withMonth/Card' , checkMonthChangeMiddlewareExchanges, getExchangeAmountCard);
+
+DashboardRoutes.get('/Dashboard-mobile/Sales', salesToMobile);
+
+DashboardRoutes.get('/Dashboard-mobile/Purchases', purchasesToMobile );
+
+DashboardRoutes.get('/Dashboard-mobile/Improvements', improvementsTomobile );
+
+DashboardRoutes.get('/Dashboard-mobile/Exchanges', exchangesToMobile );
