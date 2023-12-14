@@ -69,30 +69,38 @@ export const getRol = async (req,res) => {
 export const updateRol = async (req,res) => {
     try {
         const {idRol} = req.params;
-        const {rolName} = req.body;
+        const {rolName, licenses} = req.body;
+        const rol = await Roles.findOne({where : {idRol}});
 
-        const foundName = await Roles.findOne({where : {rolName}});
-        if(foundName) return res.status(400).json({message : 'Nombre ya registrado'})
+        if(!rol) return res.status(404).json({message : 'Rol no encontrado'});
+        
+        if (rol.rolName === "Administrador" || rol.rolName === "administrador" ){
+            return res.status(400).json({ message :"No se puede editar el rol de administrador"});
+        }
+        
 
-        // Search for the rol by their ID
-        const rol = await Roles.findByPk(idRol);
+        await rol.update({rolName});
 
-        rol.rolName = rolName;
+        await rol.setLicenses([]);
 
-        await rol.save();
+        for(let licenseId of licenses) {
+            const license = await License.findOne({where : {idLicense: licenseId}});
+            if(license) {
+                await rol.addLicense(license);
+            }
+        }
+  
         return res.status(200).json(rol);
     } catch (error) {
-        
+        return res.status(500).json({message : error.message});
     }
-};
+   };
 
 // Function to change the status (enabled/disabled) of a rol
 export const statusRol = async (req, res) => {
     const { idRol } = req.params;
     try {
         const role = await Roles.findByPk(idRol);
-
-        console.log(req)
 
         const userReq = req.User.Role.rolName;
 
