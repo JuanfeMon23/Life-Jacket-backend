@@ -143,6 +143,14 @@ export const updateExchange = async (req, res) => {
             return res.status(400).json({ message: 'No puedes crear el intercambio si no tienes vehículos asociados. Inténtalo de nuevo.' });
         }
 
+        const tieneEstadoTrue = associatedVehicles.some(detalle => detalle.vehicleStatusExchange === "true");
+        const tieneEstadoFalse = associatedVehicles.some(detalle => detalle.vehicleStatusExchange === "false");
+
+        if (!tieneEstadoTrue || !tieneEstadoFalse) {
+            return res.status(400).json({ message: 'Debe haber al menos un vehículo entrante y uno saliente para realizar el intercambio.' });
+        }
+
+
         exchange.exchangeDate = exchangeDate
         exchange.exchangeCashPrice = exchangeCashPrice
         exchange.exchangeCashPriceStatus = exchangeCashPriceStatus
