@@ -96,24 +96,31 @@ export const getExchange = async (req,res) => {
 
 //Function add a default exchange in the database
 export const postExchange = async (req, res) => {
-     try {
-        //Function to create a default exchange 
-        const newExchange = await Exchange.create({
-            exchangeDate : "01/01/2023",
-            exchangeCashPrice : 0,
-            exchangeCashPrice : "No aplica",
-            exchangeLimitations : "abcdefghijklmnopqrstuvwxyz",
-            exchangeDepartment : "",
-            exchangeMunicipality : "",
-            exchangePecuniaryPenalty : 0,
-            idClientExchange : 1
-        });
+    try {
 
-        return res.status(200).json(newExchange);
+       const user = await User.findOne({
+           where: {
+               idUser : 1
+           }
+       });
 
-    } catch (error) {
-        return res.status(500).json({message : error.message});
-    }
+       //Function to create a default exchange 
+       const newExchange = await Exchange.create({
+           exchangeDate : "01/01/2023",
+           exchangeCashPrice : 0,
+           exchangeCashPriceStatus : "No aplica",
+           exchangeLimitations : "abcdefghijklmnopqrstuvwxyz",
+           exchangeDepartment : "",
+           exchangeMunicipality : "",
+           exchangePecuniaryPenalty : 0,
+           idClientExchange : user.idUser
+       });
+
+       return res.status(200).json(newExchange);
+
+   } catch (error) {
+       return res.status(500).json({message : error.message});
+   }
 };
 
 //Function update default exchange in the database
