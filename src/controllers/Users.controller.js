@@ -314,18 +314,16 @@ export const PasswordRecovery = async (req, res) => {
           });
 
         const token = await createPasswordToken({
-            idUser : foundUser.idUser,
-            userEmail : foundUser.userEmail,
-            userName : foundUser.userName,
-            Role : role,
-            Licenses: role.Licenses.map(license => license.licenseName)
+            idUser : foundUser.idUser
         });
 
         const mailOptions = {
             from : EMAIL,
             to : `${foundUser.userEmail}`,
             subject : 'Token de recuperación de contraseña para el aplicativo LifeJacket.',
-            text : `${token}`
+            text : `Copia y pega el siguiente codigo en el espacio para codigo qué aparece en la pantalla de recuperación de cuenta:
+
+${token}`
         };
 
         transporter.sendMail(mailOptions, (err, response) => {
@@ -340,6 +338,8 @@ export const PasswordRecovery = async (req, res) => {
         return res.status(400).json({message : error.message})
     }
 };
+
+
 
 export const verifyTokenPassword = async (req,res) => {
     const {token} = req.body
