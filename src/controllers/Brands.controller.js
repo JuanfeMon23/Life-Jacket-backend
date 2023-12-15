@@ -54,6 +54,18 @@ export const createLines = async (req,res) => {
     const {VehicleType, NameBrand, BrandLine } = req.body;
     try {
 
+        const existingBrand = await Brands.findOne({
+            where:{
+                VehicleType: VehicleType,
+                NameBrand: NameBrand,
+                BrandLine: BrandLine
+            }
+        });
+
+        if (existingBrand) {
+            return res.status(400).json({ message: "La línea asociada a esa marca ya existe." });
+        }
+
         const newLine = await Brands.create({
             VehicleType, NameBrand, BrandLine
         })
@@ -64,17 +76,29 @@ export const createLines = async (req,res) => {
     }
 };
 
-export const createBrands = async (req,res) => {
-    const {VehicleType, NameBrand } = req.body;
+export const createBrands = async (req, res) => {
+    const { VehicleType, NameBrand } = req.body;
+
     try {
+        const existingBrand = await Brands.findOne({
+            where:{
+                VehicleType: VehicleType,
+                NameBrand: NameBrand
+            }
+        });
+
+        if (existingBrand) {
+            return res.status(400).json({ message: "La marca ya existe." });
+        }
 
         const newBrand = await Brands.create({
-            VehicleType, NameBrand
-        })
+            VehicleType,
+            NameBrand,
+        });
 
         return res.status(200).json(newBrand);
     } catch (error) {
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 };
 

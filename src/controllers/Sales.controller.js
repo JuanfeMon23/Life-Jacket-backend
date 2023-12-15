@@ -137,10 +137,19 @@ export const statusSale = async (req, res) => {
             return res.status(400).json({ message: 'No puedes cambiar el estado de la venta después de 20 días' });
         }
 
-        //Update the status of the vehicle associated with the sale
-        await sale.vehicle.update({
-            vehicleStatus : "true"
-        });
+        const vehicle = await Vehicle.findOne({
+            where: {
+                licensePlate : sale.vehicle.licensePlate,
+                vehicleStatus : "true"
+            }
+        })
+
+        if(!vehicle) {
+            //Update the status of the vehicle associated with the sale
+            await sale.vehicle.update({
+                vehicleStatus : "true"
+            });
+        }
 
         if (sale.vehicle.vehicleStatus === "true") {
             for (let Improvements of sale.vehicle.improvements) {

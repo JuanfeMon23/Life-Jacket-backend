@@ -315,7 +315,14 @@ export const statusExchange = async (req, res) => {
                 }]
             });
 
-            if (exchangeDetail.vehicleStatusExchange === "false") {
+            const vehicleVal = await Vehicle.findOne({
+                where: {
+                    licensePlate : vehicle.licensePlate,
+                    vehicleStatus : "true"
+                }
+            })
+
+            if (exchangeDetail.vehicleStatusExchange === "false" && !vehicleVal) {
                 await vehicle.update({
                     vehicleStatus: "true"
                 });
